@@ -18,6 +18,18 @@ else
   git clone --depth 1 "$REPO_URL" "$SKILLS_DIR"
 fi
 
+NAPKIN_DIR="$HOME/.claude/skills/napkin"
+NAPKIN_REPO="https://github.com/blader/napkin.git"
+
+if [ -d "$NAPKIN_DIR/.git" ]; then
+  git -C "$NAPKIN_DIR" fetch --depth 1 origin main
+  git -C "$NAPKIN_DIR" reset --hard origin/main
+else
+  mkdir -p "$HOME/.claude/skills"
+  rm -rf "$NAPKIN_DIR"
+  git clone --depth 1 "$NAPKIN_REPO" "$NAPKIN_DIR"
+fi
+
 # markitdown: convert documents/audio/video to markdown.
 if command -v ffmpeg >/dev/null 2>&1; then
   : # already installed
