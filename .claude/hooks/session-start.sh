@@ -52,3 +52,20 @@ fi
 if command -v uv >/dev/null 2>&1; then
   uv pip install --system -q -e "$MARKITDOWN_DIR/packages/markitdown[all]"
 fi
+
+# ECC: full agent/skill/command harness installed into ~/.claude/.
+ECC_DIR="$HOME/ECC"
+ECC_REPO="https://github.com/affaan-m/ECC.git"
+
+if [ -d "$ECC_DIR/.git" ]; then
+  git -C "$ECC_DIR" fetch origin main
+  git -C "$ECC_DIR" reset --hard origin/main
+else
+  rm -rf "$ECC_DIR"
+  git clone "$ECC_REPO" "$ECC_DIR"
+fi
+
+if command -v node >/dev/null 2>&1; then
+  ( cd "$ECC_DIR" && npm install --no-audit --no-fund --loglevel=error )
+  bash "$ECC_DIR/install.sh" --profile full
+fi
