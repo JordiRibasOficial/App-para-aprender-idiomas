@@ -1,0 +1,277 @@
+{
+  "sourceLanguage": "es",
+  "targetLanguage": "fr",
+  "level": "A1",
+  "units": [
+    {
+      "id": "u1",
+      "title": "Salutations et présentations",
+      "lessons": [
+        {
+          "id": "u1_l1",
+          "title": "Salutations de base",
+          "exercises": [
+            { "id": "u1_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Hola' en francés?", "correctAnswer": "Bonjour", "options": ["Bonjour", "Au revoir", "Merci", "S'il vous plaît"] },
+            { "id": "u1_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Buenas noches'?", "correctAnswer": "Bonsoir", "options": ["Bonsoir", "Bonjour", "Bon après-midi", "Bonne chance"] },
+            { "id": "u1_l1_e3", "type": "fillBlank", "prompt": "Bonne ___, à demain!", "correctAnswer": "nuit" },
+            { "id": "u1_l1_e4", "type": "multipleChoice", "prompt": "¿Cuál es la respuesta natural a 'Comment ça va?'", "correctAnswer": "Ça va bien, merci", "options": ["Ça va bien, merci", "Je m'appelle Ana", "J'ai vingt ans", "À bientôt"] },
+            { "id": "u1_l1_e5", "type": "matching", "prompt": "Une cada saludo en español con su traducción en francés.", "pairs": { "Hola": "Bonjour", "Adiós": "Au revoir", "Buenas noches": "Bonsoir", "Por favor": "S'il vous plaît" } },
+            { "id": "u1_l1_e6", "type": "fillBlank", "prompt": "___ de faire votre connaissance!", "correctAnswer": "Enchanté" }
+          ]
+        },
+        {
+          "id": "u1_l2",
+          "title": "Se présenter",
+          "exercises": [
+            { "id": "u1_l2_e1", "type": "fillBlank", "prompt": "Je ___ Laura.", "correctAnswer": "m'appelle" },
+            { "id": "u1_l2_e2", "type": "multipleChoice", "prompt": "¿Cómo preguntas el nombre de alguien?", "correctAnswer": "Comment tu t'appelles?", "options": ["Comment tu t'appelles?", "Quel âge as-tu?", "D'où viens-tu?", "Que fais-tu?"] },
+            { "id": "u1_l2_e3", "type": "fillBlank", "prompt": "Je ___ d'Espagne.", "correctAnswer": "viens" },
+            { "id": "u1_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Tengo 25 años'?", "correctAnswer": "J'ai 25 ans", "options": ["J'ai 25 ans", "Je suis 25 ans", "Je fais 25 ans", "Mon âge est 25"] },
+            { "id": "u1_l2_e5", "type": "matching", "prompt": "Une la pregunta con la respuesta correcta.", "pairs": { "Comment tu t'appelles?": "Je m'appelle Carlos", "Quel âge as-tu?": "J'ai 30 ans", "D'où viens-tu?": "Je viens du Mexique" } },
+            { "id": "u1_l2_e6", "type": "fillBlank", "prompt": "Voici ___ ami, Marc.", "correctAnswer": "mon" }
+          ]
+        },
+        {
+          "id": "u1_l3",
+          "title": "Nationalités et pays",
+          "exercises": [
+            { "id": "u1_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'español' (nacionalidad, masculino)?", "correctAnswer": "espagnol", "options": ["espagnol", "Espagne", "espagnole", "espagnols"] },
+            { "id": "u1_l3_e2", "type": "matching", "prompt": "Une el país con su nacionalidad en francés (masculino).", "pairs": { "Italie": "italien", "Allemagne": "allemand", "Portugal": "portugais", "Japon": "japonais" } },
+            { "id": "u1_l3_e3", "type": "fillBlank", "prompt": "Elle est ___ (de Japón, femenino).", "correctAnswer": "japonaise" },
+            { "id": "u1_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es la pregunta correcta para el país de origen?", "correctAnswer": "D'où viens-tu?", "options": ["D'où viens-tu?", "Où vas-tu?", "Quel est ton pays?", "Quel pays tu?"] },
+            { "id": "u1_l3_e5", "type": "fillBlank", "prompt": "Ils ___ du Brésil.", "correctAnswer": "viennent" },
+            { "id": "u1_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Soy de Alemania'?", "correctAnswer": "Je viens d'Allemagne", "options": ["Je viens d'Allemagne", "Je suis Allemagne pays", "Je de Allemagne viens", "Je viens Allemand"] }
+          ]
+        },
+        {
+          "id": "u1_l4",
+          "title": "Expressions de politesse",
+          "exercises": [
+            { "id": "u1_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Por favor'?", "correctAnswer": "S'il vous plaît", "options": ["S'il vous plaît", "Merci", "Pardon", "Excusez-moi"] },
+            { "id": "u1_l4_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Perdón' (para llamar la atención)?", "correctAnswer": "Excusez-moi", "options": ["Excusez-moi", "Pardon", "S'il vous plaît", "De rien"] },
+            { "id": "u1_l4_e3", "type": "fillBlank", "prompt": "Merci ___.", "correctAnswer": "beaucoup" },
+            { "id": "u1_l4_e4", "type": "matching", "prompt": "Une la expresión en español con su equivalente en francés.", "pairs": { "De nada": "De rien", "Lo siento": "Pardon", "Con permiso": "Excusez-moi", "Gracias": "Merci" } },
+            { "id": "u1_l4_e5", "type": "multipleChoice", "prompt": "Alguien te dice 'Merci'. ¿Qué respondes?", "correctAnswer": "De rien", "options": ["De rien", "S'il vous plaît", "Pardon", "Excusez-moi"] },
+            { "id": "u1_l4_e6", "type": "fillBlank", "prompt": "Je suis ___, je suis en retard.", "correctAnswer": "désolé" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "title": "Les nombres et l'heure",
+      "lessons": [
+        {
+          "id": "u2_l1",
+          "title": "Les nombres de 1 à 20",
+          "exercises": [
+            { "id": "u2_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se escribe el número 7 en francés?", "correctAnswer": "sept", "options": ["sept", "dix-sept", "septante", "septième"] },
+            { "id": "u2_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se escribe el número 15?", "correctAnswer": "quinze", "options": ["quinze", "cinquante", "quatorze", "quinzième"] },
+            { "id": "u2_l1_e3", "type": "matching", "prompt": "Une el número con su nombre en francés.", "pairs": { "3": "trois", "8": "huit", "12": "douze", "20": "vingt" } },
+            { "id": "u2_l1_e4", "type": "fillBlank", "prompt": "Après 'neuf' vient '___'.", "correctAnswer": "dix" },
+            { "id": "u2_l1_e5", "type": "fillBlank", "prompt": "J'ai ___ (2) frères.", "correctAnswer": "deux" },
+            { "id": "u2_l1_e6", "type": "multipleChoice", "prompt": "¿Cuál es el número 'onze'?", "correctAnswer": "11", "options": ["11", "1", "17", "7"] }
+          ]
+        },
+        {
+          "id": "u2_l2",
+          "title": "L'heure",
+          "exercises": [
+            { "id": "u2_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se pregunta la hora?", "correctAnswer": "Quelle heure est-il?", "options": ["Quelle heure est-il?", "Quel est le temps?", "Combien de temps?", "Quelle heure a-t-il?"] },
+            { "id": "u2_l2_e2", "type": "fillBlank", "prompt": "Il est trois ___.", "correctAnswer": "heures" },
+            { "id": "u2_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Son las 6 y media'?", "correctAnswer": "Il est six heures et demie", "options": ["Il est six heures et demie", "Il est six et demi", "Il est six heure demie", "Il est la moitié de six"] },
+            { "id": "u2_l2_e4", "type": "matching", "prompt": "Une la hora con su expresión en francés.", "pairs": { "9:00": "neuf heures", "9:15": "neuf heures et quart", "9:30": "neuf heures et demie", "9:45": "dix heures moins le quart" } },
+            { "id": "u2_l2_e5", "type": "fillBlank", "prompt": "Le train part ___ 17h.", "correctAnswer": "à" },
+            { "id": "u2_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'de la mañana' al dar una hora?", "correctAnswer": "du matin", "options": ["du matin", "de l'après-midi", "du soir", "heures"] }
+          ]
+        },
+        {
+          "id": "u2_l3",
+          "title": "Les jours de la semaine",
+          "exercises": [
+            { "id": "u2_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'lunes'?", "correctAnswer": "lundi", "options": ["lundi", "mardi", "dimanche", "vendredi"] },
+            { "id": "u2_l3_e2", "type": "matching", "prompt": "Une el día en español con su nombre en francés.", "pairs": { "miércoles": "mercredi", "viernes": "vendredi", "sábado": "samedi", "domingo": "dimanche" } },
+            { "id": "u2_l3_e3", "type": "fillBlank", "prompt": "Aujourd'hui c'est ___ (jueves).", "correctAnswer": "jeudi" },
+            { "id": "u2_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es el primer día de la semana en el calendario francés?", "correctAnswer": "lundi", "options": ["lundi", "dimanche", "samedi", "vendredi"] },
+            { "id": "u2_l3_e5", "type": "fillBlank", "prompt": "Nous travaillons du lundi ___ vendredi.", "correctAnswer": "au" },
+            { "id": "u2_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'fin de semana'?", "correctAnswer": "week-end", "options": ["week-end", "fin de semaine", "bout de semaine", "dernière semaine"] }
+          ]
+        },
+        {
+          "id": "u2_l4",
+          "title": "Les mois et les saisons",
+          "exercises": [
+            { "id": "u2_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'enero'?", "correctAnswer": "janvier", "options": ["janvier", "juin", "juillet", "janvière"] },
+            { "id": "u2_l4_e2", "type": "matching", "prompt": "Une la estación en español con su nombre en francés.", "pairs": { "primavera": "printemps", "verano": "été", "otoño": "automne", "invierno": "hiver" } },
+            { "id": "u2_l4_e3", "type": "fillBlank", "prompt": "Mon anniversaire est en ___ (diciembre).", "correctAnswer": "décembre" },
+            { "id": "u2_l4_e4", "type": "multipleChoice", "prompt": "¿Cuál es el mes más corto?", "correctAnswer": "février", "options": ["février", "avril", "mars", "mai"] },
+            { "id": "u2_l4_e5", "type": "fillBlank", "prompt": "Il fait très froid ___ hiver.", "correctAnswer": "en" },
+            { "id": "u2_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verano'?", "correctAnswer": "été", "options": ["été", "hiver", "automne", "printemps"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u3",
+      "title": "La famille et les gens",
+      "lessons": [
+        {
+          "id": "u3_l1",
+          "title": "Les membres de la famille",
+          "exercises": [
+            { "id": "u3_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermana'?", "correctAnswer": "sœur", "options": ["sœur", "frère", "mère", "cousine"] },
+            { "id": "u3_l1_e2", "type": "matching", "prompt": "Une el familiar en español con su nombre en francés.", "pairs": { "padre": "père", "madre": "mère", "abuelo": "grand-père", "hijo": "fils" } },
+            { "id": "u3_l1_e3", "type": "fillBlank", "prompt": "Ma ___ (tía) habite en Italie.", "correctAnswer": "tante" },
+            { "id": "u3_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'primo/prima'?", "correctAnswer": "cousin", "options": ["cousin", "neveu", "nièce", "frère"] },
+            { "id": "u3_l1_e5", "type": "fillBlank", "prompt": "J'ai deux ___ (hijas).", "correctAnswer": "filles" },
+            { "id": "u3_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermanos' (en general)?", "correctAnswer": "frères et sœurs", "options": ["frères et sœurs", "frères", "cousins", "sœurs"] }
+          ]
+        },
+        {
+          "id": "u3_l2",
+          "title": "Décrire les gens",
+          "exercises": [
+            { "id": "u3_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'alto/a'?", "correctAnswer": "grand", "options": ["grand", "petit", "gros", "long"] },
+            { "id": "u3_l2_e2", "type": "matching", "prompt": "Une el adjetivo en español con su traducción en francés.", "pairs": { "joven": "jeune", "mayor": "âgé", "amable": "gentil", "divertido": "amusant" } },
+            { "id": "u3_l2_e3", "type": "fillBlank", "prompt": "Elle a les cheveux ___ (largo).", "correctAnswer": "longs" },
+            { "id": "u3_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ojos azules'?", "correctAnswer": "yeux bleus", "options": ["yeux bleus", "bleus yeux", "yeux bleu", "bleu yeux"] },
+            { "id": "u3_l2_e5", "type": "fillBlank", "prompt": "Il est très ___ (inteligente).", "correctAnswer": "intelligent" },
+            { "id": "u3_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'bajo/a' (estatura)?", "correctAnswer": "petit", "options": ["petit", "court", "bas", "mineur"] }
+          ]
+        },
+        {
+          "id": "u3_l3",
+          "title": "Les pronoms et le verbe 'être'",
+          "exercises": [
+            { "id": "u3_l3_e1", "type": "fillBlank", "prompt": "Elle ___ professeure.", "correctAnswer": "est" },
+            { "id": "u3_l3_e2", "type": "fillBlank", "prompt": "Nous ___ étudiants.", "correctAnswer": "sommes" },
+            { "id": "u3_l3_e3", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de 'être' para 'je'?", "correctAnswer": "suis", "options": ["suis", "es", "est", "sont"] },
+            { "id": "u3_l3_e4", "type": "matching", "prompt": "Une el pronombre con la forma correcta de 'être'.", "pairs": { "Je": "suis", "Tu": "es", "Il": "est", "Ils": "sont" } },
+            { "id": "u3_l3_e5", "type": "fillBlank", "prompt": "___-ils à la maison? (pregunta)", "correctAnswer": "Sont" },
+            { "id": "u3_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Él no es mi hermano'?", "correctAnswer": "Il n'est pas mon frère", "options": ["Il n'est pas mon frère", "Il pas est mon frère", "Il non est mon frère", "Il n'est pas mon frères"] }
+          ]
+        },
+        {
+          "id": "u3_l4",
+          "title": "Les adjectifs possessifs",
+          "exercises": [
+            { "id": "u3_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'mi' (posesivo, masculino)?", "correctAnswer": "mon", "options": ["mon", "je", "moi", "ma"] },
+            { "id": "u3_l4_e2", "type": "matching", "prompt": "Une el pronombre con su posesivo en francés (masculino).", "pairs": { "Je": "mon", "Tu": "ton", "Il/Elle": "son", "Nous": "notre" } },
+            { "id": "u3_l4_e3", "type": "fillBlank", "prompt": "C'est ___ (su, de él) voiture.", "correctAnswer": "sa" },
+            { "id": "u3_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'nuestra casa'?", "correctAnswer": "notre maison", "options": ["notre maison", "nos maison", "nous maison", "notres maison"] },
+            { "id": "u3_l4_e5", "type": "fillBlank", "prompt": "Ils adorent ___ (su, de ellos) chien.", "correctAnswer": "leur" },
+            { "id": "u3_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'tus padres'?", "correctAnswer": "tes parents", "options": ["tes parents", "ton parents", "toi parents", "ta parents"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u4",
+      "title": "La nourriture et les boissons",
+      "lessons": [
+        {
+          "id": "u4_l1",
+          "title": "Aliments de base",
+          "exercises": [
+            { "id": "u4_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pan'?", "correctAnswer": "pain", "options": ["pain", "viande", "riz", "fromage"] },
+            { "id": "u4_l1_e2", "type": "matching", "prompt": "Une el alimento en español con su nombre en francés.", "pairs": { "manzana": "pomme", "agua": "eau", "leche": "lait", "huevo": "œuf" } },
+            { "id": "u4_l1_e3", "type": "fillBlank", "prompt": "Je mange du ___ (arroz) tous les jours.", "correctAnswer": "riz" },
+            { "id": "u4_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pollo'?", "correctAnswer": "poulet", "options": ["poulet", "poisson", "bœuf", "porc"] },
+            { "id": "u4_l1_e5", "type": "fillBlank", "prompt": "Puis-je avoir un peu de ___ (queso), s'il vous plaît?", "correctAnswer": "fromage" },
+            { "id": "u4_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verduras'?", "correctAnswer": "légumes", "options": ["légumes", "fruits", "viandes", "céréales"] }
+          ]
+        },
+        {
+          "id": "u4_l2",
+          "title": "Au restaurant",
+          "exercises": [
+            { "id": "u4_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo pides la cuenta?", "correctAnswer": "L'addition, s'il vous plaît", "options": ["L'addition, s'il vous plaît", "L'argent, s'il vous plaît", "Le paiement, s'il vous plaît", "Le total, s'il vous plaît"] },
+            { "id": "u4_l2_e2", "type": "fillBlank", "prompt": "Je ___ un café, s'il vous plaît.", "correctAnswer": "voudrais" },
+            { "id": "u4_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo preguntas si hay una mesa libre?", "correctAnswer": "Y a-t-il une table libre?", "options": ["Y a-t-il une table libre?", "Avez-vous table?", "Est table là?", "Table est-elle?"] },
+            { "id": "u4_l2_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en francés.", "pairs": { "Quiero reservar una mesa": "Je voudrais réserver une table", "¿Qué recomienda?": "Que recommandez-vous?", "Está delicioso": "C'est délicieux", "La cuenta, por favor": "L'addition, s'il vous plaît" } },
+            { "id": "u4_l2_e5", "type": "fillBlank", "prompt": "Puis-je ___ le menu, s'il vous plaît?", "correctAnswer": "voir" },
+            { "id": "u4_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'camarero/a'?", "correctAnswer": "serveur", "options": ["serveur", "cuisinier", "chef", "gérant"] }
+          ]
+        },
+        {
+          "id": "u4_l3",
+          "title": "Le verbe 'aimer'",
+          "exercises": [
+            { "id": "u4_l3_e1", "type": "fillBlank", "prompt": "J'___ la pizza. (me gusta)", "correctAnswer": "aime" },
+            { "id": "u4_l3_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'A ella le gusta el café'?", "correctAnswer": "Elle aime le café", "options": ["Elle aime le café", "Elle aime café", "Elle est aime le café", "Elle aime à café"] },
+            { "id": "u4_l3_e3", "type": "fillBlank", "prompt": "Il n'aime ___ le poisson. (no le gusta)", "correctAnswer": "pas" },
+            { "id": "u4_l3_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en francés.", "pairs": { "Me gusta el chocolate": "J'aime le chocolat", "No me gusta la cebolla": "Je n'aime pas l'oignon", "¿Te gusta el té?": "Tu aimes le thé?", "Nos gusta cocinar": "Nous aimons cuisiner" } },
+            { "id": "u4_l3_e5", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de pregunta con 'aimer' para 'tu'?", "correctAnswer": "Tu aimes...?", "options": ["Tu aimes...?", "Es-tu aimes...?", "Aimes tu...?", "Aimer tu...?"] },
+            { "id": "u4_l3_e6", "type": "fillBlank", "prompt": "Ils adorent ___ (cocinar) ensemble.", "correctAnswer": "cuisiner" }
+          ]
+        },
+        {
+          "id": "u4_l4",
+          "title": "Les quantités: du / de la / pas de",
+          "exercises": [
+            { "id": "u4_l4_e1", "type": "fillBlank", "prompt": "J'ai ___ pommes. (afirmativa, plural)", "correctAnswer": "des" },
+            { "id": "u4_l4_e2", "type": "fillBlank", "prompt": "Je n'ai ___ pain. (negativa)", "correctAnswer": "pas de" },
+            { "id": "u4_l4_e3", "type": "multipleChoice", "prompt": "¿Cuál se usa antes de un sustantivo femenino incontable, como 'eau'?", "correctAnswer": "de l'", "options": ["de l'", "du", "des", "un"] },
+            { "id": "u4_l4_e4", "type": "matching", "prompt": "Une la regla con el ejemplo correcto.", "pairs": { "Masculino": "du pain", "Femenino": "de la viande", "Negativa": "pas de pain" } },
+            { "id": "u4_l4_e5", "type": "multipleChoice", "prompt": "¿Cómo se dice 'un poco de azúcar'?", "correctAnswer": "un peu de sucre", "options": ["un peu de sucre", "du peu sucre", "un sucre", "beaucoup sucre"] },
+            { "id": "u4_l4_e6", "type": "fillBlank", "prompt": "Voudriez-vous ___ thé?", "correctAnswer": "du" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u5",
+      "title": "La routine quotidienne",
+      "lessons": [
+        {
+          "id": "u5_l1",
+          "title": "Verbes de la routine quotidienne",
+          "exercises": [
+            { "id": "u5_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'despertarse'?", "correctAnswer": "se réveiller", "options": ["se réveiller", "dormir", "rêver", "se reposer"] },
+            { "id": "u5_l1_e2", "type": "matching", "prompt": "Une la acción en español con su verbo en francés.", "pairs": { "ducharse": "se doucher", "desayunar": "prendre le petit-déjeuner", "trabajar": "travailler", "dormir": "dormir" } },
+            { "id": "u5_l1_e3", "type": "fillBlank", "prompt": "Je ___ (me visto) généralement à 7h.", "correctAnswer": "m'habille" },
+            { "id": "u5_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ir a la cama'?", "correctAnswer": "aller au lit", "options": ["aller au lit", "aller dormir chambre", "entrer lit", "coucher lit"] },
+            { "id": "u5_l1_e5", "type": "fillBlank", "prompt": "Elle ___ (se cepilla los dientes) chaque matin.", "correctAnswer": "se brosse les dents" },
+            { "id": "u5_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'comer' (comida general)?", "correctAnswer": "manger", "options": ["manger", "boire", "cuisiner", "goûter"] }
+          ]
+        },
+        {
+          "id": "u5_l2",
+          "title": "Le présent de l'indicatif (affirmatif)",
+          "exercises": [
+            { "id": "u5_l2_e1", "type": "fillBlank", "prompt": "Elle ___ (trabajar) tous les jours.", "correctAnswer": "travaille" },
+            { "id": "u5_l2_e2", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de 'aller' para 'il'?", "correctAnswer": "va", "options": ["va", "vais", "allons", "vont"] },
+            { "id": "u5_l2_e3", "type": "fillBlank", "prompt": "Je ___ (vivir) à Madrid.", "correctAnswer": "habite" },
+            { "id": "u5_l2_e4", "type": "matching", "prompt": "Une el sujeto con la forma correcta del verbo 'étudier'.", "pairs": { "Je": "étudie", "Elle": "étudie", "Nous": "étudions", "Ils": "étudient" } },
+            { "id": "u5_l2_e5", "type": "multipleChoice", "prompt": "¿Cuál es la regla para 'il/elle' en verbos -ER regulares?", "correctAnswer": "Se cambia -er por -e", "options": ["Se cambia -er por -e", "Se usa el verbo en infinitivo", "Se añade -ant", "Se usa siempre 'est'"] },
+            { "id": "u5_l2_e6", "type": "fillBlank", "prompt": "Ils ___ (comer) le petit-déjeuner à 8h.", "correctAnswer": "mangent" }
+          ]
+        },
+        {
+          "id": "u5_l3",
+          "title": "Le présent: questions et négation",
+          "exercises": [
+            { "id": "u5_l3_e1", "type": "fillBlank", "prompt": "___-tu du café? (pregunta con 'aimer')", "correctAnswer": "Aimes" },
+            { "id": "u5_l3_e2", "type": "fillBlank", "prompt": "___-elle le dimanche? (pregunta con 'travailler')", "correctAnswer": "Travaille" },
+            { "id": "u5_l3_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Ellos no trabajan los fines de semana'?", "correctAnswer": "Ils ne travaillent pas le week-end", "options": ["Ils ne travaillent pas le week-end", "Ils travaillent pas le week-end", "Ils non travaillent le week-end", "Ils ne pas travaillent le week-end"] },
+            { "id": "u5_l3_e4", "type": "matching", "prompt": "Une la forma afirmativa con su negación correcta.", "pairs": { "J'aime le thé": "Je n'aime pas le thé", "Elle aime le thé": "Elle n'aime pas le thé", "Nous travaillons ici": "Nous ne travaillons pas ici" } },
+            { "id": "u5_l3_e5", "type": "fillBlank", "prompt": "Il n'habite ___ ici.", "correctAnswer": "pas" },
+            { "id": "u5_l3_e6", "type": "multipleChoice", "prompt": "¿Cuál es correcta?", "correctAnswer": "Parle-t-il anglais?", "options": ["Parle-t-il anglais?", "Parle il anglais?", "Fait-il parle anglais?", "Est-il parle anglais?"] }
+          ]
+        },
+        {
+          "id": "u5_l4",
+          "title": "La maison et les pièces",
+          "exercises": [
+            { "id": "u5_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'cocina' (habitación)?", "correctAnswer": "cuisine", "options": ["cuisine", "chambre", "salle de bain", "salon"] },
+            { "id": "u5_l4_e2", "type": "matching", "prompt": "Une la habitación en español con su nombre en francés.", "pairs": { "dormitorio": "chambre", "baño": "salle de bain", "salón": "salon", "jardín": "jardin" } },
+            { "id": "u5_l4_e3", "type": "fillBlank", "prompt": "Je fais mes devoirs dans ma ___ (dormitorio).", "correctAnswer": "chambre" },
+            { "id": "u5_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Yo cocino en la cocina'?", "correctAnswer": "Je cuisine dans la cuisine", "options": ["Je cuisine dans la cuisine", "Je cuisine à la cuisine", "Je cuisine sur la cuisine", "Je cuisinant dans cuisine"] },
+            { "id": "u5_l4_e5", "type": "fillBlank", "prompt": "Nous regardons la télé dans le ___ (salón).", "correctAnswer": "salon" },
+            { "id": "u5_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'garaje'?", "correctAnswer": "garage", "options": ["garage", "jardin", "couloir", "grenier"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

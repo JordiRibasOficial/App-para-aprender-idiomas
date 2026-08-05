@@ -1,0 +1,277 @@
+{
+  "sourceLanguage": "es",
+  "targetLanguage": "pt",
+  "level": "A1",
+  "units": [
+    {
+      "id": "u1",
+      "title": "Saudações e apresentações",
+      "lessons": [
+        {
+          "id": "u1_l1",
+          "title": "Saudações básicas",
+          "exercises": [
+            { "id": "u1_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Hola' en portugués?", "correctAnswer": "Olá", "options": ["Olá", "Adeus", "Obrigado", "Por favor"] },
+            { "id": "u1_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Buenos días'?", "correctAnswer": "Bom dia", "options": ["Bom dia", "Boa noite", "Boa tarde", "Boa sorte"] },
+            { "id": "u1_l1_e3", "type": "fillBlank", "prompt": "Boa ___, até amanhã!", "correctAnswer": "noite" },
+            { "id": "u1_l1_e4", "type": "multipleChoice", "prompt": "¿Cuál es la respuesta natural a 'Como está?'", "correctAnswer": "Estou bem, obrigado", "options": ["Estou bem, obrigado", "Chamo-me Ana", "Tenho vinte anos", "Até logo"] },
+            { "id": "u1_l1_e5", "type": "matching", "prompt": "Une cada saludo en español con su traducción en portugués.", "pairs": { "Hola": "Olá", "Adiós": "Adeus", "Buenas noches": "Boa noite", "Por favor": "Por favor" } },
+            { "id": "u1_l1_e6", "type": "fillBlank", "prompt": "___ prazer em conhecê-lo!", "correctAnswer": "Muito" }
+          ]
+        },
+        {
+          "id": "u1_l2",
+          "title": "Apresentar-se",
+          "exercises": [
+            { "id": "u1_l2_e1", "type": "fillBlank", "prompt": "O meu nome ___ Laura.", "correctAnswer": "é" },
+            { "id": "u1_l2_e2", "type": "multipleChoice", "prompt": "¿Cómo preguntas el nombre de alguien?", "correctAnswer": "Como se chama?", "options": ["Como se chama?", "Quantos anos tem?", "De onde é?", "O que faz?"] },
+            { "id": "u1_l2_e3", "type": "fillBlank", "prompt": "Eu ___ de Espanha.", "correctAnswer": "sou" },
+            { "id": "u1_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Tengo 25 años'?", "correctAnswer": "Tenho 25 anos", "options": ["Tenho 25 anos", "Sou 25 anos", "Estou com 25 anos velho", "Minha idade é 25"] },
+            { "id": "u1_l2_e5", "type": "matching", "prompt": "Une la pregunta con la respuesta correcta.", "pairs": { "Como se chama?": "Chamo-me Carlos", "Quantos anos tem?": "Tenho 30 anos", "De onde é?": "Sou do México" } },
+            { "id": "u1_l2_e6", "type": "fillBlank", "prompt": "Este ___ o meu amigo, Marc.", "correctAnswer": "é" }
+          ]
+        },
+        {
+          "id": "u1_l3",
+          "title": "Nacionalidades e países",
+          "exercises": [
+            { "id": "u1_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'español' (nacionalidad, masculino)?", "correctAnswer": "espanhol", "options": ["espanhol", "Espanha", "espanhóis", "espanholo"] },
+            { "id": "u1_l3_e2", "type": "matching", "prompt": "Une el país con su nacionalidad en portugués.", "pairs": { "França": "francês", "Itália": "italiano", "Alemanha": "alemão", "Portugal": "português" } },
+            { "id": "u1_l3_e3", "type": "fillBlank", "prompt": "Ela é ___ (de Japón).", "correctAnswer": "japonesa" },
+            { "id": "u1_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es la pregunta correcta para el país de origen?", "correctAnswer": "De onde é?", "options": ["De onde é?", "Onde vai?", "Qual é seu país?", "Que país você?"] },
+            { "id": "u1_l3_e5", "type": "fillBlank", "prompt": "Eles ___ do Brasil.", "correctAnswer": "são" },
+            { "id": "u1_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Soy de Alemania'?", "correctAnswer": "Sou da Alemanha", "options": ["Sou da Alemanha", "Sou Alemanha país", "Eu de Alemanha sou", "Sou de Alemão"] }
+          ]
+        },
+        {
+          "id": "u1_l4",
+          "title": "Expressões de cortesia",
+          "exercises": [
+            { "id": "u1_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Por favor'?", "correctAnswer": "Por favor", "options": ["Por favor", "Obrigado", "Desculpe", "Com licença"] },
+            { "id": "u1_l4_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Perdón' (para llamar la atención)?", "correctAnswer": "Com licença", "options": ["Com licença", "Desculpe", "Por favor", "De nada"] },
+            { "id": "u1_l4_e3", "type": "fillBlank", "prompt": "Muito ___ pela ajuda.", "correctAnswer": "obrigado" },
+            { "id": "u1_l4_e4", "type": "matching", "prompt": "Une la expresión en español con su equivalente en portugués.", "pairs": { "De nada": "De nada", "Lo siento": "Desculpe", "Con permiso": "Com licença", "Gracias": "Obrigado" } },
+            { "id": "u1_l4_e5", "type": "multipleChoice", "prompt": "Alguien te dice 'Obrigado'. ¿Qué respondes?", "correctAnswer": "De nada", "options": ["De nada", "Por favor", "Desculpe", "Com licença"] },
+            { "id": "u1_l4_e6", "type": "fillBlank", "prompt": "___ desculpe, estou atrasado.", "correctAnswer": "Peço" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "title": "Números e o tempo",
+      "lessons": [
+        {
+          "id": "u2_l1",
+          "title": "Números de 1 a 20",
+          "exercises": [
+            { "id": "u2_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se escribe el número 7 en portugués?", "correctAnswer": "sete", "options": ["sete", "dezessete", "setenta", "sétimo"] },
+            { "id": "u2_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se escribe el número 15?", "correctAnswer": "quinze", "options": ["quinze", "cinquenta", "quinto", "quatorze"] },
+            { "id": "u2_l1_e3", "type": "matching", "prompt": "Une el número con su nombre en portugués.", "pairs": { "3": "três", "8": "oito", "12": "doze", "20": "vinte" } },
+            { "id": "u2_l1_e4", "type": "fillBlank", "prompt": "Depois de 'nove' vem '___'.", "correctAnswer": "dez" },
+            { "id": "u2_l1_e5", "type": "fillBlank", "prompt": "Tenho ___ (2) irmãos.", "correctAnswer": "dois" },
+            { "id": "u2_l1_e6", "type": "multipleChoice", "prompt": "¿Cuál es el número 'onze'?", "correctAnswer": "11", "options": ["11", "1", "17", "7"] }
+          ]
+        },
+        {
+          "id": "u2_l2",
+          "title": "As horas",
+          "exercises": [
+            { "id": "u2_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se pregunta la hora?", "correctAnswer": "Que horas são?", "options": ["Que horas são?", "Qual é o tempo?", "Quanto tempo é?", "Que hora tem?"] },
+            { "id": "u2_l2_e2", "type": "fillBlank", "prompt": "São três ___.", "correctAnswer": "horas" },
+            { "id": "u2_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Son las 6 y media'?", "correctAnswer": "São seis e meia", "options": ["São seis e meia", "É seis meia", "São seis e metade", "É a metade de seis"] },
+            { "id": "u2_l2_e4", "type": "matching", "prompt": "Une la hora con su expresión en portugués.", "pairs": { "9:00": "nove horas", "9:15": "nove e quinze", "9:30": "nove e meia", "9:45": "quinze para as dez" } },
+            { "id": "u2_l2_e5", "type": "fillBlank", "prompt": "O trem sai ___ 17h.", "correctAnswer": "às" },
+            { "id": "u2_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'de la mañana' al dar una hora?", "correctAnswer": "da manhã", "options": ["da manhã", "da tarde", "da noite", "horas"] }
+          ]
+        },
+        {
+          "id": "u2_l3",
+          "title": "Dias da semana",
+          "exercises": [
+            { "id": "u2_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'lunes'?", "correctAnswer": "segunda-feira", "options": ["segunda-feira", "terça-feira", "domingo", "sexta-feira"] },
+            { "id": "u2_l3_e2", "type": "matching", "prompt": "Une el día en español con su nombre en portugués.", "pairs": { "miércoles": "quarta-feira", "viernes": "sexta-feira", "sábado": "sábado", "domingo": "domingo" } },
+            { "id": "u2_l3_e3", "type": "fillBlank", "prompt": "Hoje é ___ (jueves).", "correctAnswer": "quinta-feira" },
+            { "id": "u2_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es el primer día de la semana en el calendario portugués?", "correctAnswer": "segunda-feira", "options": ["segunda-feira", "domingo", "sábado", "sexta-feira"] },
+            { "id": "u2_l3_e5", "type": "fillBlank", "prompt": "Trabalhamos de segunda ___ sexta.", "correctAnswer": "a" },
+            { "id": "u2_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'fin de semana'?", "correctAnswer": "fim de semana", "options": ["fim de semana", "final semana", "semana fim", "última semana"] }
+          ]
+        },
+        {
+          "id": "u2_l4",
+          "title": "Meses e estações",
+          "exercises": [
+            { "id": "u2_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'enero'?", "correctAnswer": "janeiro", "options": ["janeiro", "junho", "julho", "junero"] },
+            { "id": "u2_l4_e2", "type": "matching", "prompt": "Une la estación en español con su nombre en portugués.", "pairs": { "primavera": "primavera", "verano": "verão", "otoño": "outono", "invierno": "inverno" } },
+            { "id": "u2_l4_e3", "type": "fillBlank", "prompt": "O meu aniversário é em ___ (diciembre).", "correctAnswer": "dezembro" },
+            { "id": "u2_l4_e4", "type": "multipleChoice", "prompt": "¿Cuál es el mes más corto?", "correctAnswer": "fevereiro", "options": ["fevereiro", "abril", "março", "maio"] },
+            { "id": "u2_l4_e5", "type": "fillBlank", "prompt": "Faz muito frio ___ inverno.", "correctAnswer": "no" },
+            { "id": "u2_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verano'?", "correctAnswer": "verão", "options": ["verão", "verano", "veraum", "veraão"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u3",
+      "title": "Família e pessoas",
+      "lessons": [
+        {
+          "id": "u3_l1",
+          "title": "Membros da família",
+          "exercises": [
+            { "id": "u3_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermana'?", "correctAnswer": "irmã", "options": ["irmã", "irmão", "mãe", "prima"] },
+            { "id": "u3_l1_e2", "type": "matching", "prompt": "Une el familiar en español con su nombre en portugués.", "pairs": { "padre": "pai", "madre": "mãe", "abuelo": "avô", "hijo": "filho" } },
+            { "id": "u3_l1_e3", "type": "fillBlank", "prompt": "A minha ___ (tía) mora em Itália.", "correctAnswer": "tia" },
+            { "id": "u3_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'primo/prima'?", "correctAnswer": "primo", "options": ["primo", "sobrinho", "sobrinha", "irmão"] },
+            { "id": "u3_l1_e5", "type": "fillBlank", "prompt": "Tenho duas ___ (hijas).", "correctAnswer": "filhas" },
+            { "id": "u3_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermanos' (en general)?", "correctAnswer": "irmãos", "options": ["irmãos", "irmões", "primos", "irmãs"] }
+          ]
+        },
+        {
+          "id": "u3_l2",
+          "title": "Descrever pessoas",
+          "exercises": [
+            { "id": "u3_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'alto/a'?", "correctAnswer": "alto", "options": ["alto", "baixo", "grande", "comprido"] },
+            { "id": "u3_l2_e2", "type": "matching", "prompt": "Une el adjetivo en español con su traducción en portugués.", "pairs": { "joven": "jovem", "mayor": "idoso", "amable": "amável", "divertido": "divertido" } },
+            { "id": "u3_l2_e3", "type": "fillBlank", "prompt": "Ela tem cabelo ___ (largo).", "correctAnswer": "comprido" },
+            { "id": "u3_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ojos azules'?", "correctAnswer": "olhos azuis", "options": ["olhos azuis", "azuis olhos", "olho azul", "azul olhos"] },
+            { "id": "u3_l2_e5", "type": "fillBlank", "prompt": "Ele é muito ___ (inteligente).", "correctAnswer": "inteligente" },
+            { "id": "u3_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'bajo/a' (estatura)?", "correctAnswer": "baixo", "options": ["baixo", "pequeno", "curto", "menor"] }
+          ]
+        },
+        {
+          "id": "u3_l3",
+          "title": "Pronomes e o verbo 'ser'",
+          "exercises": [
+            { "id": "u3_l3_e1", "type": "fillBlank", "prompt": "Ela ___ professora.", "correctAnswer": "é" },
+            { "id": "u3_l3_e2", "type": "fillBlank", "prompt": "Nós ___ estudantes.", "correctAnswer": "somos" },
+            { "id": "u3_l3_e3", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de 'ser' para 'eu'?", "correctAnswer": "sou", "options": ["sou", "é", "somos", "são"] },
+            { "id": "u3_l3_e4", "type": "matching", "prompt": "Une el pronombre con la forma correcta de 'ser'.", "pairs": { "Eu": "sou", "Tu": "és", "Ele": "é", "Eles": "são" } },
+            { "id": "u3_l3_e5", "type": "fillBlank", "prompt": "___ eles em casa? (pregunta)", "correctAnswer": "Estão" },
+            { "id": "u3_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Él no es mi hermano'?", "correctAnswer": "Ele não é meu irmão", "options": ["Ele não é meu irmão", "Ele não ser meu irmão", "Ele é não meu irmão", "Ele não é irmãos"] }
+          ]
+        },
+        {
+          "id": "u3_l4",
+          "title": "Adjetivos possessivos",
+          "exercises": [
+            { "id": "u3_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'mi' (posesivo)?", "correctAnswer": "meu", "options": ["meu", "eu", "mim", "minha"] },
+            { "id": "u3_l4_e2", "type": "matching", "prompt": "Une el pronombre con su posesivo en portugués (masculino).", "pairs": { "Eu": "meu", "Tu": "teu", "Ele/Ela": "seu", "Nós": "nosso" } },
+            { "id": "u3_l4_e3", "type": "fillBlank", "prompt": "Este é o ___ (su, de él) carro.", "correctAnswer": "seu" },
+            { "id": "u3_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'nuestra casa'?", "correctAnswer": "nossa casa", "options": ["nossa casa", "nosso casa", "nós casa", "nossas casa"] },
+            { "id": "u3_l4_e5", "type": "fillBlank", "prompt": "Eles adoram o ___ (su, de ellos) cachorro.", "correctAnswer": "seu" },
+            { "id": "u3_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'tus padres'?", "correctAnswer": "teus pais", "options": ["teus pais", "tua pais", "te pais", "teu pai"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u4",
+      "title": "Comida e bebida",
+      "lessons": [
+        {
+          "id": "u4_l1",
+          "title": "Alimentos básicos",
+          "exercises": [
+            { "id": "u4_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pan'?", "correctAnswer": "pão", "options": ["pão", "carne", "arroz", "queijo"] },
+            { "id": "u4_l1_e2", "type": "matching", "prompt": "Une el alimento en español con su nombre en portugués.", "pairs": { "manzana": "maçã", "agua": "água", "leche": "leite", "huevo": "ovo" } },
+            { "id": "u4_l1_e3", "type": "fillBlank", "prompt": "Como ___ (arroz) todos os dias.", "correctAnswer": "arroz" },
+            { "id": "u4_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pollo'?", "correctAnswer": "frango", "options": ["frango", "peixe", "carne de vaca", "porco"] },
+            { "id": "u4_l1_e5", "type": "fillBlank", "prompt": "Pode me dar um pouco de ___ (queso), por favor?", "correctAnswer": "queijo" },
+            { "id": "u4_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verduras'?", "correctAnswer": "legumes", "options": ["legumes", "frutas", "carnes", "grãos"] }
+          ]
+        },
+        {
+          "id": "u4_l2",
+          "title": "No restaurante",
+          "exercises": [
+            { "id": "u4_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo pides la cuenta?", "correctAnswer": "A conta, por favor", "options": ["A conta, por favor", "O dinheiro, por favor", "O pagamento, por favor", "O total, por favor"] },
+            { "id": "u4_l2_e2", "type": "fillBlank", "prompt": "Eu ___ um café, por favor.", "correctAnswer": "queria" },
+            { "id": "u4_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo preguntas si hay una mesa libre?", "correctAnswer": "Há uma mesa livre?", "options": ["Há uma mesa livre?", "Tem uma mesa?", "Está mesa lá?", "É uma mesa?"] },
+            { "id": "u4_l2_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en portugués.", "pairs": { "Quiero reservar una mesa": "Quero reservar uma mesa", "¿Qué recomienda?": "O que recomenda?", "Está delicioso": "Está delicioso", "La cuenta, por favor": "A conta, por favor" } },
+            { "id": "u4_l2_e5", "type": "fillBlank", "prompt": "Posso ___ o cardápio, por favor?", "correctAnswer": "ver" },
+            { "id": "u4_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'camarero/a'?", "correctAnswer": "garçom", "options": ["garçom", "cozinheiro", "chef", "servidor"] }
+          ]
+        },
+        {
+          "id": "u4_l3",
+          "title": "O verbo 'gostar de'",
+          "exercises": [
+            { "id": "u4_l3_e1", "type": "fillBlank", "prompt": "Eu ___ de pizza. (me gusta)", "correctAnswer": "gosto" },
+            { "id": "u4_l3_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'A ella le gusta el café'?", "correctAnswer": "Ela gosta de café", "options": ["Ela gosta de café", "Ela gosta café", "Ela é gosta de café", "Ela gosta a café"] },
+            { "id": "u4_l3_e3", "type": "fillBlank", "prompt": "Ele não ___ de peixe. (no le gusta)", "correctAnswer": "gosta" },
+            { "id": "u4_l3_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en portugués.", "pairs": { "Me gusta el chocolate": "Eu gosto de chocolate", "No me gusta la cebolla": "Eu não gosto de cebola", "¿Te gusta el té?": "Tu gostas de chá?", "Nos gusta cocinar": "Nós gostamos de cozinhar" } },
+            { "id": "u4_l3_e5", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de pregunta con 'gostar' para 'tu'?", "correctAnswer": "Gostas de...?", "options": ["Gostas de...?", "És gostas de...?", "De gostas...?", "Tu gosta de...?"] },
+            { "id": "u4_l3_e6", "type": "fillBlank", "prompt": "Eles adoram ___ (cocinar) juntos.", "correctAnswer": "cozinhar" }
+          ]
+        },
+        {
+          "id": "u4_l4",
+          "title": "Quantidades: algum / nenhum",
+          "exercises": [
+            { "id": "u4_l4_e1", "type": "fillBlank", "prompt": "Tenho ___ maçãs. (afirmativa)", "correctAnswer": "algumas" },
+            { "id": "u4_l4_e2", "type": "fillBlank", "prompt": "Não tenho ___ pão. (negativa)", "correctAnswer": "nenhum" },
+            { "id": "u4_l4_e3", "type": "multipleChoice", "prompt": "¿Cuál se usa en preguntas: 'Há ___ leite?'", "correctAnswer": "algum", "options": ["algum", "nenhum", "um", "muito"] },
+            { "id": "u4_l4_e4", "type": "matching", "prompt": "Une la regla con el ejemplo correcto.", "pairs": { "Afirmativa": "alguma água", "Negativa": "nenhuma água", "Pergunta": "alguma água?" } },
+            { "id": "u4_l4_e5", "type": "multipleChoice", "prompt": "¿Cómo se dice 'un poco de azúcar'?", "correctAnswer": "um pouco de açúcar", "options": ["um pouco de açúcar", "algum açúcar", "um açúcar", "muito açúcar"] },
+            { "id": "u4_l4_e6", "type": "fillBlank", "prompt": "Gostaria de ___ chá?", "correctAnswer": "algum" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u5",
+      "title": "Rotina diária",
+      "lessons": [
+        {
+          "id": "u5_l1",
+          "title": "Verbos de rotina diária",
+          "exercises": [
+            { "id": "u5_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'despertarse'?", "correctAnswer": "acordar", "options": ["acordar", "dormir", "sonhar", "descansar"] },
+            { "id": "u5_l1_e2", "type": "matching", "prompt": "Une la acción en español con su verbo en portugués.", "pairs": { "ducharse": "tomar banho", "desayunar": "tomar café da manhã", "trabajar": "trabalhar", "dormir": "dormir" } },
+            { "id": "u5_l1_e3", "type": "fillBlank", "prompt": "Eu normalmente ___ (me visto) às 7h.", "correctAnswer": "me visto" },
+            { "id": "u5_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ir a la cama'?", "correctAnswer": "ir para a cama", "options": ["ir para a cama", "ir dormir sala", "entrar cama", "deitar a cama"] },
+            { "id": "u5_l1_e5", "type": "fillBlank", "prompt": "Ela ___ (se cepilla los dientes) todas as manhãs.", "correctAnswer": "escova os dentes" },
+            { "id": "u5_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'comer' (comida general)?", "correctAnswer": "comer", "options": ["comer", "beber", "cozinhar", "provar"] }
+          ]
+        },
+        {
+          "id": "u5_l2",
+          "title": "Presente do indicativo (afirmativo)",
+          "exercises": [
+            { "id": "u5_l2_e1", "type": "fillBlank", "prompt": "Ela ___ (trabajar) todos os dias.", "correctAnswer": "trabalha" },
+            { "id": "u5_l2_e2", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de 'ir' para 'ele'?", "correctAnswer": "vai", "options": ["vai", "vou", "vamos", "vão"] },
+            { "id": "u5_l2_e3", "type": "fillBlank", "prompt": "Eu ___ (vivir) em Madrid.", "correctAnswer": "vivo" },
+            { "id": "u5_l2_e4", "type": "matching", "prompt": "Une el sujeto con la forma correcta del verbo 'estudar'.", "pairs": { "Eu": "estudo", "Ela": "estuda", "Nós": "estudamos", "Ele": "estuda" } },
+            { "id": "u5_l2_e5", "type": "multipleChoice", "prompt": "¿Cuál es la regla para 'ele/ela' en el presente de verbos -AR?", "correctAnswer": "Se cambia -ar por -a", "options": ["Se cambia -ar por -a", "Se usa el verbo en infinitivo", "Se añade -ando", "Se usa siempre 'está'"] },
+            { "id": "u5_l2_e6", "type": "fillBlank", "prompt": "Eles ___ (comer) o pequeno-almoço às 8h.", "correctAnswer": "comem" }
+          ]
+        },
+        {
+          "id": "u5_l3",
+          "title": "Presente do indicativo: perguntas e negação",
+          "exercises": [
+            { "id": "u5_l3_e1", "type": "fillBlank", "prompt": "Tu ___ (gostas) de café? (pregunta, sin auxiliar en portugués)", "correctAnswer": "gostas" },
+            { "id": "u5_l3_e2", "type": "fillBlank", "prompt": "Ela ___ (no) trabalha aos domingos.", "correctAnswer": "não" },
+            { "id": "u5_l3_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Ellos no trabajan los fines de semana'?", "correctAnswer": "Eles não trabalham nos fins de semana", "options": ["Eles não trabalham nos fins de semana", "Eles não trabalha fins de semana", "Eles trabalham não fins de semana", "Eles não trabalhar fins de semana"] },
+            { "id": "u5_l3_e4", "type": "matching", "prompt": "Une la forma afirmativa con su negación correcta.", "pairs": { "Eu gosto de chá": "Eu não gosto de chá", "Ela gosta de chá": "Ela não gosta de chá", "Nós trabalhamos aqui": "Nós não trabalhamos aqui" } },
+            { "id": "u5_l3_e5", "type": "fillBlank", "prompt": "Ele não ___ (vivir) aqui.", "correctAnswer": "vive" },
+            { "id": "u5_l3_e6", "type": "multipleChoice", "prompt": "¿Cuál es correcta?", "correctAnswer": "Ele fala inglês?", "options": ["Ele fala inglês?", "Ele falam inglês?", "Faz ele fala inglês?", "É ele fala inglês?"] }
+          ]
+        },
+        {
+          "id": "u5_l4",
+          "title": "A casa e os cômodos",
+          "exercises": [
+            { "id": "u5_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'cocina' (habitación)?", "correctAnswer": "cozinha", "options": ["cozinha", "quarto", "banheiro", "sala de estar"] },
+            { "id": "u5_l4_e2", "type": "matching", "prompt": "Une la habitación en español con su nombre en portugués.", "pairs": { "dormitorio": "quarto", "baño": "banheiro", "salón": "sala de estar", "jardín": "jardim" } },
+            { "id": "u5_l4_e3", "type": "fillBlank", "prompt": "Faço os trabalhos de casa no ___ (dormitorio).", "correctAnswer": "quarto" },
+            { "id": "u5_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Yo cocino en la cocina'?", "correctAnswer": "Eu cozinho na cozinha", "options": ["Eu cozinho na cozinha", "Eu cozinho a cozinha", "Eu cozinho em cozinha", "Eu cozinhando na cozinha"] },
+            { "id": "u5_l4_e5", "type": "fillBlank", "prompt": "Vemos TV na ___ (salón).", "correctAnswer": "sala de estar" },
+            { "id": "u5_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'garaje'?", "correctAnswer": "garagem", "options": ["garagem", "jardim", "corredor", "sótão"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

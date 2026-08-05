@@ -101,7 +101,15 @@ cd src/mobile && ~/flutter/bin/flutter analyze
 
 **Ejecutado:** modelos Dart inmutables en `lib/domain/models/` (`Exercise`/`ExerciseType`, `Lesson`, `CourseUnit`, `Course`, `UserProgress`) con `fromJson`/`toJson` manuales — se optó por clases inmutables escritas a mano en vez de `freezed`/`json_serializable` para evitar añadir codegen (`build_runner`) como riesgo de toolchain adicional en este entorno; se puede migrar a `freezed` más adelante sin romper la API pública. `ContentRepository` (interfaz) + `AssetContentRepository` (implementación) en `lib/data/`, carga `assets/content/courses/<targetLanguage>.json`. Curso de inglés real y completo en `assets/content/courses/en.json`: 5 unidades × 4 lecciones × 6 ejercicios = 120 ejercicios A1 CEFR genuinos (saludos, números/hora, familia/personas, comida/bebida, rutina diaria — vocabulario y gramática real, sin relleno), para un hablante de español (`sourceLanguage: "es"`). Tamaño por lección (6 ejercicios) reducido respecto al rango orientativo del plan (8-12) para priorizar velocidad de la primera iteración real; ampliable sin tocar el esquema. Test `content_repository_test.dart` verifica carga real del asset, `units.length >= 5`, y todos los campos obligatorios de cada tipo de ejercicio.
 
-**Trío de idiomas de lanzamiento confirmado:** portugués, francés, japonés (además de inglés) — pendiente ejecutar como iteraciones de este mismo paso.
+**Trío de idiomas de lanzamiento [HECHO]:** portugués, francés y japonés añadidos como iteraciones de este mismo paso, mismo esquema y misma estructura (5 unidades × 4 lecciones × 6 ejercicios) que el curso de inglés, sin cambios en el modelo de datos ni en `ContentRepository` — exactamente la promesa del diseño "agnóstico de idioma" del Paso 3.
+
+- `assets/content/courses/pt.json` — portugués, con atención a los mismos puntos gramaticales adaptados (p. ej. sin auxiliar "do/does" en preguntas, a diferencia del inglés).
+- `assets/content/courses/fr.json` — francés, incluye partitivos (du/de la/pas de) en vez de "some/any".
+- `assets/content/courses/ja.json` — japonés, con un rediseño deliberado de los puntos gramaticales de las Unidades 3 y 5: en vez de forzar "pronombres + verbo to be" y "presente simple" al estilo inglés (que no existen así en japonés), se usan puntos gramaticales japoneses reales — cópula です/だ y partícula posesiva の en vez de adjetivos posesivos, forma ます (afirmativo/negativo/pregunta) en vez de conjugación por persona. Contenido en escritura japonesa real (hiragana/katakana/kanji), no en rōmaji, con prompts en español.
+
+Test `content_repository_test.dart` generalizado a los 4 idiomas (bucle parametrizado, ya no solo inglés) + test añadido de unicidad de IDs de ejercicio dentro de cada curso (detecta colisiones de copiar-pegar). Los 4 cursos cargan y validan correctamente: 20 unidades, 80 lecciones, 480 ejercicios en total entre los 4 idiomas.
+
+**Fuera de alcance deliberado de esta iteración:** selección de idioma de destino en la UI (`LessonListScreen`/`englishCourseProvider` siguen fijos a inglés) — esta iteración era específicamente de contenido (Paso 3), no de la función de cambiar de idioma en la app, que es una pieza de UI separada para una iteración futura antes de publicar los 4 idiomas.
 
 ### Contexto autocontenido
 Modelo de datos en `lib/domain/models/`: `Course` (con `sourceLanguage`, `targetLanguage` como campos desde el inicio, aunque el MVP solo cargue 4 combinaciones), `Unit`, `Lesson`, `Exercise` (opción múltiple, rellenar hueco, emparejar), `UserProgress`. Contenido como JSON en `assets/content/courses/<lang-code>.json` (uno por idioma, no un único archivo gigante — así añadir un idioma nuevo no toca los existentes).
@@ -365,10 +373,14 @@ Suite en verde, cobertura ≥80% medida (no estimada) sobre `lib/domain` y `lib/
 
 ---
 
-## Paso 12 — CI: build Android + iOS
+## Paso 12 — CI: build Android + iOS [HECHO]
 
 **Modelo:** Sonnet 5.
-**Depende de:** 5, 6, 9, 11.
+**Depende de:** 5, 6, 9, 11 (ejecutado sin esperar al Paso 9 completo — CI solo compila y testea, no depende de productos de tienda reales).
+
+**Ejecutado:** `.github/workflows/mobile-ci.yml`, disparado sobre cambios en `src/mobile/**`. `build-android` (ubuntu-latest): `flutter analyze` + `flutter test --coverage` + `flutter build appbundle --release`, con caché de `~/.pub-cache` y de Gradle. `build-ios` (macos-latest): `flutter build ios --release --no-codesign` (sin firma hasta el Paso 13), con caché de `~/.pub-cache`.
+
+**Verificación real, no solo escrita:** el push disparó el run [30968886009](https://github.com/JordiRibasOficial/App-para-aprender-idiomas/actions/runs/30968886009) contra PR #1 — **ambos jobs terminaron en verde** (`conclusion: success`). Primera confirmación real de que el build de iOS (Pasos 6/9) funciona, tal y como pedía el criterio de salida del plan original.
 
 ### Contexto autocontenido
 `.github/workflows/mobile-ci.yml`, dos jobs:

@@ -1,0 +1,277 @@
+{
+  "sourceLanguage": "es",
+  "targetLanguage": "ja",
+  "level": "A1",
+  "units": [
+    {
+      "id": "u1",
+      "title": "あいさつと自己紹介",
+      "lessons": [
+        {
+          "id": "u1_l1",
+          "title": "基本のあいさつ",
+          "exercises": [
+            { "id": "u1_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Hola' (durante el día) en japonés?", "correctAnswer": "こんにちは", "options": ["こんにちは", "さようなら", "ありがとう", "すみません"] },
+            { "id": "u1_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Buenos días'?", "correctAnswer": "おはようございます", "options": ["おはようございます", "こんばんは", "こんにちは", "おやすみなさい"] },
+            { "id": "u1_l1_e3", "type": "fillBlank", "prompt": "お___なさい。 (Buenas noches, al despedirse para dormir)", "correctAnswer": "やすみ" },
+            { "id": "u1_l1_e4", "type": "multipleChoice", "prompt": "¿Cuál es la respuesta natural a 'お元気ですか?' (¿Cómo estás?)", "correctAnswer": "元気です、ありがとう", "options": ["元気です、ありがとう", "私の名前はアナです", "二十歳です", "またね"] },
+            { "id": "u1_l1_e5", "type": "matching", "prompt": "Une cada saludo en español con su traducción en japonés.", "pairs": { "Hola (de día)": "こんにちは", "Adiós": "さようなら", "Buenas noches": "おやすみなさい", "Por favor": "お願いします" } },
+            { "id": "u1_l1_e6", "type": "fillBlank", "prompt": "はじめ___。 (Encantado de conocerte)", "correctAnswer": "まして" }
+          ]
+        },
+        {
+          "id": "u1_l2",
+          "title": "自己紹介",
+          "exercises": [
+            { "id": "u1_l2_e1", "type": "fillBlank", "prompt": "私の名前___ローラです。 (partícula は)", "correctAnswer": "は" },
+            { "id": "u1_l2_e2", "type": "multipleChoice", "prompt": "¿Cómo preguntas el nombre de alguien (formal)?", "correctAnswer": "お名前は何ですか", "options": ["お名前は何ですか", "何歳ですか", "どこから来ましたか", "何をしますか"] },
+            { "id": "u1_l2_e3", "type": "fillBlank", "prompt": "私はスペイン___来ました。 (desde)", "correctAnswer": "から" },
+            { "id": "u1_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Tengo 25 años'?", "correctAnswer": "二十五歳です", "options": ["二十五歳です", "二十五歳します", "二十五歳あります", "二十五歳います"] },
+            { "id": "u1_l2_e5", "type": "matching", "prompt": "Une la pregunta con la respuesta correcta.", "pairs": { "お名前は何ですか": "カルロスです", "何歳ですか": "三十歳です", "どこから来ましたか": "メキシコから来ました" } },
+            { "id": "u1_l2_e6", "type": "fillBlank", "prompt": "これ___私の友達、マークです。 (partícula は)", "correctAnswer": "は" }
+          ]
+        },
+        {
+          "id": "u1_l3",
+          "title": "国籍と国",
+          "exercises": [
+            { "id": "u1_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'español/a' (nacionalidad)?", "correctAnswer": "スペイン人", "options": ["スペイン人", "スペイン", "スペイン語", "スペインの"] },
+            { "id": "u1_l3_e2", "type": "matching", "prompt": "Une el país con su nacionalidad en japonés.", "pairs": { "フランス": "フランス人", "イタリア": "イタリア人", "ドイツ": "ドイツ人", "ポルトガル": "ポルトガル人" } },
+            { "id": "u1_l3_e3", "type": "fillBlank", "prompt": "彼女は___です。 (de Japón)", "correctAnswer": "日本人" },
+            { "id": "u1_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es la pregunta correcta para el país de origen?", "correctAnswer": "どこから来ましたか", "options": ["どこから来ましたか", "どこへ行きますか", "あなたの国は何ですか", "何の国ですか"] },
+            { "id": "u1_l3_e5", "type": "fillBlank", "prompt": "彼らはブラジル___来ました。 (desde)", "correctAnswer": "から" },
+            { "id": "u1_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Soy de Alemania'?", "correctAnswer": "ドイツから来ました", "options": ["ドイツから来ました", "ドイツです国", "私はドイツ国", "ドイツ人から来ました"] }
+          ]
+        },
+        {
+          "id": "u1_l4",
+          "title": "丁寧な表現",
+          "exercises": [
+            { "id": "u1_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Por favor' (al pedir algo)?", "correctAnswer": "お願いします", "options": ["お願いします", "ありがとう", "すみません", "どういたしまして"] },
+            { "id": "u1_l4_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Perdón' (para llamar la atención)?", "correctAnswer": "すみません", "options": ["すみません", "お願いします", "どういたしまして", "ごめんなさい"] },
+            { "id": "u1_l4_e3", "type": "fillBlank", "prompt": "どうも___ございます。 (Muchas gracias)", "correctAnswer": "ありがとう" },
+            { "id": "u1_l4_e4", "type": "matching", "prompt": "Une la expresión en español con su equivalente en japonés.", "pairs": { "De nada": "どういたしまして", "Lo siento": "ごめんなさい", "Con permiso": "すみません", "Gracias": "ありがとう" } },
+            { "id": "u1_l4_e5", "type": "multipleChoice", "prompt": "Alguien te dice 'ありがとう'. ¿Qué respondes?", "correctAnswer": "どういたしまして", "options": ["どういたしまして", "お願いします", "すみません", "ごめんなさい"] },
+            { "id": "u1_l4_e6", "type": "fillBlank", "prompt": "遅れて___なさい。 (Lo siento por llegar tarde)", "correctAnswer": "ごめん" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "title": "数と時間",
+      "lessons": [
+        {
+          "id": "u2_l1",
+          "title": "1から20までの数字",
+          "exercises": [
+            { "id": "u2_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice el número 7?", "correctAnswer": "なな", "options": ["なな", "ろく", "はち", "きゅう"] },
+            { "id": "u2_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice el número 15?", "correctAnswer": "じゅうご", "options": ["じゅうご", "ごじゅう", "じゅうよん", "じゅうろく"] },
+            { "id": "u2_l1_e3", "type": "matching", "prompt": "Une el número con su nombre en japonés.", "pairs": { "3": "さん", "8": "はち", "12": "じゅうに", "20": "にじゅう" } },
+            { "id": "u2_l1_e4", "type": "fillBlank", "prompt": "きゅうの次は___です。 (después de 9 viene 10)", "correctAnswer": "じゅう" },
+            { "id": "u2_l1_e5", "type": "fillBlank", "prompt": "兄弟が___います。 (2 hermanos)", "correctAnswer": "ふたり" },
+            { "id": "u2_l1_e6", "type": "multipleChoice", "prompt": "¿Cuál es el número 'じゅういち'?", "correctAnswer": "11", "options": ["11", "1", "17", "7"] }
+          ]
+        },
+        {
+          "id": "u2_l2",
+          "title": "時間",
+          "exercises": [
+            { "id": "u2_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se pregunta la hora?", "correctAnswer": "今何時ですか", "options": ["今何時ですか", "今日は何ですか", "どのくらいですか", "何時間ですか"] },
+            { "id": "u2_l2_e2", "type": "fillBlank", "prompt": "三___です。 (Son las 3 en punto)", "correctAnswer": "時" },
+            { "id": "u2_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Son las 6 y media'?", "correctAnswer": "六時半です", "options": ["六時半です", "六時と半", "半六時です", "六の半時"] },
+            { "id": "u2_l2_e4", "type": "matching", "prompt": "Une la hora con su expresión en japonés.", "pairs": { "9:00": "九時", "9:15": "九時十五分", "9:30": "九時半", "9:45": "九時四十五分" } },
+            { "id": "u2_l2_e5", "type": "fillBlank", "prompt": "電車は午後五時___出ます。 (partícula 'a las')", "correctAnswer": "に" },
+            { "id": "u2_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'de la mañana' al dar una hora?", "correctAnswer": "午前", "options": ["午前", "午後", "夜", "時"] }
+          ]
+        },
+        {
+          "id": "u2_l3",
+          "title": "曜日",
+          "exercises": [
+            { "id": "u2_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'lunes'?", "correctAnswer": "月曜日", "options": ["月曜日", "火曜日", "日曜日", "金曜日"] },
+            { "id": "u2_l3_e2", "type": "matching", "prompt": "Une el día en español con su nombre en japonés.", "pairs": { "miércoles": "水曜日", "viernes": "金曜日", "sábado": "土曜日", "domingo": "日曜日" } },
+            { "id": "u2_l3_e3", "type": "fillBlank", "prompt": "今日は___です。 (jueves)", "correctAnswer": "木曜日" },
+            { "id": "u2_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es el primer día de la semana en el calendario japonés?", "correctAnswer": "月曜日", "options": ["月曜日", "日曜日", "土曜日", "金曜日"] },
+            { "id": "u2_l3_e5", "type": "fillBlank", "prompt": "月曜日___金曜日まで働きます。 (desde)", "correctAnswer": "から" },
+            { "id": "u2_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'fin de semana'?", "correctAnswer": "週末", "options": ["週末", "週始め", "週間", "最後の週"] }
+          ]
+        },
+        {
+          "id": "u2_l4",
+          "title": "月と季節",
+          "exercises": [
+            { "id": "u2_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'enero'?", "correctAnswer": "一月", "options": ["一月", "六月", "七月", "十一月"] },
+            { "id": "u2_l4_e2", "type": "matching", "prompt": "Une la estación en español con su nombre en japonés.", "pairs": { "primavera": "春", "verano": "夏", "otoño": "秋", "invierno": "冬" } },
+            { "id": "u2_l4_e3", "type": "fillBlank", "prompt": "誕生日は___です。 (diciembre)", "correctAnswer": "十二月" },
+            { "id": "u2_l4_e4", "type": "multipleChoice", "prompt": "¿Cuál es el mes más corto?", "correctAnswer": "二月", "options": ["二月", "四月", "三月", "五月"] },
+            { "id": "u2_l4_e5", "type": "fillBlank", "prompt": "冬___とても寒いです。 (partícula de tema)", "correctAnswer": "は" },
+            { "id": "u2_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verano'?", "correctAnswer": "夏", "options": ["夏", "冬", "秋", "春"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u3",
+      "title": "家族と人",
+      "lessons": [
+        {
+          "id": "u3_l1",
+          "title": "家族のメンバー",
+          "exercises": [
+            { "id": "u3_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermana menor'?", "correctAnswer": "妹", "options": ["妹", "弟", "母", "いとこ"] },
+            { "id": "u3_l1_e2", "type": "matching", "prompt": "Une el familiar en español con su nombre en japonés.", "pairs": { "padre": "父", "madre": "母", "abuelo": "祖父", "hijo": "息子" } },
+            { "id": "u3_l1_e3", "type": "fillBlank", "prompt": "私の___(tía)はイタリアに住んでいます。", "correctAnswer": "おば" },
+            { "id": "u3_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'primo/prima'?", "correctAnswer": "いとこ", "options": ["いとこ", "おい", "めい", "きょうだい"] },
+            { "id": "u3_l1_e5", "type": "fillBlank", "prompt": "娘が___います。 (2 hijas)", "correctAnswer": "ふたり" },
+            { "id": "u3_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermanos' (en general)?", "correctAnswer": "きょうだい", "options": ["きょうだい", "おじ", "いとこ", "おば"] }
+          ]
+        },
+        {
+          "id": "u3_l2",
+          "title": "人を描写する",
+          "exercises": [
+            { "id": "u3_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'alto/a'?", "correctAnswer": "背が高い", "options": ["背が高い", "背が低い", "大きい", "長い"] },
+            { "id": "u3_l2_e2", "type": "matching", "prompt": "Une el adjetivo en español con su traducción en japonés.", "pairs": { "joven": "若い", "mayor": "年上", "amable": "親切な", "divertido": "面白い" } },
+            { "id": "u3_l2_e3", "type": "fillBlank", "prompt": "彼女は髪が___です。 (largo)", "correctAnswer": "長い" },
+            { "id": "u3_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ojos azules'?", "correctAnswer": "青い目", "options": ["青い目", "目青い", "青目", "目の青い"] },
+            { "id": "u3_l2_e5", "type": "fillBlank", "prompt": "彼はとても___です。 (listo, inteligente)", "correctAnswer": "賢い" },
+            { "id": "u3_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'bajo/a' (estatura)?", "correctAnswer": "背が低い", "options": ["背が低い", "背が高い", "小さい", "短い"] }
+          ]
+        },
+        {
+          "id": "u3_l3",
+          "title": "です・だ と存在の言い方",
+          "exercises": [
+            { "id": "u3_l3_e1", "type": "fillBlank", "prompt": "彼女は先生___。 (copula です)", "correctAnswer": "です" },
+            { "id": "u3_l3_e2", "type": "fillBlank", "prompt": "私たちは学生___。 (copula です)", "correctAnswer": "です" },
+            { "id": "u3_l3_e3", "type": "multipleChoice", "prompt": "¿Cuál es la forma negativa educada de です?", "correctAnswer": "ではありません", "options": ["ではありません", "ますません", "ないです", "じゃますせん"] },
+            { "id": "u3_l3_e4", "type": "matching", "prompt": "Une el pronombre con la traducción correcta.", "pairs": { "yo": "私", "tú": "あなた", "él/ella": "彼・彼女", "nosotros": "私たち" } },
+            { "id": "u3_l3_e5", "type": "fillBlank", "prompt": "彼らは家に___か。 (¿están en casa? — verbo de existencia)", "correctAnswer": "います" },
+            { "id": "u3_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Él no es mi hermano'?", "correctAnswer": "彼は私の兄弟ではありません", "options": ["彼は私の兄弟ではありません", "彼は私の兄弟じゃないだ", "彼は私の兄弟ではないません", "彼は兄弟ではありませんの"] }
+          ]
+        },
+        {
+          "id": "u3_l4",
+          "title": "の（所有を表す助詞）",
+          "exercises": [
+            { "id": "u3_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'mi coche' usando の?", "correctAnswer": "私の車", "options": ["私の車", "私車", "車の私", "私は車"] },
+            { "id": "u3_l4_e2", "type": "matching", "prompt": "Une el pronombre con su forma posesiva en japonés.", "pairs": { "yo": "私の", "tú": "あなたの", "él": "彼の", "nosotros": "私たちの" } },
+            { "id": "u3_l4_e3", "type": "fillBlank", "prompt": "これは___(su, de él)車です。", "correctAnswer": "彼の" },
+            { "id": "u3_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'nuestra casa'?", "correctAnswer": "私たちの家", "options": ["私たちの家", "家の私たち", "私たち家", "私の家たち"] },
+            { "id": "u3_l4_e5", "type": "fillBlank", "prompt": "彼らは___(su, de ellos)犬が大好きです。", "correctAnswer": "彼らの" },
+            { "id": "u3_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'tus padres'?", "correctAnswer": "あなたの両親", "options": ["あなたの両親", "あなた両親", "両親のあなた", "あなたは両親"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u4",
+      "title": "食べ物と飲み物",
+      "lessons": [
+        {
+          "id": "u4_l1",
+          "title": "基本の食べ物",
+          "exercises": [
+            { "id": "u4_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pan'?", "correctAnswer": "パン", "options": ["パン", "肉", "米", "チーズ"] },
+            { "id": "u4_l1_e2", "type": "matching", "prompt": "Une el alimento en español con su nombre en japonés.", "pairs": { "manzana": "りんご", "agua": "水", "leche": "牛乳", "huevo": "卵" } },
+            { "id": "u4_l1_e3", "type": "fillBlank", "prompt": "毎日___(arroz/comida)を食べます。", "correctAnswer": "ご飯" },
+            { "id": "u4_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pollo'?", "correctAnswer": "鶏肉", "options": ["鶏肉", "魚", "牛肉", "豚肉"] },
+            { "id": "u4_l1_e5", "type": "fillBlank", "prompt": "___(queso)を少しください。", "correctAnswer": "チーズ" },
+            { "id": "u4_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verduras'?", "correctAnswer": "野菜", "options": ["野菜", "果物", "肉", "穀物"] }
+          ]
+        },
+        {
+          "id": "u4_l2",
+          "title": "レストランで",
+          "exercises": [
+            { "id": "u4_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo pides la cuenta?", "correctAnswer": "お会計をお願いします", "options": ["お会計をお願いします", "お金をお願いします", "払いをお願いします", "合計をお願いします"] },
+            { "id": "u4_l2_e2", "type": "fillBlank", "prompt": "コーヒーを___。 (Quiero un café, forma educada de pedir)", "correctAnswer": "ください" },
+            { "id": "u4_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo preguntas si hay una mesa libre?", "correctAnswer": "空いている席はありますか", "options": ["空いている席はありますか", "席を持っていますか", "席がありますあるか", "席は空くですか"] },
+            { "id": "u4_l2_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en japonés.", "pairs": { "Quiero reservar una mesa": "席を予約したいです", "¿Qué recomienda?": "おすすめは何ですか", "Está delicioso": "おいしいです", "La cuenta, por favor": "お会計をお願いします" } },
+            { "id": "u4_l2_e5", "type": "fillBlank", "prompt": "メニューを___もいいですか。 (ver)", "correctAnswer": "見て" },
+            { "id": "u4_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'camarero/a'?", "correctAnswer": "店員", "options": ["店員", "料理人", "シェフ", "マネージャー"] }
+          ]
+        },
+        {
+          "id": "u4_l3",
+          "title": "好き（gustar）",
+          "exercises": [
+            { "id": "u4_l3_e1", "type": "fillBlank", "prompt": "私はピザが___です。 (me gusta)", "correctAnswer": "好き" },
+            { "id": "u4_l3_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'A ella le gusta el café'?", "correctAnswer": "彼女はコーヒーが好きです", "options": ["彼女はコーヒーが好きです", "彼女はコーヒーを好きです", "彼女はコーヒー好きです", "彼女が好きですコーヒー"] },
+            { "id": "u4_l3_e3", "type": "fillBlank", "prompt": "彼は魚が___です。 (no le gusta)", "correctAnswer": "嫌い" },
+            { "id": "u4_l3_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en japonés.", "pairs": { "Me gusta el chocolate": "チョコレートが好きです", "No me gusta la cebolla": "玉ねぎが嫌いです", "¿Te gusta el té?": "お茶が好きですか", "Nos gusta cocinar": "料理をするのが好きです" } },
+            { "id": "u4_l3_e5", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de pregunta con 好き?", "correctAnswer": "好きですか", "options": ["好きですか", "好きします", "は好きですか", "好きあるか"] },
+            { "id": "u4_l3_e6", "type": "fillBlank", "prompt": "彼らは一緒に___のが好きです。 (cocinar)", "correctAnswer": "料理する" }
+          ]
+        },
+        {
+          "id": "u4_l4",
+          "title": "数量表現：いくつか・全然",
+          "exercises": [
+            { "id": "u4_l4_e1", "type": "fillBlank", "prompt": "りんごが___あります。 (algunas)", "correctAnswer": "いくつか" },
+            { "id": "u4_l4_e2", "type": "fillBlank", "prompt": "パンが___ありません。 (nada, con negativo)", "correctAnswer": "全然" },
+            { "id": "u4_l4_e3", "type": "multipleChoice", "prompt": "¿Cómo se pregunta 'Hay algo de leche?'", "correctAnswer": "牛乳がありますか", "options": ["牛乳がありますか", "牛乳が全然ありますか", "牛乳がいくつありますか", "牛乳はですか"] },
+            { "id": "u4_l4_e4", "type": "matching", "prompt": "Une la regla con el ejemplo correcto.", "pairs": { "Afirmativa": "水がいくつかあります", "Negativa": "水が全然ありません", "Pregunta": "水がありますか" } },
+            { "id": "u4_l4_e5", "type": "multipleChoice", "prompt": "¿Cómo se dice 'un poco de azúcar'?", "correctAnswer": "少し砂糖", "options": ["少し砂糖", "たくさん砂糖", "一つ砂糖", "いくつか砂糖"] },
+            { "id": "u4_l4_e6", "type": "fillBlank", "prompt": "お茶を___いかがですか。 (un poco)", "correctAnswer": "少し" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u5",
+      "title": "毎日の習慣",
+      "lessons": [
+        {
+          "id": "u5_l1",
+          "title": "日課の動詞",
+          "exercises": [
+            { "id": "u5_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'despertarse'?", "correctAnswer": "起きる", "options": ["起きる", "寝る", "夢を見る", "休む"] },
+            { "id": "u5_l1_e2", "type": "matching", "prompt": "Une la acción en español con su verbo en japonés.", "pairs": { "ducharse": "シャワーを浴びる", "desayunar": "朝ごはんを食べる", "trabajar": "働く", "dormir": "寝る" } },
+            { "id": "u5_l1_e3", "type": "fillBlank", "prompt": "私はいつも7時に___。 (me visto)", "correctAnswer": "服を着ます" },
+            { "id": "u5_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ir a la cama'?", "correctAnswer": "寝る", "options": ["寝る", "寝室に行く", "ベッドに入る", "休憩する"] },
+            { "id": "u5_l1_e5", "type": "fillBlank", "prompt": "彼女は毎朝___。 (se cepilla los dientes)", "correctAnswer": "歯を磨きます" },
+            { "id": "u5_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'comer' (comida general)?", "correctAnswer": "食べる", "options": ["食べる", "飲む", "料理する", "味わう"] }
+          ]
+        },
+        {
+          "id": "u5_l2",
+          "title": "ます形（肯定）",
+          "exercises": [
+            { "id": "u5_l2_e1", "type": "fillBlank", "prompt": "彼女は毎日___。 (trabajar, forma ます)", "correctAnswer": "働きます" },
+            { "id": "u5_l2_e2", "type": "multipleChoice", "prompt": "¿Cuál es la forma ます de 行く (ir)?", "correctAnswer": "行きます", "options": ["行きます", "行くます", "行きだ", "行くです"] },
+            { "id": "u5_l2_e3", "type": "fillBlank", "prompt": "私はマドリードに___。 (vivir, forma ています)", "correctAnswer": "住んでいます" },
+            { "id": "u5_l2_e4", "type": "matching", "prompt": "Une el verbo en forma diccionario con su forma ます.", "pairs": { "食べる": "食べます", "飲む": "飲みます", "見る": "見ます", "話す": "話します" } },
+            { "id": "u5_l2_e5", "type": "multipleChoice", "prompt": "¿Cuál es la terminación educada del presente afirmativo?", "correctAnswer": "ます", "options": ["ます", "る", "た", "ない"] },
+            { "id": "u5_l2_e6", "type": "fillBlank", "prompt": "彼らは8時に朝ごはんを___。 (comer, forma ます)", "correctAnswer": "食べます" }
+          ]
+        },
+        {
+          "id": "u5_l3",
+          "title": "ます形（疑問と否定）",
+          "exercises": [
+            { "id": "u5_l3_e1", "type": "fillBlank", "prompt": "コーヒーが好きです___。 (partícula final de pregunta)", "correctAnswer": "か" },
+            { "id": "u5_l3_e2", "type": "fillBlank", "prompt": "彼女は日曜日に働き___か。 (forma ます en pregunta)", "correctAnswer": "ます" },
+            { "id": "u5_l3_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Ellos no trabajan los fines de semana'?", "correctAnswer": "彼らは週末に働きません", "options": ["彼らは週末に働きません", "彼らは週末に働くません", "彼らは週末に働きないです", "彼らは週末に働かません"] },
+            { "id": "u5_l3_e4", "type": "matching", "prompt": "Une la forma afirmativa con su negación correcta (ます形).", "pairs": { "飲みます": "飲みません", "食べます": "食べません", "働きます": "働きません" } },
+            { "id": "u5_l3_e5", "type": "fillBlank", "prompt": "彼はここに住んでい___。 (no vive, forma negativa)", "correctAnswer": "ません" },
+            { "id": "u5_l3_e6", "type": "multipleChoice", "prompt": "¿Cuál es correcta para preguntar '¿Habla inglés?'", "correctAnswer": "英語を話しますか", "options": ["英語を話しますか", "英語を話すか", "英語を話しますですか", "英語話しますか"] }
+          ]
+        },
+        {
+          "id": "u5_l4",
+          "title": "家と部屋",
+          "exercises": [
+            { "id": "u5_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'cocina' (habitación)?", "correctAnswer": "台所", "options": ["台所", "寝室", "お風呂", "リビング"] },
+            { "id": "u5_l4_e2", "type": "matching", "prompt": "Une la habitación en español con su nombre en japonés.", "pairs": { "dormitorio": "寝室", "baño": "お風呂", "salón": "リビング", "jardín": "庭" } },
+            { "id": "u5_l4_e3", "type": "fillBlank", "prompt": "___(dormitorio)で宿題をします。", "correctAnswer": "寝室" },
+            { "id": "u5_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Yo cocino en la cocina'?", "correctAnswer": "台所で料理します", "options": ["台所で料理します", "台所を料理します", "台所に料理します", "料理台所します"] },
+            { "id": "u5_l4_e5", "type": "fillBlank", "prompt": "___(salón)でテレビを見ます。", "correctAnswer": "リビング" },
+            { "id": "u5_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'garaje'?", "correctAnswer": "ガレージ", "options": ["ガレージ", "庭", "廊下", "屋根裏"] }
+          ]
+        }
+      ]
+    }
+  ]
+}
