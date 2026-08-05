@@ -148,10 +148,12 @@ APK debug instalable, navegación entre las 4 pantallas funcional (verificación
 
 ---
 
-## Paso 5 — Identidad Android
+## Paso 5 — Identidad Android [HECHO]
 
 **Modelo:** Sonnet 5. **Paralelizable con:** Paso 6.
 **Depende de:** Paso 2. **Bloquea:** 9, 12.
+
+**Ejecutado:** `applicationId`/`namespace` placeholder (`com.TODO.appparaaprenderidiomas.app_para_aprender_idiomas`) confirmado consistente en `build.gradle.kts`, iconos adaptativos por defecto del scaffold (pendientes de logo real). `flutter build appbundle --release` verificado: `app-release.aab` generado (46.2MB, firmado con debug key — firma real pendiente del Paso 13).
 
 ### Contexto autocontenido
 `src/mobile/android/app/build.gradle` (`applicationId`, `versionCode`/`versionName`), iconos adaptativos en `android/app/src/main/res/`, `AndroidManifest.xml` (permisos mínimos).
@@ -173,10 +175,12 @@ cd src/mobile && ~/flutter/bin/flutter build appbundle --release
 
 ---
 
-## Paso 6 — Identidad iOS
+## Paso 6 — Identidad iOS [HECHO — código; build pendiente de CI/Mac]
 
 **Modelo:** Sonnet 5. **Paralelizable con:** Paso 5.
 **Depende de:** Paso 2. **Bloquea:** 9, 12.
+
+**Ejecutado:** `CFBundleIdentifier`/`PRODUCT_BUNDLE_IDENTIFIER` confirmado consistente con Android (`com.TODO.appparaaprenderidiomas.appParaAprenderIdiomas`, mismo placeholder), `CFBundleDisplayName` ya correcto ("App Para Aprender Idiomas") desde el scaffold. Sin build local posible en este contenedor Linux, como estaba previsto — se confirma en el Paso 12 (CI, runner macOS).
 
 ### Contexto autocontenido
 `src/mobile/ios/Runner/Info.plist` (`CFBundleIdentifier` — mismo valor base que Android), iconos, `LaunchScreen`. **Sin build local posible en este contenedor Linux** — se verifica en el Paso 12 (CI, runner macOS) o en Mac real del usuario.
