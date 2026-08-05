@@ -19,6 +19,7 @@ void main() {
 
       expect(state.completed, isFalse);
       expect(state.selectedLevel, isNull);
+      expect(state.targetLanguage, isNull);
       expect(state.authMode, isNull);
       expect(state.email, isNull);
     });
@@ -26,11 +27,12 @@ void main() {
     test('complete persists the choice and load reads it back as guest', () async {
       final repository = SharedPreferencesOnboardingRepository();
 
-      await repository.complete(level: 'A1', authMode: AuthMode.guest);
+      await repository.complete(level: 'A1', targetLanguage: 'pt', authMode: AuthMode.guest);
       final reloaded = await SharedPreferencesOnboardingRepository().load();
 
       expect(reloaded.completed, isTrue);
       expect(reloaded.selectedLevel, 'A1');
+      expect(reloaded.targetLanguage, 'pt');
       expect(reloaded.authMode, AuthMode.guest);
       expect(reloaded.email, isNull);
     });
@@ -38,7 +40,12 @@ void main() {
     test('complete persists the email when the auth mode is email', () async {
       final repository = SharedPreferencesOnboardingRepository();
 
-      await repository.complete(level: 'A1', authMode: AuthMode.email, email: 'ana@example.com');
+      await repository.complete(
+        level: 'A1',
+        targetLanguage: 'en',
+        authMode: AuthMode.email,
+        email: 'ana@example.com',
+      );
       final reloaded = await SharedPreferencesOnboardingRepository().load();
 
       expect(reloaded.completed, isTrue);

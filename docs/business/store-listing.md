@@ -33,10 +33,8 @@ TRES TIPOS DE EJERCICIO, CADA UNO ENSEÑA ALGO DISTINTO
 TU PROGRESO, GUARDADO EN TU DISPOSITIVO
 Rachas diarias, puntuación acumulada y lecciones completadas — todo guardado localmente, sin necesidad de crear una cuenta para empezar.
 
-PREMIUM, SOLO SI QUIERES MÁS
-La suscripción Premium (mensual o anual, con descuento en el plan anual) da acceso a más idiomas a medida que se publiquen. El curso de inglés A1 no está detrás de un muro — lo premium es una ampliación, no un rescate de lo básico.
-
-Portugués, francés y japonés ya están en desarrollo con la misma calidad de contenido que el inglés.
+PREMIUM: PORTUGUÉS, FRANCÉS Y JAPONÉS
+La suscripción Premium (mensual o anual, con descuento en el plan anual) desbloquea los cursos A1 completos de portugués, francés y japonés — misma calidad y estructura que el inglés, ya disponibles, no "próximamente". El curso de inglés A1 no está detrás de un muro — lo premium es una ampliación real de idiomas, no un rescate de lo básico.
 
 Sin gamificación vacía. Sin relleno. Contenido real, revisado, que se puede completar de verdad.
 ```

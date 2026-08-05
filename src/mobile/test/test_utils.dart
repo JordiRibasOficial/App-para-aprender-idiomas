@@ -21,6 +21,7 @@ Widget appWithCompletedOnboarding() {
           initialState: const OnboardingState(
             completed: true,
             selectedLevel: 'A1',
+            targetLanguage: 'en',
             authMode: AuthMode.guest,
           ),
         ),

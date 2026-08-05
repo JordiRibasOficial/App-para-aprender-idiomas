@@ -2,21 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/models/target_language.dart';
 import '../providers/content_providers.dart';
 import '../providers/progress_providers.dart';
 
 class LessonListScreen extends ConsumerWidget {
-  const LessonListScreen({super.key});
+  const LessonListScreen({super.key, required this.targetLanguage});
+
+  final String targetLanguage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final courseAsync = ref.watch(englishCourseProvider);
+    final courseAsync = ref.watch(courseProvider(targetLanguage));
     final completedLessonIds =
-        ref.watch(englishProgressProvider).value?.completedLessonIds ?? const {};
+        ref.watch(progressProvider(targetLanguage)).value?.completedLessonIds ?? const {};
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inglés · A1'),
+        title: Text('${targetLanguageDisplayName(targetLanguage)} · A1'),
         actions: [
           IconButton(
             icon: const Icon(Icons.workspace_premium_outlined),
@@ -52,7 +55,7 @@ class LessonListScreen extends ConsumerWidget {
                   ),
                   title: Text(lesson.title),
                   subtitle: Text('${lesson.exercises.length} ejercicios'),
-                  onTap: () => context.go('/lesson/${unit.id}/${lesson.id}'),
+                  onTap: () => context.go('/lesson/$targetLanguage/${unit.id}/${lesson.id}'),
                 ),
             ],
           ],

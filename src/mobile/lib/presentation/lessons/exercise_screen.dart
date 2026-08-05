@@ -12,8 +12,14 @@ import '../widgets/progress_bar.dart';
 import 'lesson_summary_data.dart';
 
 class ExerciseScreen extends ConsumerStatefulWidget {
-  const ExerciseScreen({super.key, required this.unitId, required this.lessonId});
+  const ExerciseScreen({
+    super.key,
+    required this.targetLanguage,
+    required this.unitId,
+    required this.lessonId,
+  });
 
+  final String targetLanguage;
   final String unitId;
   final String lessonId;
 
@@ -83,12 +89,12 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     }
 
     await ref
-        .read(englishProgressProvider.notifier)
+        .read(progressProvider(widget.targetLanguage).notifier)
         .completeLesson(lessonId: lesson.id, score: _score);
     if (!mounted) return;
 
     context.go(
-      '/lesson/${widget.unitId}/${widget.lessonId}/summary',
+      '/lesson/${widget.targetLanguage}/${widget.unitId}/${widget.lessonId}/summary',
       extra: LessonSummaryData(
         unitId: widget.unitId,
         lessonTitle: lesson.title,
@@ -100,7 +106,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final courseAsync = ref.watch(englishCourseProvider);
+    final courseAsync = ref.watch(courseProvider(widget.targetLanguage));
 
     return courseAsync.when(
       loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),

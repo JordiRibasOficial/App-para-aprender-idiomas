@@ -8,16 +8,20 @@ final progressRepositoryProvider = Provider<ProgressRepository>((ref) {
   return SqliteProgressRepository();
 });
 
-class EnglishProgressNotifier extends AsyncNotifier<UserProgress> {
+class ProgressNotifier extends AsyncNotifier<UserProgress> {
+  ProgressNotifier(this.targetLanguage);
+
+  final String targetLanguage;
+
   @override
   Future<UserProgress> build() {
-    return ref.watch(progressRepositoryProvider).load('en');
+    return ref.watch(progressRepositoryProvider).load(targetLanguage);
   }
 
   Future<void> completeLesson({required String lessonId, required int score}) async {
     final repository = ref.read(progressRepositoryProvider);
     final updated = await repository.recordLessonCompletion(
-      targetLanguage: 'en',
+      targetLanguage: targetLanguage,
       lessonId: lessonId,
       score: score,
     );
@@ -25,6 +29,6 @@ class EnglishProgressNotifier extends AsyncNotifier<UserProgress> {
   }
 }
 
-final englishProgressProvider = AsyncNotifierProvider<EnglishProgressNotifier, UserProgress>(
-  EnglishProgressNotifier.new,
+final progressProvider = AsyncNotifierProvider.family<ProgressNotifier, UserProgress, String>(
+  ProgressNotifier.new,
 );

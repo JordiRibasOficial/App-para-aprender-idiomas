@@ -29,7 +29,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               FilledButton(
-                onPressed: () => context.push('/onboarding/level'),
+                onPressed: () => context.push('/onboarding/language'),
                 child: const Text('Empezar'),
               ),
             ],

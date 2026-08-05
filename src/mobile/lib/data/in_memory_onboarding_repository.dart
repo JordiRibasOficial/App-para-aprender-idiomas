@@ -14,12 +14,14 @@ class InMemoryOnboardingRepository implements OnboardingRepository {
   @override
   Future<OnboardingState> complete({
     required String level,
+    required String targetLanguage,
     required AuthMode authMode,
     String? email,
   }) async {
     _state = OnboardingState(
       completed: true,
       selectedLevel: level,
+      targetLanguage: targetLanguage,
       authMode: authMode,
       email: email,
     );

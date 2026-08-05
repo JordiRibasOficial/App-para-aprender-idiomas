@@ -18,8 +18,10 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
   Future<void> _complete(AuthMode authMode, {String? email}) async {
     setState(() => _completing = true);
     final level = ref.read(onboardingSelectedLevelProvider);
+    final targetLanguage = ref.read(onboardingSelectedLanguageProvider);
     await ref.read(onboardingProvider.notifier).complete(
           level: level,
+          targetLanguage: targetLanguage,
           authMode: authMode,
           email: email,
         );

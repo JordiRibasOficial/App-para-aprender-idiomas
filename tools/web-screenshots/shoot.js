@@ -44,7 +44,12 @@ async function shootOnboardingFlow(browser) {
 
   await page.getByText('Empezar', { exact: true }).click({ timeout: 5000 });
   await page.waitForTimeout(2000);
-  await page.screenshot({ path: path.join(OUT, '02-nivel.png') });
+  await page.screenshot({ path: path.join(OUT, '02-idioma.png') });
+
+  // English is preselected as the default target language.
+  await page.getByText('Continuar', { exact: true }).click({ timeout: 5000 });
+  await page.waitForTimeout(2000);
+  await page.screenshot({ path: path.join(OUT, '02b-nivel.png') });
 
   await page.getByText('Continuar', { exact: true }).click({ timeout: 5000 });
   await page.waitForTimeout(2000);
@@ -63,8 +68,8 @@ async function main() {
   });
 
   await shootUrl(browser, `${BASE}/#/`, '01-welcome.png');
-  await shootUrl(browser, `${BASE}/#/lesson/u1/u1_l1`, '03-ejercicio.png');
-  await shootUrl(browser, `${BASE}/#/lesson/u2/u2_l1`, '04-ejercicio2.png');
+  await shootUrl(browser, `${BASE}/#/lesson/en/u1/u1_l1`, '03-ejercicio.png');
+  await shootUrl(browser, `${BASE}/#/lesson/en/u2/u2_l1`, '04-ejercicio2.png');
   await shootUrl(browser, `${BASE}/#/paywall`, '06-premium.png');
   await shootOnboardingFlow(browser);
 

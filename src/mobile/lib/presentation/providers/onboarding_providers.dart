@@ -16,11 +16,17 @@ class OnboardingNotifier extends AsyncNotifier<OnboardingState> {
 
   Future<void> complete({
     required String level,
+    required String targetLanguage,
     required AuthMode authMode,
     String? email,
   }) async {
     final repository = ref.read(onboardingRepositoryProvider);
-    final updated = await repository.complete(level: level, authMode: authMode, email: email);
+    final updated = await repository.complete(
+      level: level,
+      targetLanguage: targetLanguage,
+      authMode: authMode,
+      email: email,
+    );
     state = AsyncData(updated);
   }
 }
@@ -40,4 +46,17 @@ class SelectedLevelNotifier extends Notifier<String> {
 
 final onboardingSelectedLevelProvider = NotifierProvider<SelectedLevelNotifier, String>(
   SelectedLevelNotifier.new,
+);
+
+/// Transient selection made on the language screen, read by the auth-choice
+/// screen when it calls [OnboardingNotifier.complete].
+class SelectedLanguageNotifier extends Notifier<String> {
+  @override
+  String build() => 'en';
+
+  void select(String targetLanguage) => state = targetLanguage;
+}
+
+final onboardingSelectedLanguageProvider = NotifierProvider<SelectedLanguageNotifier, String>(
+  SelectedLanguageNotifier.new,
 );

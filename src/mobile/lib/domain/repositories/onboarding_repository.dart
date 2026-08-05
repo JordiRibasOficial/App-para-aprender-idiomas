@@ -7,6 +7,7 @@ abstract interface class OnboardingRepository {
 
   Future<OnboardingState> complete({
     required String level,
+    required String targetLanguage,
     required AuthMode authMode,
     String? email,
   });

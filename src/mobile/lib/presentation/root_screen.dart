@@ -19,7 +19,9 @@ class RootScreen extends ConsumerWidget {
       error: (error, stackTrace) => Scaffold(
         body: Center(child: Text('No se pudo iniciar la app: $error')),
       ),
-      data: (state) => state.completed ? const LessonListScreen() : const WelcomeScreen(),
+      data: (state) => state.completed
+          ? LessonListScreen(targetLanguage: state.targetLanguage ?? 'en')
+          : const WelcomeScreen(),
     );
   }
 }

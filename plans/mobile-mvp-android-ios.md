@@ -94,7 +94,7 @@ cd src/mobile && ~/flutter/bin/flutter analyze
 
 ---
 
-## Paso 3 — Modelo de contenido multi-idioma y curso de inglés completo [HECHO — inglés; PT/FR/JA pendientes]
+## Paso 3 — Modelo de contenido multi-idioma y curso de inglés completo [HECHO — 4 idiomas, seleccionables en la UI]
 
 **Modelo:** Sonnet 5 (Opus para el diseño del esquema de datos, dado que debe soportar 12 idiomas sin rehacerse).
 **Depende de:** Paso 2. **Bloquea:** 7. **Paralelizable con:** Paso 4 (mocks).
@@ -109,7 +109,13 @@ cd src/mobile && ~/flutter/bin/flutter analyze
 
 Test `content_repository_test.dart` generalizado a los 4 idiomas (bucle parametrizado, ya no solo inglés) + test añadido de unicidad de IDs de ejercicio dentro de cada curso (detecta colisiones de copiar-pegar). Los 4 cursos cargan y validan correctamente: 20 unidades, 80 lecciones, 480 ejercicios en total entre los 4 idiomas.
 
-**Fuera de alcance deliberado de esta iteración:** selección de idioma de destino en la UI (`LessonListScreen`/`englishCourseProvider` siguen fijos a inglés) — esta iteración era específicamente de contenido (Paso 3), no de la función de cambiar de idioma en la app, que es una pieza de UI separada para una iteración futura antes de publicar los 4 idiomas.
+**Selección de idioma en la UI [HECHO]:** cerrado lo que la primera pasada había dejado deliberadamente fuera de alcance. `LanguageSelectionScreen` nueva, primer paso del onboarding (antes de nivel), con los 4 idiomas de lanzamiento. `courseProvider`/`progressProvider` generalizados de providers fijos a inglés a `FutureProvider.family`/`AsyncNotifierProvider.family` parametrizados por `targetLanguage`; `OnboardingState` guarda el idioma elegido (persistido en `SharedPreferences`); rutas (`/lesson/:targetLanguage/:unitId/:lessonId`) y `LessonListScreen`/`ExerciseScreen` actualizados para usar el idioma real en vez de `'en'` hardcodeado.
+
+**Decisión de negocio explícita del usuario (vía `AskUserQuestion`):** portugués/francés/japonés quedan detrás del paywall — inglés sigue gratis y completo, los otros 3 requieren Premium, coincidiendo con lo que la ficha de tienda ya prometía ("Premium desbloquea más idiomas"). `TargetLanguageOption.requiresPremium` marca los 3; `LanguageSelectionScreen` comprueba `entitlementProvider` y, si el usuario no es Premium, el botón "Continuar" lleva a `/paywall` en vez de seguir el onboarding — no hay forma de elegir un idioma de pago sin pasar por ahí, porque todavía no existe un selector de idioma fuera del onboarding. Limitación conocida y documentada en el código: el gate se comprueba una vez, al elegir idioma, no en cada carga de lección (mismo nivel de rigor que el resto del paywall, ver Paso 9).
+
+`docs/business/store-listing.md` actualizado: el párrafo de Premium ya no dice "en desarrollo" — los 3 idiomas existen de verdad y están detrás del muro real.
+
+Tests nuevos: onboarding completo eligiendo portugués sin Premium (termina en el paywall, no en nivel), y con una suscripción activa simulada (termina en la lista de lecciones de portugués). De paso, se encontró y arregló un bug de aislamiento de tests: `appRouter` es un singleton a nivel de módulo, así que su pila de navegación sobrevivía entre tests del mismo archivo — añadido `tearDown(() => appRouter.go('/'))`. 57/57 tests en verde, `flutter analyze` limpio, `flutter build appbundle --release` verificado.
 
 ### Contexto autocontenido
 Modelo de datos en `lib/domain/models/`: `Course` (con `sourceLanguage`, `targetLanguage` como campos desde el inicio, aunque el MVP solo cargue 4 combinaciones), `Unit`, `Lesson`, `Exercise` (opción múltiple, rellenar hueco, emparejar), `UserProgress`. Contenido como JSON en `assets/content/courses/<lang-code>.json` (uno por idioma, no un único archivo gigante — así añadir un idioma nuevo no toca los existentes).

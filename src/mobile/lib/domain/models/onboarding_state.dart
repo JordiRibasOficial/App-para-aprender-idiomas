@@ -8,12 +8,16 @@ class OnboardingState {
   const OnboardingState({
     this.completed = false,
     this.selectedLevel,
+    this.targetLanguage,
     this.authMode,
     this.email,
   });
 
   final bool completed;
   final String? selectedLevel;
+
+  /// Course code chosen on the language-selection screen (`en`/`pt`/`fr`/`ja`).
+  final String? targetLanguage;
   final AuthMode? authMode;
   final String? email;
 }
