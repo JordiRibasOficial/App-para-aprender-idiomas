@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.TODO.appparaaprenderidiomas.app_para_aprender_idiomas"
+    namespace = "com.worldwebapps.app.aprenderidioma"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -15,8 +15,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.TODO.appparaaprenderidiomas.app_para_aprender_idiomas"
+        applicationId = "com.worldwebapps.app.aprenderidioma"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

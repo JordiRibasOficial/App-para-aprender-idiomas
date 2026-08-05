@@ -1,4 +1,4 @@
-package com.TODO.appparaaprenderidiomas.app_para_aprender_idiomas
+package com.worldwebapps.app.aprenderidioma
 
 import io.flutter.embedding.android.FlutterActivity
 

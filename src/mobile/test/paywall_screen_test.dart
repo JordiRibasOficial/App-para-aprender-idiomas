@@ -21,11 +21,11 @@ void main() {
 
     expect(find.text('Mensual'), findsOneWidget);
     expect(find.text('Anual'), findsOneWidget);
-    expect(find.text('€7.99'), findsOneWidget);
-    expect(find.text('€44.99'), findsOneWidget);
+    expect(find.text('€14.99'), findsOneWidget);
+    expect(find.text('€89.94'), findsOneWidget);
 
-    // 44.99 / (7.99 * 12) = 0.4695... -> saves ~53%.
-    expect(find.text('-53%'), findsOneWidget);
+    // 89.94 / (14.99 * 12) = 0.5 exactly -> saves 50%.
+    expect(find.text('-50%'), findsOneWidget);
   });
 
   testWidgets('purchasing a plan updates the screen to the active-subscription view',
@@ -33,7 +33,7 @@ void main() {
     await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Suscribirse — €44.99'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Suscribirse — €89.94'));
     await tester.pump(); // enters the purchasing state
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
@@ -49,7 +49,7 @@ void main() {
     await tester.pumpWidget(buildPaywall(repository));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Suscribirse — €44.99'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Suscribirse — €89.94'));
     await tester.pumpAndSettle(); // mock purchase resolves after 300ms
 
     expect(find.text('No se pudo completar la compra de annual_sub.'), findsOneWidget);
