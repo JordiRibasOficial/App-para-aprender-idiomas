@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../providers/content_providers.dart';
+import '../providers/progress_providers.dart';
 
 class LessonListScreen extends ConsumerWidget {
   const LessonListScreen({super.key});
@@ -10,6 +11,8 @@ class LessonListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final courseAsync = ref.watch(englishCourseProvider);
+    final completedLessonIds =
+        ref.watch(englishProgressProvider).value?.completedLessonIds ?? const {};
 
     return Scaffold(
       appBar: AppBar(title: const Text('Inglés · A1')),
@@ -30,7 +33,14 @@ class LessonListScreen extends ConsumerWidget {
               ),
               for (final lesson in unit.lessons)
                 ListTile(
-                  leading: const Icon(Icons.menu_book_outlined),
+                  leading: Icon(
+                    completedLessonIds.contains(lesson.id)
+                        ? Icons.check_circle
+                        : Icons.menu_book_outlined,
+                    color: completedLessonIds.contains(lesson.id)
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
                   title: Text(lesson.title),
                   subtitle: Text('${lesson.exercises.length} ejercicios'),
                   onTap: () => context.go('/lesson/${unit.id}/${lesson.id}'),

@@ -208,10 +208,12 @@ Configuración completa, coherente con Android, marcada honestamente como "build
 
 ---
 
-## Paso 7 — Persistencia local y progreso
+## Paso 7 — Persistencia local y progreso [HECHO]
 
 **Modelo:** Sonnet 5.
 **Depende de:** 3, 4. **Bloquea:** 8, 10.
+
+**Ejecutado:** `UserProgress` ampliado con `lastActivityDate` + lógica de racha pura (`UserProgress.nextStreak`: mismo día no cambia, día siguiente +1, cualquier otro salto reinicia a 1). `ProgressRepository` (interfaz) con `load`/`recordLessonCompletion`; `InMemoryProgressRepository` (usada en tests y como override) y `SqliteProgressRepository` (real, `sqflite` + `path_provider`, dos tablas — `user_progress` y `completed_lessons` — con `INSERT OR REPLACE`/`OR IGNORE` en una transacción). `ExerciseScreen` llama a `completeLesson` al terminar la última pregunta antes de navegar al resumen; `LessonListScreen` marca con check las lecciones ya completadas vía `englishProgressProvider`. `flutter analyze`: sin issues. 14 tests en verde (6 nuevos de `InMemoryProgressRepository` — guardar/recuperar, aislamiento entre idiomas, las 3 ramas de la racha — más 1 de integración de los providers de Riverpod). `SqliteProgressRepository` no tiene test unitario propio (requiere canales de plataforma, no disponibles en `flutter test`; se revisó por código, sigue el mismo contrato que la versión en memoria) — pendiente de verificación real en `integration_test` sobre emulador/dispositivo cuando exista. Build de verificación: `flutter build apk --debug` con `sqflite` real integrado — `app-debug.apk` generado (112.9MB).
 
 ### Contexto autocontenido
 `sqflite` para progreso (lecciones completadas, racha, puntuación) en `lib/data/progress_repository.dart`, con interfaz `ProgressRepository` abstracta + implementación SQLite + implementación en memoria para tests.

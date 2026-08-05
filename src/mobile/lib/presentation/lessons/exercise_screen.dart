@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../domain/models/exercise.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/content_providers.dart';
+import '../providers/progress_providers.dart';
 import '../widgets/progress_bar.dart';
 import 'lesson_summary_data.dart';
 
@@ -68,7 +69,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     });
   }
 
-  void _next(Lesson lesson) {
+  Future<void> _next(Lesson lesson) async {
     if (_index + 1 < lesson.exercises.length) {
       setState(() {
         _index++;
@@ -80,6 +81,11 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       });
       return;
     }
+
+    await ref
+        .read(englishProgressProvider.notifier)
+        .completeLesson(lessonId: lesson.id, score: _score);
+    if (!mounted) return;
 
     context.go(
       '/lesson/${widget.unitId}/${widget.lessonId}/summary',
