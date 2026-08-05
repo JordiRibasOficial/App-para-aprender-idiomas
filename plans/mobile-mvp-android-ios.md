@@ -298,10 +298,14 @@ Código completo, tests contra mocks en verde, sin afirmar verificación no real
 
 ---
 
-## Paso 10 — Onboarding y autenticación mínima
+## Paso 10 — Onboarding y autenticación mínima [HECHO]
 
 **Modelo:** Sonnet 5.
 **Depende de:** 4, 7. **Paralelizable con:** 8, 9.
+
+**Ejecutado:** `WelcomeScreen` → `LevelSelectionScreen` (A1 seleccionable, A2-C2 mostrados como "Próximamente" con candado — honesto sobre lo que existe de verdad) → `AuthChoiceScreen` (invitado o email, ambos **solo locales** en el MVP — la UI lo dice explícitamente al usuario, sin fingir que hay una cuenta real detrás del email). `OnboardingRepository` (interfaz) con `SharedPreferencesOnboardingRepository` (real) e `InMemoryOnboardingRepository` (tests). `RootScreen` decide en `/` si mostrar el onboarding o `LessonListScreen` según `onboardingProvider.completed` — sin usar `redirect` de `go_router` (evita la complejidad de mezclar estado async de Riverpod con el ciclo de vida del router; la decisión vive en el propio widget de la ruta `/`). `selectedLevel` se guarda pero todavía no cambia ningún contenido (solo existe el curso de inglés A1) — documentado como no-op honesto, no una promesa incumplida.
+
+`flutter analyze`: sin issues. 24 tests en verde (2 nuevos de flujo de onboarding: instalación nueva muestra bienvenida en vez de la lista de lecciones; completar como invitado llega a la lista de lecciones). Se añadió `test/test_utils.dart` para no repetir el boilerplate de overrides en cada test que necesita `MyApp` completo. Build de verificación: `flutter build apk --debug` con el flujo de onboarding integrado.
 
 ### Contexto autocontenido
 Bienvenida → selección de nivel de partida (simplificable a elección manual en el MVP) → email o invitado (invitado = progreso solo local, sin backend de auth en el MVP).
