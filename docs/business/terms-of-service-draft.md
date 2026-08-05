@@ -1,8 +1,8 @@
 # Términos y Condiciones (borrador) — App para Aprender Idiomas
 
-> **BORRADOR. No publicar sin revisión de un abogado real.** Sustituir `[FECHA]`, `[EMAIL DE CONTACTO]`, `[RAZÓN SOCIAL]` y `[JURISDICCIÓN]` antes de publicar.
+> **BORRADOR. No publicar sin revisión de un abogado real.** Nombre y email ya rellenados según lo indicado por el usuario — la jurisdicción (sección 10) y el resto de puntos `[PENDIENTE]` siguen sin confirmar con un asesor real.
 
-**Última actualización: [FECHA]**
+**Última actualización: 5 de agosto de 2026**
 
 ## 1. Aceptación de los términos
 
@@ -26,7 +26,7 @@ En esta versión, la App no requiere una cuenta real — el progreso se guarda l
 
 ## 5. Propiedad intelectual
 
-El contenido de los cursos (textos, ejercicios, estructura pedagógica) es propiedad de `[RAZÓN SOCIAL]` o de sus licenciantes. Se concede al usuario una licencia personal, no exclusiva e intransferible para usar el contenido dentro de la App, únicamente para uso personal de aprendizaje.
+El contenido de los cursos (textos, ejercicios, estructura pedagógica) es propiedad de Webapps o de sus licenciantes. Se concede al usuario una licencia personal, no exclusiva e intransferible para usar el contenido dentro de la App, únicamente para uso personal de aprendizaje.
 
 ## 6. Uso aceptable
 
@@ -46,8 +46,8 @@ Podemos modificar estos términos; los cambios materiales se notificarán dentro
 
 ## 10. Ley aplicable
 
-`[PENDIENTE: definir con el asesor legal — probablemente ley española/UE dado que el responsable previsto opera desde España, pero debe confirmarse formalmente, especialmente en su interacción con las políticas de Apple/Google que a veces imponen su propia jurisdicción para disputas de pago.]`
+Ley española y de la Unión Europea, aplicable a Webapps. `[PENDIENTE: confirmar formalmente con el asesor legal, especialmente en su interacción con las políticas de Apple/Google que a veces imponen su propia jurisdicción para disputas de pago.]`
 
 ## 11. Contacto
 
-`[EMAIL DE CONTACTO]`
+world.webapps@gmail.com

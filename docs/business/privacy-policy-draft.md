@@ -1,12 +1,12 @@
 # Política de Privacidad (borrador) — App para Aprender Idiomas
 
-> **BORRADOR. No publicar sin revisión de un abogado/asesor en protección de datos real.** Este documento intenta ser coherente con el RGPD (por tener usuarios en la UE) y con los requisitos de Apple App Store / Google Play, pero no ha sido redactado ni revisado por un profesional del derecho. Sustituir `[FECHA]`, `[EMAIL DE CONTACTO]` y `[RAZÓN SOCIAL]` antes de publicar, y confirmar la forma legal real con un asesor (ver `business-registration-checklist.md`).
+> **BORRADOR. No publicar sin revisión de un abogado/asesor en protección de datos real.** Este documento intenta ser coherente con el RGPD (por tener usuarios en la UE) y con los requisitos de Apple App Store / Google Play, pero no ha sido redactado ni revisado por un profesional del derecho. Nombre y email ya rellenados según lo indicado por el usuario — sigue pendiente confirmar la forma legal real con un asesor (ver `business-registration-checklist.md`), especialmente si "Webapps" acaba siendo un nombre comercial sobre una figura legal distinta (autónomo/SL).
 
-**Última actualización: [FECHA]**
+**Última actualización: 5 de agosto de 2026**
 
 ## 1. Quiénes somos
 
-App para Aprender Idiomas es una aplicación móvil de aprendizaje de idiomas. `[RAZÓN SOCIAL, PENDIENTE DE CONSTITUCIÓN]` es responsable del tratamiento de los datos descritos en esta política. Contacto: `[EMAIL DE CONTACTO]`.
+App para Aprender Idiomas es una aplicación móvil de aprendizaje de idiomas. Webapps es responsable del tratamiento de los datos descritos en esta política. Contacto: world.webapps@gmail.com.
 
 ## 2. Qué datos recogemos
 
@@ -35,7 +35,7 @@ A fecha de esta versión, la aplicación **no tiene backend propio** — el prog
 
 ## 6. Derechos del usuario
 
-Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya tiene control total: desinstalar la app elimina todos los datos locales. Para el email opcional (si se proporcionó), puede solicitarse su eliminación escribiendo a `[EMAIL DE CONTACTO]`.
+Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya tiene control total: desinstalar la app elimina todos los datos locales. Para el email opcional (si se proporcionó), puede solicitarse su eliminación escribiendo a world.webapps@gmail.com.
 
 ## 7. Menores de edad
 
@@ -47,4 +47,4 @@ Cualquier cambio material se notificará dentro de la aplicación antes de que e
 
 ## 9. Contacto
 
-`[EMAIL DE CONTACTO]`
+world.webapps@gmail.com

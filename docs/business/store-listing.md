@@ -47,9 +47,9 @@ Sin gamificación vacía. Sin relleno. Contenido real, revisado, que se puede co
 
 **Clasificación de contenido:** Apto para todos los públicos (sin contenido objetable — habrá que completar el cuestionario real de Play Console, esto es solo la expectativa).
 
-**Email de contacto de la ficha:** `[PENDIENTE — el que decidas usar como contacto público de desarrollador]`
+**Email de contacto de la ficha:** world.webapps@gmail.com
 
-**URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — página lista y pusheada a la rama `gh-pages`; **solo falta que actives GitHub Pages en la configuración del repo** (ver instrucciones al final de este documento) para que la URL responda.
+**URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — publicada y en vivo.
 
 ---
 
@@ -80,7 +80,7 @@ ingles,aprender ingles,curso ingles,idiomas,vocabulario,gramatica,a1 ingles,ingl
 **Clasificación de edad:** 4+ (sin contenido objetable — a completar en el cuestionario real de App Store Connect).
 
 **URL de soporte (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/` — misma página, sirve como landing de soporte/legal.
-**URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — mismo documento que Google Play, misma condición (activar GitHub Pages).
+**URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — publicada y en vivo.
 
 ---
 
@@ -89,7 +89,7 @@ ingles,aprender ingles,curso ingles,idiomas,vocabulario,gramatica,a1 ingles,ingl
 - **Icono final** (512×512 para Play, 1024×1024 para App Store): el proyecto usa el icono por defecto del scaffold de Flutter — hace falta un logo real antes de poder generar el icono definitivo con `flutter_launcher_icons` (ya mencionado como pendiente en los Pasos 5/6 del plan).
 - **Gráfico de feature de Play Store** (1024×500): mismo bloqueo — necesita el logo/identidad visual final.
 - **Capturas de pantalla**: ambas tiendas piden capturas reales de la app funcionando (mínimo 2 en Play, tamaños específicos por dispositivo en Apple — 6.7", 6.5", 5.5" de iPhone, y iPad si se soporta). Este contenedor Linux no tiene emulador gráfico, así que no puedo generarlas yo directamente; se capturan corriendo la app en un dispositivo/emulador real cuando hagas las pruebas de sandbox del Paso 13.
-- ~~Alojar la política de privacidad y los términos~~ **[HECHO]** — página estática en la rama `gh-pages` (`index.html`, `privacy.html`, `terms.html`), sin mezclar con `docs/business/` de `main` para no exponer los documentos internos de negocio/financieros. **Un solo paso manual pendiente, tuyo:** en el repo de GitHub, ve a **Settings → Pages → Build and deployment → Source: "Deploy from a branch"**, elige la rama **`gh-pages`** y la carpeta **`/ (root)`**, y guarda. En unos minutos la URL `https://jordiribasoficial.github.io/App-para-aprender-idiomas/` empieza a responder.
-- **Dos datos reales pendientes de ti para completar la política de privacidad y los términos** (ahora mismo marcados como "pendiente de confirmar" en las páginas publicadas, no inventados): tu **nombre legal o razón social** (como responsable del tratamiento / titular del contenido) y un **email de contacto** real. En cuanto me los des, actualizo las 2 páginas al momento.
+- ~~Alojar la política de privacidad y los términos~~ **[HECHO]** — página estática en vivo en la rama `gh-pages` (`index.html`, `privacy.html`, `terms.html`), GitHub Pages activado, verificado con `curl` (HTTP 200 en las 3 URLs, contenido correcto).
+- ~~Nombre legal/razón social y email de contacto~~ **[HECHO]** — Webapps / world.webapps@gmail.com, ya rellenados en las páginas publicadas y en los borradores de `privacy-policy-draft.md`/`terms-of-service-draft.md`. Sigue pendiente de un asesor real confirmar si "Webapps" corresponde a una figura legal constituida (autónomo/SL) o es solo un nombre comercial — ver `business-registration-checklist.md`.
 
 Todo lo de texto de este documento está listo para copiar y pegar en cuanto tengas las cuentas aprobadas.
