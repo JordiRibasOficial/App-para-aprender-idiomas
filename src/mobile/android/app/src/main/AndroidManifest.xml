@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="app_para_aprender_idiomas"
+        android:label="App para Aprender Idiomas"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

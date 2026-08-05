@@ -177,6 +177,8 @@ APK debug instalable, navegación entre las 4 pantallas funcional (verificación
 
 **Ejecutado:** `applicationId`/`namespace` placeholder (`com.TODO.appparaaprenderidiomas.app_para_aprender_idiomas`) confirmado consistente en `build.gradle.kts`, iconos adaptativos por defecto del scaffold (pendientes de logo real). `flutter build appbundle --release` verificado: `app-release.aab` generado (46.2MB, firmado con debug key — firma real pendiente del Paso 13).
 
+**Nombre visible de la app [HECHO — encontrado en auditoría propia]:** `android:label` en `AndroidManifest.xml` seguía siendo `app_para_aprender_idiomas` (el nombre técnico snake_case del scaffold) — eso es lo que un usuario real vería bajo el icono, en el selector de apps y en Ajustes, no "App para Aprender Idiomas". Corregido para que coincida con el nombre usado en `main.dart`/ficha de tienda. Verificado en el manifest fusionado tras `flutter build appbundle --release`.
+
 ### Contexto autocontenido
 `src/mobile/android/app/build.gradle` (`applicationId`, `versionCode`/`versionName`), iconos adaptativos en `android/app/src/main/res/`, `AndroidManifest.xml` (permisos mínimos).
 
