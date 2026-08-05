@@ -49,7 +49,7 @@ Sin gamificación vacía. Sin relleno. Contenido real, revisado, que se puede co
 
 **Email de contacto de la ficha:** `[PENDIENTE — el que decidas usar como contacto público de desarrollador]`
 
-**URL de política de privacidad (obligatoria):** `[PENDIENTE — necesitas alojar `docs/business/privacy-policy-draft.md` en una URL pública real antes de poder publicar; una GitHub Pages simple o una página estática bastan para esto]`
+**URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — página lista y pusheada a la rama `gh-pages`; **solo falta que actives GitHub Pages en la configuración del repo** (ver instrucciones al final de este documento) para que la URL responda.
 
 ---
 
@@ -79,8 +79,8 @@ ingles,aprender ingles,curso ingles,idiomas,vocabulario,gramatica,a1 ingles,ingl
 
 **Clasificación de edad:** 4+ (sin contenido objetable — a completar en el cuestionario real de App Store Connect).
 
-**URL de soporte (obligatoria):** `[PENDIENTE — misma consideración que la política de privacidad, necesitas una URL pública]`
-**URL de política de privacidad (obligatoria):** `[PENDIENTE — mismo documento que Google Play]`
+**URL de soporte (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/` — misma página, sirve como landing de soporte/legal.
+**URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — mismo documento que Google Play, misma condición (activar GitHub Pages).
 
 ---
 
@@ -89,6 +89,7 @@ ingles,aprender ingles,curso ingles,idiomas,vocabulario,gramatica,a1 ingles,ingl
 - **Icono final** (512×512 para Play, 1024×1024 para App Store): el proyecto usa el icono por defecto del scaffold de Flutter — hace falta un logo real antes de poder generar el icono definitivo con `flutter_launcher_icons` (ya mencionado como pendiente en los Pasos 5/6 del plan).
 - **Gráfico de feature de Play Store** (1024×500): mismo bloqueo — necesita el logo/identidad visual final.
 - **Capturas de pantalla**: ambas tiendas piden capturas reales de la app funcionando (mínimo 2 en Play, tamaños específicos por dispositivo en Apple — 6.7", 6.5", 5.5" de iPhone, y iPad si se soporta). Este contenedor Linux no tiene emulador gráfico, así que no puedo generarlas yo directamente; se capturan corriendo la app en un dispositivo/emulador real cuando hagas las pruebas de sandbox del Paso 13.
-- **Alojar la política de privacidad y los términos**: los borradores ya existen (`privacy-policy-draft.md`, `terms-of-service-draft.md`) pero ninguna tienda acepta un enlace a un archivo de GitHub sin más — necesitan una URL pública real (una página simple basta) antes de poder rellenar los campos obligatorios de arriba.
+- ~~Alojar la política de privacidad y los términos~~ **[HECHO]** — página estática en la rama `gh-pages` (`index.html`, `privacy.html`, `terms.html`), sin mezclar con `docs/business/` de `main` para no exponer los documentos internos de negocio/financieros. **Un solo paso manual pendiente, tuyo:** en el repo de GitHub, ve a **Settings → Pages → Build and deployment → Source: "Deploy from a branch"**, elige la rama **`gh-pages`** y la carpeta **`/ (root)`**, y guarda. En unos minutos la URL `https://jordiribasoficial.github.io/App-para-aprender-idiomas/` empieza a responder.
+- **Dos datos reales pendientes de ti para completar la política de privacidad y los términos** (ahora mismo marcados como "pendiente de confirmar" en las páginas publicadas, no inventados): tu **nombre legal o razón social** (como responsable del tratamiento / titular del contenido) y un **email de contacto** real. En cuanto me los des, actualizo las 2 páginas al momento.
 
 Todo lo de texto de este documento está listo para copiar y pegar en cuanto tengas las cuentas aprobadas.
