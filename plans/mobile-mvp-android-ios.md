@@ -62,10 +62,12 @@ Persistencia entre sesiones: si se abre una sesión nueva de Claude Code on the 
 
 ---
 
-## Paso 2 — Arquitectura de paquetes y estructura del proyecto
+## Paso 2 — Arquitectura de paquetes y estructura del proyecto [HECHO]
 
 **Modelo:** Opus 5 / esfuerzo alto (decisión de arquitectura).
 **Depende de:** Paso 1. **Bloquea:** 3, 4, 5, 6.
+
+**Ejecutado:** `flutter_riverpod` 3.4.2, `go_router` 17.4.0, `intl` 0.20.3 añadidos vía `flutter pub add`. Carpetas `lib/domain/{models,repositories}/`, `lib/data/`, `lib/presentation/{home,router}/` creadas. `main.dart` reescrito con `ProviderScope` + `MaterialApp.router`; `HomeScreen` + `GoRouter` mínimos en su lugar del contador de demo. `test/widget_test.dart` actualizado para el nuevo home screen. `flutter analyze`: sin issues. `flutter test`: 1/1 en verde.
 
 ### Contexto autocontenido
 Definir en `src/mobile/pubspec.yaml` y la estructura de carpetas (`lib/domain/`, `lib/data/`, `lib/presentation/`, `lib/l10n/` si aplica para la UI del propio app, no confundir con el contenido de los cursos) las dependencias base:
