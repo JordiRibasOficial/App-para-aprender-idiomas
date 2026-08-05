@@ -15,7 +15,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
     final isPremium = ref.watch(entitlementProvider).value?.isActive ?? false;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('¿Qué idioma quieres aprender?')),
+      appBar: AppBar(title: const Text('Elige tu idioma')),
       body: RadioGroup<String>(
         groupValue: selected,
         onChanged: (value) {

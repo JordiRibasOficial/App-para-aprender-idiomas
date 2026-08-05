@@ -76,7 +76,7 @@ void main() {
 
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
-    expect(find.text('¿Qué idioma quieres aprender?'), findsOneWidget);
+    expect(find.text('Elige tu idioma'), findsOneWidget);
 
     // English is preselected as the default target language.
     await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
