@@ -13,7 +13,12 @@ import '../domain/repositories/subscription_repository.dart';
 /// same as "no active entitlement" (see `entitlementProvider` usage).
 class MockSubscriptionRepository implements SubscriptionRepository {
   final _controller = StreamController<Entitlement>.broadcast();
+  final _errorController = StreamController<String>.broadcast();
   Entitlement _current = const Entitlement();
+
+  /// Test hook: when true, the next [purchase] call reports failure on
+  /// [purchaseErrorStream] instead of granting an entitlement.
+  bool simulateFailure = false;
 
   @override
   Future<List<SubscriptionPlan>> loadPlans() async => SubscriptionPlan.placeholderPlans;
@@ -22,8 +27,17 @@ class MockSubscriptionRepository implements SubscriptionRepository {
   Stream<Entitlement> get entitlementStream => _controller.stream;
 
   @override
+  Stream<String> get purchaseErrorStream => _errorController.stream;
+
+  @override
   Future<void> purchase(SubscriptionPlan plan) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
+
+    if (simulateFailure) {
+      _errorController.add('No se pudo completar la compra de ${plan.productId}.');
+      return;
+    }
+
     _current = Entitlement(status: EntitlementStatus.active, activeProductId: plan.productId);
     _controller.add(_current);
   }
@@ -36,5 +50,6 @@ class MockSubscriptionRepository implements SubscriptionRepository {
   @override
   void dispose() {
     unawaited(_controller.close());
+    unawaited(_errorController.close());
   }
 }

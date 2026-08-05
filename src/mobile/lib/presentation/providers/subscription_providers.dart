@@ -18,3 +18,7 @@ final subscriptionPlansProvider = FutureProvider<List<SubscriptionPlan>>((ref) {
 final entitlementProvider = StreamProvider<Entitlement>((ref) {
   return ref.watch(subscriptionRepositoryProvider).entitlementStream;
 });
+
+final purchaseErrorProvider = StreamProvider<String>((ref) {
+  return ref.watch(subscriptionRepositoryProvider).purchaseErrorStream;
+});

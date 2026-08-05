@@ -20,10 +20,24 @@ SubscriptionPlan _planFromProductDetails(ProductDetails details) {
   );
 }
 
-/// Real store-backed [SubscriptionRepository]. Product IDs, receipt
-/// verification, and restore-state reconciliation are finished in Paso 9 —
-/// this wires the plumbing (`in_app_purchase` unifies Google Play Billing
-/// and StoreKit under one API) and reacts to purchase updates.
+/// Real store-backed [SubscriptionRepository]. `in_app_purchase` unifies
+/// Google Play Billing and StoreKit under one API.
+///
+/// **What this does NOT verify (Paso 9 scope, explicit):**
+/// - No server-side receipt validation against Apple/Google's verification
+///   APIs — that requires a backend, which doesn't exist yet.
+/// - No cryptographic signature check of the receipt.
+/// - No subscription expiry/renewal tracking of its own — entitlement state
+///   depends entirely on the store re-pushing events on [purchaseStream]
+///   (which both platforms do on renewal/cancellation while the app is
+///   installed, but there's no independent expiry check here).
+/// - No refund/chargeback reconciliation beyond what the store pushes.
+///
+/// What it DOES do locally: rejects a purchase as an entitlement source if
+/// [PurchaseDetails.verificationData] has no local verification payload at
+/// all (a purchase with literally nothing to verify is treated as
+/// untrustworthy) — a presence check, not a real verification. Real
+/// verification is a Paso 13+ backend concern.
 class InAppPurchaseSubscriptionRepository implements SubscriptionRepository {
   InAppPurchaseSubscriptionRepository() {
     _purchaseSubscription = _iap.purchaseStream.listen(_onPurchaseUpdate);
@@ -32,9 +46,13 @@ class InAppPurchaseSubscriptionRepository implements SubscriptionRepository {
   final InAppPurchase _iap = InAppPurchase.instance;
   late final StreamSubscription<List<PurchaseDetails>> _purchaseSubscription;
   final _entitlementController = StreamController<Entitlement>.broadcast();
+  final _purchaseErrorController = StreamController<String>.broadcast();
 
   @override
   Stream<Entitlement> get entitlementStream => _entitlementController.stream;
+
+  @override
+  Stream<String> get purchaseErrorStream => _purchaseErrorController.stream;
 
   @override
   Future<List<SubscriptionPlan>> loadPlans() async {
@@ -66,11 +84,21 @@ class InAppPurchaseSubscriptionRepository implements SubscriptionRepository {
       switch (purchase.status) {
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
-          _entitlementController.add(
-            Entitlement(status: EntitlementStatus.active, activeProductId: purchase.productID),
-          );
+          if (purchase.verificationData.localVerificationData.isEmpty) {
+            _purchaseErrorController.add(
+              'La compra de ${purchase.productID} no trae datos de verificación — no se activó.',
+            );
+          } else {
+            _entitlementController.add(
+              Entitlement(status: EntitlementStatus.active, activeProductId: purchase.productID),
+            );
+          }
         case PurchaseStatus.error:
+          _purchaseErrorController.add(
+            purchase.error?.message ?? 'No se pudo completar la compra de ${purchase.productID}.',
+          );
         case PurchaseStatus.canceled:
+          _purchaseErrorController.add('Compra cancelada.');
         case PurchaseStatus.pending:
           break;
       }
@@ -85,5 +113,6 @@ class InAppPurchaseSubscriptionRepository implements SubscriptionRepository {
   void dispose() {
     unawaited(_purchaseSubscription.cancel());
     unawaited(_entitlementController.close());
+    unawaited(_purchaseErrorController.close());
   }
 }

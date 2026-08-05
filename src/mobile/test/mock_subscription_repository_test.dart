@@ -38,5 +38,23 @@ void main() {
       expect(emitted.last.activeProductId, SubscriptionPlan.monthlyProductId);
       repository.dispose();
     });
+
+    test('simulateFailure reports a purchase error instead of granting an entitlement',
+        () async {
+      final repository = MockSubscriptionRepository()..simulateFailure = true;
+      final entitlements = <Entitlement>[];
+      final errors = <String>[];
+      final entitlementSub = repository.entitlementStream.listen(entitlements.add);
+      final errorSub = repository.purchaseErrorStream.listen(errors.add);
+
+      await repository.purchase(SubscriptionPlan.placeholderPlans[0]);
+      await entitlementSub.cancel();
+      await errorSub.cancel();
+
+      expect(entitlements, isEmpty);
+      expect(errors, hasLength(1));
+      expect(errors.single, contains(SubscriptionPlan.monthlyProductId));
+      repository.dispose();
+    });
   });
 }

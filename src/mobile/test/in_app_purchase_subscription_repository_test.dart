@@ -128,4 +128,83 @@ void main() {
 
     expect(fakePlatform.restoreCalled, isTrue);
   });
+
+  test('a purchase with no local verification data is rejected, not granted', () async {
+    final entitlements = <Entitlement>[];
+    final errors = <String>[];
+    final entitlementSub = repository.entitlementStream.listen(entitlements.add);
+    final errorSub = repository.purchaseErrorStream.listen(errors.add);
+
+    fakePlatform.emitPurchaseUpdate([
+      PurchaseDetails(
+        productID: SubscriptionPlan.monthlyProductId,
+        verificationData: PurchaseVerificationData(
+          localVerificationData: '',
+          serverVerificationData: '',
+          source: 'test',
+        ),
+        transactionDate: null,
+        status: PurchaseStatus.purchased,
+      ),
+    ]);
+
+    await Future<void>.delayed(Duration.zero);
+    await entitlementSub.cancel();
+    await errorSub.cancel();
+
+    expect(entitlements, isEmpty);
+    expect(errors, hasLength(1));
+    expect(errors.single, contains(SubscriptionPlan.monthlyProductId));
+  });
+
+  test('an errored purchase update is reported on purchaseErrorStream, not as an entitlement',
+      () async {
+    final entitlements = <Entitlement>[];
+    final errors = <String>[];
+    final entitlementSub = repository.entitlementStream.listen(entitlements.add);
+    final errorSub = repository.purchaseErrorStream.listen(errors.add);
+
+    fakePlatform.emitPurchaseUpdate([
+      PurchaseDetails(
+        productID: SubscriptionPlan.monthlyProductId,
+        verificationData: PurchaseVerificationData(
+          localVerificationData: '',
+          serverVerificationData: '',
+          source: 'test',
+        ),
+        transactionDate: null,
+        status: PurchaseStatus.error,
+      )..error = IAPError(source: 'test', code: 'declined', message: 'Card declined'),
+    ]);
+
+    await Future<void>.delayed(Duration.zero);
+    await entitlementSub.cancel();
+    await errorSub.cancel();
+
+    expect(entitlements, isEmpty);
+    expect(errors, ['Card declined']);
+  });
+
+  test('a cancelled purchase update is reported on purchaseErrorStream', () async {
+    final errors = <String>[];
+    final errorSub = repository.purchaseErrorStream.listen(errors.add);
+
+    fakePlatform.emitPurchaseUpdate([
+      PurchaseDetails(
+        productID: SubscriptionPlan.monthlyProductId,
+        verificationData: PurchaseVerificationData(
+          localVerificationData: '',
+          serverVerificationData: '',
+          source: 'test',
+        ),
+        transactionDate: null,
+        status: PurchaseStatus.canceled,
+      ),
+    ]);
+
+    await Future<void>.delayed(Duration.zero);
+    await errorSub.cancel();
+
+    expect(errors, hasLength(1));
+  });
 }

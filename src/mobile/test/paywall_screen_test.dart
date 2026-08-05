@@ -42,4 +42,17 @@ void main() {
     expect(find.text('¡Ya eres Premium!'), findsOneWidget);
     expect(find.text('Plan activo: annual_sub'), findsOneWidget);
   });
+
+  testWidgets('a failed purchase shows an error snackbar and stays on the plans view',
+      (tester) async {
+    final repository = MockSubscriptionRepository()..simulateFailure = true;
+    await tester.pumpWidget(buildPaywall(repository));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Suscribirse — €44.99'));
+    await tester.pumpAndSettle(); // mock purchase resolves after 300ms
+
+    expect(find.text('No se pudo completar la compra de annual_sub.'), findsOneWidget);
+    expect(find.text('¡Ya eres Premium!'), findsNothing);
+  });
 }

@@ -10,6 +10,14 @@ abstract interface class SubscriptionRepository {
   /// restoration, or — from Paso 9 onward — expiry).
   Stream<Entitlement> get entitlementStream;
 
+  /// Emits a human-readable message whenever a purchase attempt fails,
+  /// is cancelled, or is rejected by local verification. The UI should
+  /// listen to this to tell the user something went wrong — [purchase]
+  /// itself only reports whether the request was *sent*, not whether it
+  /// succeeded (that arrives asynchronously via [entitlementStream] or
+  /// this stream).
+  Stream<String> get purchaseErrorStream;
+
   Future<void> purchase(SubscriptionPlan plan);
 
   Future<void> restorePurchases();

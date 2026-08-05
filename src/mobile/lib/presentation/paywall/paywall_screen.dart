@@ -31,6 +31,14 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     final plansAsync = ref.watch(subscriptionPlansProvider);
     final entitlement = ref.watch(entitlementProvider).value ?? const Entitlement();
 
+    ref.listen(purchaseErrorProvider, (previous, next) {
+      final message = next.value;
+      if (message == null) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(message)));
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('Hazte Premium')),
       body: entitlement.isActive

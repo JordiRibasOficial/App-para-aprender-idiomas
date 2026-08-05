@@ -277,32 +277,27 @@ Paywall renderiza los dos planes con descuento correcto, sin errores de análisi
 
 ---
 
-## Paso 9 — Configuración de productos de suscripción (Android + iOS)
+## Paso 9 — Configuración de productos de suscripción (Android + iOS) [HECHO — código; sandbox real pendiente del Paso 13]
 
 **Modelo:** Sonnet 5.
 **Depende de:** 5, 6, 8. **Bloquea:** 12, 13.
 
-⚠️ **Bloqueo parcial de cuenta:** el código compila y corre contra `MockSubscriptionRepository` sin cuenta de tienda. Las pruebas reales de compra (sandbox) requieren productos de suscripción creados en Play Console y App Store Connect — eso llega en el Paso 13.
+⚠️ **Bloqueo parcial de cuenta, sigue vigente:** el código compila y corre contra `MockSubscriptionRepository` sin cuenta de tienda. Las pruebas reales de compra (sandbox) requieren productos de suscripción creados en Play Console y App Store Connect — eso llega en el Paso 13.
 
-### Contexto autocontenido
-Conectar `in_app_purchase` de verdad: IDs de producto (`monthly_sub`, `annual_sub` — placeholders hasta que existan cuentas reales), manejo de errores de compra, restauración de compras, verificación de recibo (server-side idealmente, o al menos verificación local básica para el MVP).
+**Ejecutado:** IDs de producto (`monthly_sub`/`annual_sub`) ya existían como constantes desde el Paso 8. Lo que faltaba y se añadió ahora:
+- **`purchaseErrorStream`** nuevo en `SubscriptionRepository` — antes los estados `error`/`canceled`/`pending` de una compra se ignoraban en silencio (`break` sin más); ahora `error` y `canceled` emiten un mensaje legible, y `PaywallScreen` lo muestra en un `SnackBar` (`ref.listen(purchaseErrorProvider, ...)`) en vez de dejar al usuario sin ninguna señal de que algo falló.
+- **Verificación local básica de recibo** (lo que el Paso 8 dejaba pendiente explícitamente): una compra `purchased`/`restored` con `verificationData.localVerificationData` vacío se rechaza — no se concede el entitlement y se emite un error. Es una comprobación de presencia, no una verificación criptográfica real; documentado así, sin exagerar, en el docstring de la clase.
+- **`MockSubscriptionRepository.simulateFailure`** — hook de test para simular una compra fallida y comprobar que la UI reacciona correctamente.
 
-### Tareas
-1. IDs de producto definidos como constantes (placeholder).
-2. Manejo de estados de compra (pendiente, completada, fallida, cancelada, restaurada).
-3. Documentar explícitamente qué queda sin verificar hasta tener cuentas reales.
+**Documentado explícitamente qué sigue sin verificar** (en el docstring de `InAppPurchaseSubscriptionRepository`, no solo aquí): sin validación de recibo server-side contra las APIs de Apple/Google (no hay backend), sin verificación criptográfica de firma, sin seguimiento propio de expiración/renovación (depende enteramente de que la tienda vuelva a emitir eventos en `purchaseStream`), sin reconciliación de reembolsos más allá de lo que la tienda empuje.
 
-### Verificación
-```bash
-cd src/mobile && ~/flutter/bin/flutter test
-```
-Verificación funcional real de compra: pendiente hasta el Paso 13.
+`flutter analyze`: sin issues. 9 tests nuevos en verde (3 de `InAppPurchaseSubscriptionRepository` — verificación local rechazada, error reportado, cancelación reportada — con `FakeInAppPurchasePlatform`; 1 de `MockSubscriptionRepository.simulateFailure`; 1 de `PaywallScreen` mostrando el snackbar de error), 55 tests en total (antes 50). Cobertura `lib/domain`+`lib/data` subió a **98.8%** (antes 97.5%). Build de verificación: `flutter build apk --debug`.
 
 ### Criterio de salida
-Código completo, tests contra mocks en verde, sin afirmar verificación no realizada.
+Código completo, tests contra mocks en verde, sin afirmar verificación no realizada. **Cumplido.**
 
 ### Rollback
-`git checkout -- src/mobile/lib/data/subscription_repository.dart`.
+`git checkout -- src/mobile/lib/data/in_app_purchase_subscription_repository.dart src/mobile/lib/data/mock_subscription_repository.dart src/mobile/lib/domain/repositories/subscription_repository.dart src/mobile/lib/presentation/paywall/paywall_screen.dart src/mobile/lib/presentation/providers/subscription_providers.dart`.
 
 ---
 
