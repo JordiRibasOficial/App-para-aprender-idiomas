@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Privacidad — App para Aprender Idiomas</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a2e;
+    --muted: #5a5a72;
+    --accent: #3d5afe;
+    --card: #f5f6fa;
+    --border: #e2e4ee;
+    --pending: #a15c00;
+    --pending-bg: #fff3e0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14141f;
+      --fg: #eceefc;
+      --muted: #a3a6c2;
+      --accent: #7b8cff;
+      --card: #1c1c2c;
+      --border: #2c2c40;
+      --pending: #ffb84d;
+      --pending-bg: #2e2410;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.65;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+  a.back {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  h1 { font-size: 1.6rem; margin: 16px 0 4px; }
+  p.updated { color: var(--muted); margin-top: 0; font-size: 0.9rem; }
+  h2 { font-size: 1.15rem; margin-top: 2.2em; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .pending {
+    color: var(--pending);
+    background: var(--pending-bg);
+    border-radius: 6px;
+    padding: 1px 6px;
+    font-style: normal;
+  }
+  footer {
+    margin-top: 48px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">&larr; Volver</a>
+    <h1>Política de Privacidad</h1>
+    <p class="updated">Última actualización: 5 de agosto de 2026</p>
+
+    <h2>1. Quiénes somos</h2>
+    <p>
+      App para Aprender Idiomas es una aplicación móvil de aprendizaje de idiomas.
+      <span class="pending">[Responsable del tratamiento pendiente de confirmar]</span>
+      es responsable del tratamiento de los datos descritos en esta política.
+      Contacto: <span class="pending">[email de contacto pendiente de confirmar]</span>.
+    </p>
+
+    <h2>2. Qué datos recogemos</h2>
+    <p>
+      A fecha de esta versión, la aplicación <strong>no tiene backend propio</strong> — el
+      progreso de aprendizaje se almacena únicamente en el dispositivo del usuario.
+      Los datos que se recogen son:
+    </p>
+    <div class="card">
+      <p><strong>Progreso de aprendizaje</strong> (lecciones completadas, puntuación, racha):
+      almacenado localmente en el dispositivo, no se envía a ningún servidor nuestro.</p>
+      <p><strong>Email (opcional)</strong>: si el usuario elige "Continuar con email" en el
+      registro inicial, se guarda localmente en el dispositivo. No se usa para crear una
+      cuenta real ni se envía a ningún servidor en esta versión — se pedirá de nuevo, de
+      forma más completa y con backend real, cuando exista un sistema de cuentas.</p>
+      <p><strong>Datos de compra de suscripción</strong>: gestionados directamente por
+      Google Play / Apple App Store, no por nosotros. No tenemos acceso a datos de
+      tarjetas ni de pago — solo recibimos confirmación de que existe una suscripción
+      activa, a través de la API oficial de cada tienda.</p>
+    </div>
+
+    <h2>3. Qué no hacemos</h2>
+    <ul>
+      <li>No vendemos datos personales a terceros.</li>
+      <li>No usamos redes publicitarias de terceros en esta versión.</li>
+      <li>No compartimos el progreso de aprendizaje con nadie — vive solo en el dispositivo del usuario.</li>
+    </ul>
+
+    <h2>4. Base legal del tratamiento (RGPD)</h2>
+    <ul>
+      <li>Progreso local: no sale del dispositivo, por lo que no constituye un tratamiento por nuestra parte en el sentido del RGPD más allá de facilitar el almacenamiento local.</li>
+      <li>Email opcional: consentimiento explícito del usuario al elegir proporcionar su email.</li>
+      <li>Datos de suscripción: ejecución del contrato de suscripción, necesario para prestar el servicio de pago.</li>
+    </ul>
+
+    <h2>5. Servicios de terceros</h2>
+    <p>
+      Google Play Billing / Apple StoreKit procesan los pagos de la suscripción, sujetos a
+      las políticas de privacidad de Google y Apple respectivamente. Esta sección se
+      actualizará si en el futuro se añade analítica o un backend de cuentas real.
+    </p>
+
+    <h2>6. Derechos del usuario</h2>
+    <p>
+      Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el
+      tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya
+      tiene control total: desinstalar la app elimina todos los datos locales. Para el
+      email opcional, si se proporcionó, puede solicitarse su eliminación escribiendo a
+      <span class="pending">[email de contacto pendiente de confirmar]</span>.
+    </p>
+
+    <h2>7. Menores de edad</h2>
+    <p>
+      La aplicación no está dirigida específicamente a menores de 13 años (o la edad
+      mínima aplicable según la jurisdicción).
+    </p>
+
+    <h2>8. Cambios en esta política</h2>
+    <p>Cualquier cambio material se notificará dentro de la aplicación antes de que entre en vigor.</p>
+
+    <h2>9. Contacto</h2>
+    <p><span class="pending">[email de contacto pendiente de confirmar]</span></p>
+
+    <footer>App para Aprender Idiomas</footer>
+  </div>
+</body>
+</html>
