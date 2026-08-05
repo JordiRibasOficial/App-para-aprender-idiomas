@@ -5,11 +5,13 @@ import '../domain/models/subscription_plan.dart';
 import '../domain/repositories/subscription_repository.dart';
 
 /// Lets the paywall UI be built and tested without a store connection.
+///
+/// Like the real store repository, [entitlementStream] stays silent until a
+/// purchase or restore happens — it never eagerly emits a "none"
+/// entitlement, since a broadcast stream can't replay past events to
+/// listeners that subscribe later. Callers should treat "no event yet" the
+/// same as "no active entitlement" (see `entitlementProvider` usage).
 class MockSubscriptionRepository implements SubscriptionRepository {
-  MockSubscriptionRepository() {
-    _controller.add(_current);
-  }
-
   final _controller = StreamController<Entitlement>.broadcast();
   Entitlement _current = const Entitlement();
 

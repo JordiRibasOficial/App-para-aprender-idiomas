@@ -327,10 +327,22 @@ Flujo completo navegable sin bloqueos, tests de widget en verde.
 
 ---
 
-## Paso 11 — Tests automatizados con cobertura medida
+## Paso 11 — Tests automatizados con cobertura medida [HECHO]
 
-**Modelo:** Opus 5 para diseño de casos, Sonnet 5 para escribirlos.
+**Modelo:** Sonnet 5, esfuerzo alto (diseño de fakes de plataforma para testear código real sin dispositivo).
 **Depende de:** 3, 7, 8 (mínimo).
+
+**Ejecutado:** cobertura real medida con `flutter test --coverage` + `lcov`/`genhtml` (instalados en el contenedor). En vez de aceptar 0% en los repositorios reales por "requieren plataforma", se testearon de verdad sin dispositivo:
+- `SqliteProgressRepository`: `sqflite_common_ffi` contra la librería `libsqlite3` real del sistema (ya presente en el contenedor) + un `PathProviderPlatform` falso apuntando a un directorio temporal real — SQLite de verdad, no un mock.
+- `InAppPurchaseSubscriptionRepository`: `FakeInAppPurchasePlatform` (`test/fakes/`) registrado vía `InAppPurchasePlatform.instance`, con `debugDefaultTargetPlatformOverride = TargetPlatform.linux` para evitar que `InAppPurchase.instance` registre un `BillingClientManager` real (que abriría una conexión nativa fallida en segundo plano) — descubierto por error real al escribir el test, no algo anticipado de antemano.
+- `SharedPreferencesOnboardingRepository`: `SharedPreferences.setMockInitialValues()` (mecanismo de test oficial del paquete).
+- Serialización JSON de los 5 modelos de dominio (`Course`, `CourseUnit`, `Lesson`, `Exercise`, `UserProgress`) con round-trip real, más el caso borde de `UserProgress.nextStreak` con racha corrupta en 0.
+
+**Bug real encontrado y corregido durante este paso:** `MockSubscriptionRepository` emitía un entitlement inicial en el constructor antes de que nadie estuviera escuchando — como es un `StreamController.broadcast()`, ese evento se perdía para cualquier listener que se suscribiera después (exactamente el patrón real de uso en la app). Se eliminó esa emisión: el repositorio ahora se queda en silencio hasta la primera compra/restauración, igual que el repositorio real, y la UI ya trataba correctamente "sin evento todavía" como "sin entitlement activo" (`.value ?? const Entitlement()`), así que no hizo falta tocar `PaywallScreen`.
+
+**Cobertura medida** (`lcov --extract ... 'lib/domain/*' 'lib/data/*'`): **97.5%** (236/242 líneas) — supera el 80% mínimo. Todos los archivos de `domain`/`data` están entre 90% y 100%; el hueco restante son ramas de error no alcanzables sin condiciones sintéticas adicionales (p. ej. `PurchaseStatus.error`/`canceled`/`pending` en el listener de compras). Cobertura del proyecto completo (incluyendo `presentation`, no exigida por el criterio de salida): 81.6%.
+
+`flutter analyze`: sin issues. Suite completa: 46 tests en verde.
 
 ### Contexto autocontenido
 Cobertura de `ContentRepository`, `ProgressRepository`, cálculo de descuento del paywall, `Level`/`AuthChoice`. Los servicios de `in_app_purchase` reales se testean con mocks, nunca contra tiendas reales en CI.
