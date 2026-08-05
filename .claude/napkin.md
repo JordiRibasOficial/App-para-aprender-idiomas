@@ -23,17 +23,15 @@
    Do instead: `uv pip install --system -e '<path>[extras]'` so the package is importable from any session without activating a venv.
 
 ## Domain Behavior Guardrails
-1. **[2026-08-04] The apt `dotnet-sdk-8.0` cannot build Android/iOS — no workload support at all**
-   Do instead: install a second SDK via the official `dotnet-install.sh` script (`--install-dir ~/.dotnet-maui`), then `~/.dotnet-maui/dotnet workload install android --skip-sign-check` + `dotnet new install Microsoft.Maui.Templates`. Also install the native Android SDK (cmdline-tools + `platform-tools` + `platforms;android-34` + `build-tools;34.0.0` from `dl.google.com/android/repository/`, `ANDROID_HOME=~/android-sdk`). Verified end-to-end: `dotnet build -f net8.0-android` succeeds with this combo. iOS still cannot build on this Linux container regardless of SDK — needs CI with a macOS runner or a real Mac.
-2. **[2026-08-04] `maui-blazor` template emits unconditioned `net8.0-ios;net8.0-maccatalyst` TFMs — NuGet restore evaluates all of them even when building `-f net8.0-android` only, and fails on Linux**
-   Do instead: immediately after scaffolding, edit the `.csproj` to condition non-Android TFMs: `<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net8.0-ios;net8.0-maccatalyst</TargetFrameworks>`.
-3. **[2026-08-03] NuGet `Humanizer` 3.0.10 (latest) is broken — `Humanizer.Core.fil` declares no compatible target framework**
-   Do instead: pin `dotnet add package Humanizer --version 2.14.1`.
-4. **[2026-08-03] `dotnet-sdk-8.0` isn't preinstalled but is in the default apt repos**
-   Do instead: `apt-get install -y -qq --no-install-recommends dotnet-sdk-8.0`.
-5. **[2026-08-03] Project is a Blazor Web App (server interactivity) at `src/AppParaAprenderIdiomas.Web`, solution file `AppParaAprenderIdiomas.sln` at repo root; a `src/AppParaAprenderIdiomas.Mobile` (MAUI Blazor Hybrid) and `src/AppParaAprenderIdiomas.Core` (shared RCL) are being added per `plans/mobile-mvp-android-ios.md`**
-   Do instead: add new .NET projects under `src/`, add them to the existing `.sln` with `dotnet sln add`, reuse `Core` for anything platform-agnostic.
-6. **[2026-08-03] `.claude/hooks/session-start.sh` clones/updates `superpowers`, `napkin` (both `~/.claude/skills/`), `markitdown` (`~/markitdown`, `uv pip install --system -e`), and `ECC` (`~/ECC`, `npm install` + `bash install.sh --profile full`), and installs `ffmpeg` if missing — gated on `CLAUDE_CODE_REMOTE=true`**
+1. **[2026-08-05] Mobile stack is Flutter (Dart), not .NET MAUI — MAUI was tried, validated, then discarded by explicit user decision (wanted "best today", not reuse). Setup path verified end-to-end:**
+   Do instead: `git clone https://github.com/flutter/flutter.git -b stable --depth 1 ~/flutter`; Android SDK nativo en `~/android-sdk` (cmdline-tools + `platform-tools` + `platforms;android-36` + `build-tools;28.0.3` — Flutter pide 36/28.0.3 specifically, not whatever MAUI wanted); `flutter config --android-sdk ~/android-sdk`; `yes | flutter doctor --android-licenses`; then `flutter create --org com.TODO... --platforms android,ios src/mobile`. Verified: Android toolchain shows ✓ in `flutter doctor`. iOS still cannot build on this Linux container — needs CI with a macOS runner or a real Mac, same limitation as MAUI had.
+2. **[2026-08-03] NuGet `Humanizer` 3.0.10 (latest) is broken — `Humanizer.Core.fil` declares no compatible target framework**
+   Do instead: pin `dotnet add package Humanizer --version 2.14.1`. (Only relevant to the legacy `src/AppParaAprenderIdiomas.Web` Blazor project, kept as a possible future landing page, not the active mobile app.)
+3. **[2026-08-03] `dotnet-sdk-8.0` isn't preinstalled but is in the default apt repos**
+   Do instead: `apt-get install -y -qq --no-install-recommends dotnet-sdk-8.0`. (Same scope note as above — Web project only.)
+4. **[2026-08-05] Project layout: `src/AppParaAprenderIdiomas.Web` (Blazor, legacy/possible landing page) is separate from `src/mobile` (Flutter, the active app). Plan lives at `plans/mobile-mvp-android-ios.md`; the discarded MAUI plan is archived as `plans/mobile-mvp-android-ios.MAUI-SUPERSEDED.md`**
+   Do instead: all new mobile feature work goes in `src/mobile` (Dart/Flutter), not the `.sln`/C# projects.
+5. **[2026-08-03] `.claude/hooks/session-start.sh` clones/updates `superpowers`, `napkin` (both `~/.claude/skills/`), `markitdown` (`~/markitdown`, `uv pip install --system -e`), and `ECC` (`~/ECC`, `npm install` + `bash install.sh --profile full`), and installs `ffmpeg` if missing — gated on `CLAUDE_CODE_REMOTE=true`. Does NOT yet install Flutter/Android SDK (item 1 above) — that setup is still manual per session as of this note.**
    Do instead: when adding another tool/skill the user wants available every session, append the same clone-or-fetch-reset pattern to this script rather than creating a new hook file. Note: ECC's own hooks (`~/.claude/hooks/hooks.json`) are copied to disk by its installer but are NOT wired into `~/.claude/settings.json` — merging them in is blocked by the auto-mode classifier as a hard boundary (retries do not clear it, unlike most other blocks in this session), because several of ECC's hooks actively block tool calls (`matcher: "*"`) rather than just nudge.
 
 ## User Directives
