@@ -236,10 +236,14 @@ Test contra `InMemoryProgressRepository`: guardar/recuperar progreso correcto.
 
 ---
 
-## Paso 8 — Paywall y entitlements
+## Paso 8 — Paywall y entitlements [HECHO]
 
-**Modelo:** Opus 5 / esfuerzo alto (lógica de facturación).
+**Modelo:** Sonnet 5, esfuerzo alto (API de `in_app_purchase` verificada contra el código fuente instalado antes de escribir el repositorio real, dado el peso de la lógica de facturación).
 **Depende de:** Paso 7. **Bloquea:** 9.
+
+**Ejecutado:** `SubscriptionPlan` (productId/period/precio, `annualSavingsRatio` calculado a partir de precios reales, no hardcodeado) y `Entitlement` en `domain/models/`. `SubscriptionRepository` (interfaz) con `MockSubscriptionRepository` (planes placeholder, compra simulada con delay, usada en tests y para maquetar sin tienda) y `InAppPurchaseSubscriptionRepository` (real, sobre `in_app_purchase` 3.3.0 — `isAvailable`/`queryProductDetails`/`buyNonConsumable`/`purchaseStream`/`completePurchase`/`restorePurchases`, verificados contra el código fuente del paquete antes de usarlos). `PaywallScreen` con `PlanCard` (toggle mensual/anual, badge de ahorro, vista de "ya eres Premium" cuando hay entitlement activo), accesible desde un icono en `LessonListScreen` y en la ruta `/paywall`. Precios marcados con `// TODO: confirmar precio definitivo con el usuario antes del Paso 13` (placeholders: €7.99/mes, €44.99/año, ahorro real ~53%).
+
+`flutter analyze`: sin issues. Tests en verde: 3 de `annualSavingsRatio` (cálculo real, caso borde de precio 0, placeholders razonables) + 2 de `PaywallScreen` con `MockSubscriptionRepository` (renderiza ambos planes con el badge de ahorro correcto; comprar actualiza la UI a "ya eres Premium"). Build de verificación: `flutter build apk --debug` con `in_app_purchase` real integrado.
 
 ### Contexto autocontenido
 `lib/data/subscription_repository.dart` usando el paquete oficial `in_app_purchase` (abstrae Google Play Billing + StoreKit 2 bajo una sola API). UI de paywall en `lib/presentation/paywall/paywall_screen.dart` (mensual vs. anual con % de ahorro).

@@ -15,7 +15,16 @@ class LessonListScreen extends ConsumerWidget {
         ref.watch(englishProgressProvider).value?.completedLessonIds ?? const {};
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Inglés · A1')),
+      appBar: AppBar(
+        title: const Text('Inglés · A1'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.workspace_premium_outlined),
+            tooltip: 'Hazte Premium',
+            onPressed: () => context.push('/paywall'),
+          ),
+        ],
+      ),
       body: courseAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(
