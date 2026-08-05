@@ -1,0 +1,94 @@
+# Ficha de tienda (borrador) — App para Aprender Idiomas
+
+> **Borrador de textos, listo para copiar y pegar en Play Console / App Store Connect en cuanto tengas las cuentas.** Los assets gráficos (icono final, gráfico de feature, capturas de pantalla) siguen pendientes — ver la sección "Lo que falta" al final. Nada de este documento se ha subido a ninguna tienda todavía.
+
+## Nombre de la app
+
+**"App para Aprender Idiomas"** (25 caracteres — cabe en el límite de 30 de ambas tiendas).
+
+**Nota de ASO (App Store Optimization), a decidir:** este nombre no incluye "inglés", que es probablemente el término de búsqueda más directo para el MVP (solo hay curso de inglés completo por ahora). Una alternativa más orientada a búsqueda sería algo como *"Aprende Inglés - Idiomas"* (24 caracteres), que mete la palabra clave principal en el título — el campo con más peso en el algoritmo de búsqueda de ambas tiendas. Lo dejo como decisión tuya, no cambio el nombre del proyecto unilateralmente; mientras tanto, la keyword "inglés" ya está bien representada en subtítulo/descripción corta más abajo.
+
+---
+
+## Google Play Console
+
+**Descripción corta** (máx. 80 caracteres):
+```
+Aprende inglés de verdad: lecciones cortas, contenido real, sin relleno.
+```
+(72 caracteres)
+
+**Descripción completa** (máx. 4000 caracteres):
+```
+Aprende inglés con lecciones de 5 minutos que encajan en tu día — no otra app que empiezas y abandonas.
+
+CURSO DE INGLÉS A1 COMPLETO, GRATIS DESDE EL PRIMER DÍA
+5 unidades, 20 lecciones, 120 ejercicios reales: saludos y presentaciones, números y la hora, familia y personas, comida y bebida, rutina diaria. No es una demo — es un curso A1 entero, sin ninguna lección bloqueada tras un muro de pago.
+
+TRES TIPOS DE EJERCICIO, CADA UNO ENSEÑA ALGO DISTINTO
+- Opción múltiple para reconocer vocabulario y gramática
+- Rellenar el hueco para practicar la forma exacta de una palabra
+- Emparejar para conectar conceptos en español e inglés
+
+TU PROGRESO, GUARDADO EN TU DISPOSITIVO
+Rachas diarias, puntuación acumulada y lecciones completadas — todo guardado localmente, sin necesidad de crear una cuenta para empezar.
+
+PREMIUM, SOLO SI QUIERES MÁS
+La suscripción Premium (mensual o anual, con descuento en el plan anual) da acceso a más idiomas a medida que se publiquen. El curso de inglés A1 no está detrás de un muro — lo premium es una ampliación, no un rescate de lo básico.
+
+Portugués, francés y japonés ya están en desarrollo con la misma calidad de contenido que el inglés.
+
+Sin gamificación vacía. Sin relleno. Contenido real, revisado, que se puede completar de verdad.
+```
+
+**Categoría:** Educación
+
+**Etiquetas sugeridas:** aprender inglés, idiomas, educación, vocabulario, gramática
+
+**Clasificación de contenido:** Apto para todos los públicos (sin contenido objetable — habrá que completar el cuestionario real de Play Console, esto es solo la expectativa).
+
+**Email de contacto de la ficha:** `[PENDIENTE — el que decidas usar como contacto público de desarrollador]`
+
+**URL de política de privacidad (obligatoria):** `[PENDIENTE — necesitas alojar `docs/business/privacy-policy-draft.md` en una URL pública real antes de poder publicar; una GitHub Pages simple o una página estática bastan para esto]`
+
+---
+
+## Apple App Store Connect
+
+**Subtítulo** (máx. 30 caracteres):
+```
+Inglés en lecciones de 5 min
+```
+(28 caracteres)
+
+**Texto promocional** (máx. 170 caracteres — se puede cambiar sin pasar revisión, útil para anuncios puntuales):
+```
+Curso de inglés A1 completo, gratis desde el primer día. 5 unidades, 120 ejercicios reales. Sin relleno, sin muro de pago en lo básico.
+```
+
+**Descripción** (máx. 4000 caracteres): igual que la de Google Play de arriba — Apple no impone un formato distinto, se puede reutilizar tal cual.
+
+**Palabras clave** (máx. 100 caracteres, separadas por comas, sin espacios para aprovechar el límite):
+```
+ingles,aprender ingles,curso ingles,idiomas,vocabulario,gramatica,a1 ingles,ingles gratis
+```
+(89 caracteres)
+
+**Categoría primaria:** Educación
+**Categoría secundaria:** Referencia (opcional)
+
+**Clasificación de edad:** 4+ (sin contenido objetable — a completar en el cuestionario real de App Store Connect).
+
+**URL de soporte (obligatoria):** `[PENDIENTE — misma consideración que la política de privacidad, necesitas una URL pública]`
+**URL de política de privacidad (obligatoria):** `[PENDIENTE — mismo documento que Google Play]`
+
+---
+
+## Lo que falta (fuera del alcance de este documento)
+
+- **Icono final** (512×512 para Play, 1024×1024 para App Store): el proyecto usa el icono por defecto del scaffold de Flutter — hace falta un logo real antes de poder generar el icono definitivo con `flutter_launcher_icons` (ya mencionado como pendiente en los Pasos 5/6 del plan).
+- **Gráfico de feature de Play Store** (1024×500): mismo bloqueo — necesita el logo/identidad visual final.
+- **Capturas de pantalla**: ambas tiendas piden capturas reales de la app funcionando (mínimo 2 en Play, tamaños específicos por dispositivo en Apple — 6.7", 6.5", 5.5" de iPhone, y iPad si se soporta). Este contenedor Linux no tiene emulador gráfico, así que no puedo generarlas yo directamente; se capturan corriendo la app en un dispositivo/emulador real cuando hagas las pruebas de sandbox del Paso 13.
+- **Alojar la política de privacidad y los términos**: los borradores ya existen (`privacy-policy-draft.md`, `terms-of-service-draft.md`) pero ninguna tienda acepta un enlace a un archivo de GitHub sin más — necesitan una URL pública real (una página simple basta) antes de poder rellenar los campos obligatorios de arriba.
+
+Todo lo de texto de este documento está listo para copiar y pegar en cuanto tengas las cuentas aprobadas.

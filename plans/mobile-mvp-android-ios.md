@@ -399,7 +399,7 @@ Ambos jobs en verde — primera confirmación real de que el build de iOS (Pasos
 
 ---
 
-## Paso 13 — Assets de tienda y submission ⚠️ REQUIERE ACCIÓN DEL USUARIO
+## Paso 13 — Assets de tienda y submission ⚠️ REQUIERE ACCIÓN DEL USUARIO [EN CURSO]
 
 **Modelo:** Sonnet 5 para assets/textos; usuario para cuentas y revisión legal.
 **Depende de:** 9, 12.
@@ -407,8 +407,14 @@ Ambos jobs en verde — primera confirmación real de que el build de iOS (Pasos
 ### Contexto autocontenido
 Igual estructura que el plan anterior: el agente prepara ficha de tienda, capturas (si hay build real disponible), checklist de submission con cada ítem marcado honestamente como hecho/pendiente. El usuario crea las cuentas, confirma `applicationId`/bundle id definitivo, configura productos de suscripción reales, y hace la revisión legal real antes de publicar.
 
+**Progreso:**
+- Titularidad confirmada: **individual** (no organización) — evita el bloqueo de D-U-N-S de Apple, ambas cuentas se pueden crear en días, no semanas.
+- Guía paso a paso entregada al usuario para crear Google Play Console (25 $, verificación de identidad ~2-3 días hábiles) y Apple Developer Program (99 $/año, normalmente aprobación el mismo día con cuenta individual). **Cuentas todavía sin crear por el usuario — bloqueo real, en curso.**
+- `docs/business/store-listing.md` [HECHO]: textos completos y verificados dentro de límite de caracteres para ambas tiendas (nombre, descripción corta/completa, subtítulo y texto promocional de Apple, palabras clave, categoría, clasificación de contenido). Reclamo de "curso completo gratis, sin lecciones bloqueadas" verificado contra el código (`lib/presentation/lessons` no tiene ninguna lógica de gating por entitlement) antes de escribirlo, para no afirmar algo falso en una ficha pública.
+- **Pendiente, bloqueado por assets que no existen todavía:** icono final y gráfico de feature (necesitan un logo real, el proyecto sigue con el icono por defecto del scaffold), capturas de pantalla (necesitan un dispositivo/emulador gráfico real, este contenedor no tiene uno), alojar `privacy-policy-draft.md`/`terms-of-service-draft.md` en una URL pública real (las tiendas no aceptan un enlace a GitHub sin más para el campo obligatorio de política de privacidad).
+
 ### Criterio de salida
-Paquete de submission listo para que el usuario suba a un track interno/TestFlight en cuanto tenga las cuentas.
+Paquete de submission listo para que el usuario suba a un track interno/TestFlight en cuanto tenga las cuentas. **Parcialmente cumplido** — textos listos, cuentas y assets gráficos pendientes.
 
 ### Rollback
 No aplica (documentación).
