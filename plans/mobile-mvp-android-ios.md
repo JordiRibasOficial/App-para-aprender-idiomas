@@ -259,6 +259,8 @@ Test contra `InMemoryProgressRepository`: guardar/recuperar progreso correcto.
 
 `flutter analyze`: sin issues. Tests en verde: 3 de `annualSavingsRatio` (cálculo real, caso borde de precio 0, placeholders razonables) + 2 de `PaywallScreen` con `MockSubscriptionRepository` (renderiza ambos planes con el badge de ahorro correcto; comprar actualiza la UI a "ya eres Premium"). Build de verificación: `flutter build apk --debug` con `in_app_purchase` real integrado.
 
+**Disclosure de renovación automática + enlaces legales [HECHO]:** encontrado durante una auditoría propia, no pedido explícitamente — Apple exige (App Store Review Guideline 3.1.2) que la pantalla de compra muestre, antes de comprar, que la suscripción se renueva automáticamente y enlaces a Términos/Privacidad; Google Play espera lo mismo. `PaywallScreen` ahora incluye ese texto y dos enlaces reales (`url_launcher`) a `terms.html`/`privacy.html` (la página ya publicada en `gh-pages`). `_PlansView` pasó de `Column` a `SingleChildScrollView` para no arriesgar overflow en pantallas pequeñas con el contenido añadido. Test nuevo verificando que el disclosure y los dos enlaces se renderizan. 58/58 tests, `flutter analyze` limpio, `flutter build appbundle --release` verificado con la dependencia nueva.
+
 ### Contexto autocontenido
 `lib/data/subscription_repository.dart` usando el paquete oficial `in_app_purchase` (abstrae Google Play Billing + StoreKit 2 bajo una sola API). UI de paywall en `lib/presentation/paywall/paywall_screen.dart` (mensual vs. anual con % de ahorro).
 

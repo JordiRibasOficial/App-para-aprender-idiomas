@@ -28,6 +28,17 @@ void main() {
     expect(find.text('-50%'), findsOneWidget);
   });
 
+  testWidgets(
+      'shows the auto-renewal disclosure and legal links required by App Store guideline 3.1.2',
+      (tester) async {
+    await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('se renueva automáticamente'), findsOneWidget);
+    expect(find.text('Términos de servicio'), findsOneWidget);
+    expect(find.text('Política de privacidad'), findsOneWidget);
+  });
+
   testWidgets('purchasing a plan updates the screen to the active-subscription view',
       (tester) async {
     await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
