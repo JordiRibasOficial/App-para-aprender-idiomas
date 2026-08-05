@@ -127,10 +127,14 @@ Test en verde contra el curso de inglés real.
 
 ---
 
-## Paso 4 — UI de lecciones
+## Paso 4 — UI de lecciones [HECHO]
 
 **Modelo:** Sonnet 5. **Paralelizable con:** Paso 3 (mocks hasta converger).
 **Depende de:** Paso 2. **Bloquea:** 7, 10.
+
+**Ejecutado:** conectado directamente al contenido real del Paso 3 (no hicieron falta mocks, el curso de inglés ya existía). `LessonListScreen` (lista de unidades/lecciones desde `Course` vía Riverpod), `ExerciseScreen` (renderiza los 3 tipos de ejercicio — opción múltiple con `RadioGroup`, rellenar hueco con `TextField`, emparejar con `DropdownButtonFormField` por par, opciones barajadas de forma determinista por `Exercise.id`), `LessonSummaryScreen` (puntuación + `ProgressBar`), rutas en `go_router` (`/`, `/lesson/:unitId/:lessonId`, `/lesson/:unitId/:lessonId/summary`). Theming Material 3 con paleta semilla provisional (`AppTheme`, light/dark). Progreso de la lección es solo en memoria de momento (persistencia real llega en el Paso 7). `flutter analyze`: sin issues. 7 tests en verde (unitarios de `Exercise.isCorrect` para los 3 tipos, boot del árbol de widgets, navegación lista→ejercicio con calificación real). Build de verificación: `flutter build apk --debug` — `app-debug.apk` generado (92.8MB).
+
+**Simplificación conocida:** la UI de emparejar no impide seleccionar el mismo valor en dos pares distintos (no hay eliminación de opciones ya usadas) — aceptable para el MVP, revisar en una iteración de pulido de UX si hace falta.
 
 ### Contexto autocontenido
 Widgets en `lib/presentation/lessons/`: lista de unidades/lecciones, pantalla de ejercicio (según `Exercise.type`), resumen de lección, barra de progreso. Rutas registradas en `go_router`.
