@@ -408,10 +408,18 @@ No aplica (documentación).
 
 ---
 
-## Paso 14 — Marketing, legal y negocio (paralelo desde el Paso 0)
+## Paso 14 — Marketing, legal y negocio (paralelo desde el Paso 0) [HECHO — primera pasada]
 
-**Modelo:** Sonnet 5, skills de ECC (`content-engine`, `marketing-campaign`) para borradores — nunca como sustituto de un profesional real.
+**Modelo:** Sonnet 5, skill de ECC `marketing-campaign` para la estrategia de lanzamiento — nunca como sustituto de un profesional real.
 **Depende de:** nada técnico.
+
+**Ejecutado**, todo en `docs/business/`, cada documento con nota de borrador explícita:
+- `launch-strategy.md`: posicionamiento, panorama competitivo (Duolingo/Babbel/Busuu), canales orgánicos priorizados (ASO, TikTok/Reels con contenido real de las lecciones, comunidades), calendario orientativo de 12 semanas, KPIs tempranos sin cifras objetivo inventadas.
+- `financial-projection.md`: supuestos declarados explícitamente (precios placeholder del Paso 8, comisión de tienda, conversión/churn de referencia de industria sin datos propios), 3 escenarios a 12 meses, coste real conocido de las cuentas de plataforma (~124 USD/año).
+- `privacy-policy-draft.md` y `terms-of-service-draft.md`: borradores coherentes con RGPD y políticas de Apple/Google, honestos sobre que no hay backend todavía (progreso 100% local), con placeholders `[PENDIENTE]` explícitos donde falta decisión legal real.
+- `business-registration-checklist.md`: checklist informativo (autónomo vs. sociedad, IVA digital cuando las tiendas actúan como reseller of record, RGPD) — cada punto marcado "pendiente de asesor", ningún trámite ejecutado.
+
+**Marcado como "primera pasada"** porque el trío de idiomas adicional (Paso 3 iteración) y las cuentas reales (Paso 13) todavía no existen — estos documentos se revisarán cuando haya datos reales que sustituyan las hipótesis declaradas.
 
 ### Contexto autocontenido
 Idéntico en alcance al plan anterior: estrategia de lanzamiento, proyección financiera estimada (marcada como estimación), borradores de política de privacidad/términos (propietario de estos documentos — el Paso 13 los consume, no los duplica), checklist informativo de alta de actividad/IVA digital (sin ejecutar ningún trámite real). Usuario ya confirmó que buscará asesor real antes de publicar.
