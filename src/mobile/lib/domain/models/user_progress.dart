@@ -56,6 +56,17 @@ class UserProgress {
 
   static DateTime dateOnly(DateTime value) => DateTime(value.year, value.month, value.day);
 
+  /// Calendar-day count since the epoch, computed in UTC regardless of the
+  /// input's timezone. Deliberately NOT `localDate.difference(other).inDays`
+  /// — on a DST spring-forward day the local calendar day is only 23 wall-
+  /// clock hours long, so that would floor to 0 instead of 1 and wrongly
+  /// flatline the streak the day after the transition. Building the
+  /// comparison dates in UTC (which has no DST) sidesteps that entirely.
+  static int _daysSinceEpoch(DateTime date) {
+    final utcDate = DateTime.utc(date.year, date.month, date.day);
+    return utcDate.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
+  }
+
   /// Streak rule: same calendar day as [previousActivityDate] keeps the
   /// streak, the very next calendar day extends it by one, any other gap
   /// (including going backwards) resets it to 1.
@@ -66,9 +77,7 @@ class UserProgress {
   }) {
     if (previousActivityDate == null) return 1;
 
-    final previous = dateOnly(previousActivityDate);
-    final current = dateOnly(completedAt);
-    final gapDays = current.difference(previous).inDays;
+    final gapDays = _daysSinceEpoch(completedAt) - _daysSinceEpoch(previousActivityDate);
 
     if (gapDays == 0) return previousStreak == 0 ? 1 : previousStreak;
     if (gapDays == 1) return previousStreak + 1;

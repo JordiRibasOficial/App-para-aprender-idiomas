@@ -136,5 +136,54 @@ void main() {
 
       expect(streak, 1);
     });
+
+    // nextStreak computes the gap via UTC calendar-day arithmetic
+    // (_daysSinceEpoch), not DateTime.difference().inDays on local
+    // midnights — the latter floors to 0 instead of 1 across a DST
+    // spring-forward day (23 wall-clock hours long), wrongly flatlining the
+    // streak. This sandbox's system timezone is fixed to UTC (no DST ever
+    // occurs here), so a real spring-forward transition can't be
+    // constructed and verified in this test; these cases instead lock down
+    // the calendar-day math at the boundaries most likely to expose an
+    // off-by-one in that kind of rewrite.
+    test('nextStreak extends across a month boundary', () {
+      final streak = UserProgress.nextStreak(
+        previousActivityDate: DateTime(2026, 1, 31),
+        completedAt: DateTime(2026, 2, 1),
+        previousStreak: 5,
+      );
+
+      expect(streak, 6);
+    });
+
+    test('nextStreak extends across a year boundary', () {
+      final streak = UserProgress.nextStreak(
+        previousActivityDate: DateTime(2025, 12, 31),
+        completedAt: DateTime(2026, 1, 1),
+        previousStreak: 5,
+      );
+
+      expect(streak, 6);
+    });
+
+    test('nextStreak extends across a leap day', () {
+      final streak = UserProgress.nextStreak(
+        previousActivityDate: DateTime(2024, 2, 29),
+        completedAt: DateTime(2024, 3, 1),
+        previousStreak: 5,
+      );
+
+      expect(streak, 6);
+    });
+
+    test('nextStreak resets when the gap spans a month boundary', () {
+      final streak = UserProgress.nextStreak(
+        previousActivityDate: DateTime(2026, 1, 29),
+        completedAt: DateTime(2026, 2, 1),
+        previousStreak: 5,
+      );
+
+      expect(streak, 1);
+    });
   });
 }
