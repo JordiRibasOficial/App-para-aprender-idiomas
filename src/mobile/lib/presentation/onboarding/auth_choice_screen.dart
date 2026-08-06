@@ -5,6 +5,12 @@ import 'package:go_router/go_router.dart';
 import '../../domain/models/onboarding_state.dart';
 import '../providers/onboarding_providers.dart';
 
+/// Deliberately simple — this only screens for obviously-malformed input
+/// (no "@", no domain), not full RFC 5322 validation. Nothing downstream
+/// depends on the address being deliverable yet (see the screen's own
+/// disclaimer text: no real account exists today).
+final _emailFormat = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+
 class AuthChoiceScreen extends ConsumerStatefulWidget {
   const AuthChoiceScreen({super.key});
 
@@ -30,30 +36,12 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
   }
 
   Future<void> _showEmailDialog() async {
-    final controller = TextEditingController();
     final email = await showDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Tu email'),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(hintText: 'tu@email.com'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(controller.text.trim()),
-            child: const Text('Continuar'),
-          ),
-        ],
-      ),
+      builder: (dialogContext) => const _EmailDialog(),
     );
 
-    if (email != null && email.isNotEmpty) {
+    if (email != null) {
       await _complete(AuthMode.email, email: email);
     }
   }
@@ -99,6 +87,60 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EmailDialog extends StatefulWidget {
+  const _EmailDialog();
+
+  @override
+  State<_EmailDialog> createState() => _EmailDialogState();
+}
+
+class _EmailDialogState extends State<_EmailDialog> {
+  final _controller = TextEditingController();
+  String? _error;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final email = _controller.text.trim();
+    if (!_emailFormat.hasMatch(email)) {
+      setState(() => _error = 'Escribe un email válido, p. ej. tu@email.com');
+      return;
+    }
+    Navigator.of(context).pop(email);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Tu email'),
+      content: TextField(
+        controller: _controller,
+        keyboardType: TextInputType.emailAddress,
+        autofocus: true,
+        decoration: InputDecoration(hintText: 'tu@email.com', errorText: _error),
+        onChanged: (_) {
+          if (_error != null) setState(() => _error = null);
+        },
+        onSubmitted: (_) => _submit(),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        FilledButton(
+          onPressed: _submit,
+          child: const Text('Continuar'),
+        ),
+      ],
     );
   }
 }
