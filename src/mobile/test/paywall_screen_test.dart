@@ -66,4 +66,19 @@ void main() {
     expect(find.text('No se pudo completar la compra de annual_sub.'), findsOneWidget);
     expect(find.text('¡Ya eres Premium!'), findsNothing);
   });
+
+  testWidgets('restoring with nothing to restore tells the user instead of doing nothing visibly',
+      (tester) async {
+    await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Restaurar compras'));
+    await tester.pump(); // enters the restoring state
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    await tester.pumpAndSettle(); // grace period for a late entitlement elapses
+
+    expect(find.text('No se encontraron compras anteriores.'), findsOneWidget);
+    expect(find.text('¡Ya eres Premium!'), findsNothing);
+  });
 }

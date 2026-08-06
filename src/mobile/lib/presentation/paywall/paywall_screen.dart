@@ -24,6 +24,7 @@ class PaywallScreen extends ConsumerStatefulWidget {
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   SubscriptionPeriod _selectedPeriod = SubscriptionPeriod.annual;
   bool _purchasing = false;
+  bool _restoring = false;
 
   Future<void> _purchase(SubscriptionPlan plan) async {
     setState(() => _purchasing = true);
@@ -31,6 +32,29 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       await ref.read(subscriptionRepositoryProvider).purchase(plan);
     } finally {
       if (mounted) setState(() => _purchasing = false);
+    }
+  }
+
+  Future<void> _restore() async {
+    setState(() => _restoring = true);
+    try {
+      await ref.read(subscriptionRepositoryProvider).restorePurchases();
+      // restorePurchases() only confirms the store request was issued, not
+      // that a restored entitlement (if any) has arrived on
+      // entitlementStream yet — give it a moment before concluding there was
+      // nothing to restore. Best-effort: the exact delivery timing isn't
+      // independently verified against a real store here (Paso 9's known
+      // limitation, see InAppPurchaseSubscriptionRepository's class doc).
+      await Future<void>.delayed(const Duration(milliseconds: 800));
+      if (!mounted) return;
+      final isActive = ref.read(entitlementProvider).value?.isActive ?? false;
+      if (!isActive) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(const SnackBar(content: Text('No se encontraron compras anteriores.')));
+      }
+    } finally {
+      if (mounted) setState(() => _restoring = false);
     }
   }
 
@@ -72,8 +96,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   plans: plans,
                   selectedPeriod: _selectedPeriod,
                   purchasing: _purchasing,
+                  restoring: _restoring,
                   onSelect: (period) => setState(() => _selectedPeriod = period),
                   onPurchase: _purchase,
+                  onRestore: _restore,
                 );
               },
             ),
@@ -81,23 +107,27 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   }
 }
 
-class _PlansView extends ConsumerWidget {
+class _PlansView extends StatelessWidget {
   const _PlansView({
     required this.plans,
     required this.selectedPeriod,
     required this.purchasing,
+    required this.restoring,
     required this.onSelect,
     required this.onPurchase,
+    required this.onRestore,
   });
 
   final List<SubscriptionPlan> plans;
   final SubscriptionPeriod selectedPeriod;
   final bool purchasing;
+  final bool restoring;
   final ValueChanged<SubscriptionPeriod> onSelect;
   final Future<void> Function(SubscriptionPlan plan) onPurchase;
+  final Future<void> Function() onRestore;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final monthly = plans.firstWhere((p) => p.period == SubscriptionPeriod.monthly);
     final annual = plans.firstWhere((p) => p.period == SubscriptionPeriod.annual);
     final savingsRatio = SubscriptionPlan.annualSavingsRatio(monthly: monthly, annual: annual);
@@ -138,8 +168,14 @@ class _PlansView extends ConsumerWidget {
                 : Text('Suscribirse — ${selectedPlan.formattedPrice}'),
           ),
           TextButton(
-            onPressed: () => ref.read(subscriptionRepositoryProvider).restorePurchases(),
-            child: const Text('Restaurar compras'),
+            onPressed: restoring ? null : onRestore,
+            child: restoring
+                ? const SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Restaurar compras'),
           ),
           const SizedBox(height: 16),
           Text(
