@@ -52,5 +52,25 @@ void main() {
       expect(reloaded.authMode, AuthMode.email);
       expect(reloaded.email, 'ana@example.com');
     });
+
+    test(
+        'load tolerates an auth mode value that no longer matches a current enum name '
+        'instead of throwing', () async {
+      SharedPreferences.setMockInitialValues({
+        'onboarding_completed': true,
+        'onboarding_level': 'A1',
+        'onboarding_target_language': 'en',
+        // Simulates data written by a future/older app version whose
+        // AuthMode enum doesn't match this build's — e.g. a renamed value.
+        'onboarding_auth_mode': 'sso',
+      });
+      final repository = SharedPreferencesOnboardingRepository();
+
+      final state = await repository.load();
+
+      expect(state.completed, isTrue);
+      expect(state.selectedLevel, 'A1');
+      expect(state.authMode, isNull);
+    });
   });
 }

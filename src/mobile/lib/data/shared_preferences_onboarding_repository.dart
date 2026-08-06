@@ -3,6 +3,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/models/onboarding_state.dart';
 import '../domain/repositories/onboarding_repository.dart';
 
+/// `AuthMode.values.byName` throws on anything that isn't an exact current
+/// enum name — a real risk for data that outlives the code that wrote it
+/// (a future rename, or SharedPreferences corruption). Treating stored
+/// state as untrusted boundary data here, same as any other external input,
+/// instead of letting a stale value permanently strand a returning user on
+/// [RootScreen]'s error branch with no in-app way to recover.
+AuthMode? _authModeFromName(String? name) {
+  if (name == null) return null;
+  for (final mode in AuthMode.values) {
+    if (mode.name == name) return mode;
+  }
+  return null;
+}
+
 class SharedPreferencesOnboardingRepository implements OnboardingRepository {
   static const _completedKey = 'onboarding_completed';
   static const _levelKey = 'onboarding_level';
@@ -16,12 +30,11 @@ class SharedPreferencesOnboardingRepository implements OnboardingRepository {
     final completed = prefs.getBool(_completedKey) ?? false;
     if (!completed) return const OnboardingState();
 
-    final authModeName = prefs.getString(_authModeKey);
     return OnboardingState(
       completed: true,
       selectedLevel: prefs.getString(_levelKey),
       targetLanguage: prefs.getString(_targetLanguageKey),
-      authMode: authModeName == null ? null : AuthMode.values.byName(authModeName),
+      authMode: _authModeFromName(prefs.getString(_authModeKey)),
       email: prefs.getString(_emailKey),
     );
   }
