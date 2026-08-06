@@ -10,6 +10,11 @@ on:
     paths:
       - 'src/mobile/**'
       - '.github/workflows/mobile-ci.yml'
+  # Lets a run be triggered directly via the REST API instead of waiting
+  # on a push/pull_request webhook — added during a GitHub Actions
+  # incident where webhook delivery was throttled to ~15%, so pushed
+  # commits weren't reliably starting a run on their own.
+  workflow_dispatch:
 
 env:
   FLUTTER_VERSION: '3.44.8'
