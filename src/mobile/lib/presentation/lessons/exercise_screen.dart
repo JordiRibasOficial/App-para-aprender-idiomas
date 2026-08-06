@@ -114,8 +114,23 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         body: Center(child: Text('No se pudo cargar la lección: $error')),
       ),
       data: (course) {
-        final unit = course.units.firstWhere((u) => u.id == widget.unitId);
-        final lesson = unit.lessons.firstWhere((l) => l.id == widget.lessonId);
+        final matchingUnits = course.units.where((u) => u.id == widget.unitId).toList();
+        final matchingLessons = matchingUnits.isEmpty
+            ? const <Lesson>[]
+            : matchingUnits.first.lessons.where((l) => l.id == widget.lessonId).toList();
+        final lesson = matchingLessons.isEmpty ? null : matchingLessons.first;
+
+        // widget.unitId/lessonId come from the route path — a system
+        // boundary, even though today only in-app navigation (always with
+        // valid IDs pulled from this same course) reaches this screen. Not
+        // crashing keeps this screen safe against stale/malformed links if
+        // deep linking is ever added later.
+        if (lesson == null) {
+          return const Scaffold(
+            body: Center(child: Text('Esta lección ya no está disponible.')),
+          );
+        }
+
         final exercise = lesson.exercises[_index];
 
         return Scaffold(
