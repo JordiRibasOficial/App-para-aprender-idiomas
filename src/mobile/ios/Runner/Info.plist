@@ -24,6 +24,13 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<!-- AdMob App ID, required by google_mobile_ads before it will
+	     initialize (crashes at startup if missing). This is Google's
+	     official public *test* App ID — see
+	     docs/business/play-console-setup-guide.md for swapping it for a
+	     real one from an AdMob account before publishing. -->
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

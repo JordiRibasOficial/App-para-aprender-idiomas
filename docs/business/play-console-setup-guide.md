@@ -47,9 +47,10 @@ Esto tiene que reflejar lo que el código hace de verdad — he revisado el repo
 | Dirección de email | **Sí, opcional** | Solo si el usuario elige "continuar con email" en el onboarding (`auth_choice_screen.dart`) en vez de "continuar como invitado". Se guarda **únicamente en el dispositivo** (`SharedPreferences`, vía `SharedPreferencesOnboardingRepository`) — la app no tiene backend propio, nunca se envía a ningún servidor nuestro. |
 | Progreso de aprendizaje (lecciones completadas, racha, puntuación) | Sí | Guardado solo localmente en el dispositivo, mismo mecanismo que arriba. No se comparte con terceros. |
 | Historial de compras / facturación | No lo recopila la app directamente | Las suscripciones se gestionan vía Google Play Billing (`in_app_purchase`) — es Google quien procesa y almacena esos datos según su propia política, la app solo consulta el estado de la suscripción. |
-| Ubicación, contactos, fotos, identificadores de publicidad, analítica de terceros | No | No hay ningún SDK de analítica ni de publicidad integrado en el código (`pubspec.yaml` no tiene ninguna dependencia de ese tipo). |
+| Identificador de publicidad, datos de dispositivo para anuncios | **Sí, solo para usuarios sin Premium activo** | Google AdMob (`google_mobile_ads`) muestra anuncios en la versión gratuita — se desactivan automáticamente en cuanto hay una suscripción Premium activa (`PremiumGatedBannerAd`, gateado por `entitlementProvider`). Se pide consentimiento vía el formulario UMP de Google para usuarios en la UE/Reino Unido antes de mostrar cualquier anuncio. **Marca esta app como "Contiene anuncios" en Play Console** y completa la subsección de publicidad del cuestionario de seguridad de datos con AdMob como proveedor. |
+| Ubicación, contactos, fotos, analítica de terceros | No | No hay ningún SDK de analítica integrado en el código — solo el SDK de anuncios de arriba. |
 
-Marca "No se comparten datos con terceros" y "Los usuarios pueden pedir que se borren sus datos" (borrar la app borra todo, al ser almacenamiento 100% local).
+Marca "Los usuarios pueden pedir que se borren sus datos" (borrar la app borra todo lo almacenado localmente). Ya **no** marques "No se comparten datos con terceros" ni "Sin anuncios" — con AdMob integrado, ninguna de las dos es cierta.
 
 ## 5. Productos de suscripción (lo más importante — que coincidan con el código)
 
@@ -75,9 +76,20 @@ El código en `src/mobile/lib/domain/models/subscription_plan.dart:26-27` espera
 
 Estos son los precios que confirmaste (14,99 €/mes, 89,94 €/año — un ahorro real del 50% frente a pagar mensual todo el año). Play Console te dejará fijar el precio en euros y luego convertirá automáticamente al resto de monedas por región — revisa que la conversión automática no distorsione el precio en mercados grandes (EE.UU., Reino Unido) antes de publicar, si te importa el precio exacto ahí.
 
-Una vez creados y **activados** (no solo guardados como borrador), la app real (no la de pruebas con `MockSubscriptionRepository`) podrá cargarlos vía `InAppPurchaseSubscriptionRepository` — ese código ya está implementado y probado (67 tests en `test/`, más los de integración en dispositivo real que están terminando de verificarse en CI ahora mismo).
+Una vez creados y **activados** (no solo guardados como borrador), la app real (no la de pruebas con `MockSubscriptionRepository`) podrá cargarlos vía `InAppPurchaseSubscriptionRepository` — ese código ya está implementado y probado (69 tests en `test/`, más los de integración en dispositivo real que están terminando de verificarse en CI ahora mismo).
 
-## 6. Track de pruebas interno (recomendado antes de producción)
+## 6. Cuenta de AdMob y IDs de anuncio reales
+
+La app ya integra Google AdMob (banner discreto, solo para usuarios sin Premium activo, oculto en el instante en que se activa una suscripción). Ahora mismo usa **los IDs de prueba oficiales de Google** (`ca-app-pub-3940256099942544/...`) — siempre devuelven anuncios de prueba, nunca generan ingresos reales. Para monetizar de verdad:
+
+1. Crea una cuenta en [admob.google.com](https://admob.google.com) (gratis, vinculada a tu cuenta de Google — puede ser la misma que usas para Play Console).
+2. Vincula tu app de Play Console desde AdMob (o crea la entrada de la app manualmente en AdMob con el mismo package name `com.worldwebapps.app.aprenderidioma`).
+3. Crea una unidad de anuncio de tipo **banner** para Android y otra para iOS.
+4. Pásame los dos ID de unidad de anuncio reales y el App ID de AdMob de cada plataforma — actualizo `src/mobile/lib/data/ads/ad_unit_ids.dart` (el ID de la unidad de anuncio) y `AndroidManifest.xml`/`Info.plist` (el App ID) en un momento.
+
+**No subas un build a producción con los IDs de prueba activos** — Google lo prohíbe explícitamente (política de "fraudulent clicks"/spam) y puede suspender la cuenta de AdMob. Los de prueba son solo para desarrollo y para el track de pruebas internas del punto 7.
+
+## 7. Track de pruebas interno (recomendado antes de producción)
 
 **Play Console → Pruebas → Pruebas internas → Crear versión nueva**
 
@@ -86,7 +98,7 @@ Sube el `.aab` (lo genera `flutter build appbundle --release`, ya verificado que
 - Añadir tu propio email como probador y confirmar el flujo completo de principio a fin
 - Detectar cualquier problema de configuración de la ficha antes de exponerla al público
 
-## 7. Firma de la app (App signing)
+## 8. Firma de la app (App signing)
 
 Play Console gestiona la firma por ti por defecto ("Play App Signing") — no hace falta que generes ni guardes tú una keystore de producción. Solo confirma que está activado (lo está por defecto en apps nuevas) la primera vez que subas un `.aab`.
 
@@ -101,6 +113,7 @@ Play Console gestiona la firma por ti por defecto ("Play App Signing") — no ha
 - [ ] Sección de seguridad de datos completada (tabla de arriba)
 - [ ] Suscripción `monthly_sub` creada y **activada**
 - [ ] Suscripción `annual_sub` creada y **activada**
+- [ ] Cuenta de AdMob creada y vinculada (o IDs de unidad de anuncio reales enviados para actualizar el código)
 - [ ] Primer `.aab` subido al track de pruebas internas
 - [ ] Compra de prueba real completada con tarjeta de prueba
 

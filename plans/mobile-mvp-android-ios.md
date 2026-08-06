@@ -479,6 +479,36 @@ Documentos en `docs/business/`, cada uno con nota de "borrador, revisar con prof
 
 ---
 
+## Paso 15 — Publicidad de terceros en la versión gratuita (AdMob) [HECHO — código; cuenta de AdMob y publicación de la política de privacidad en vivo pendientes]
+
+**Motivación:** decisión del usuario — monetizar la versión gratuita con anuncios de terceros además de la suscripción Premium, implementado antes del lanzamiento (no como v1.1 posterior).
+
+**Ejecutado:**
+- `google_mobile_ads: ^9.0.0` añadido a `pubspec.yaml`.
+- `PremiumGatedBannerAd` (`lib/presentation/widgets/`): banner discreto en `LessonListScreen`, oculto de forma instantánea en cuanto `entitlementProvider` reporta una suscripción activa — nunca se muestra a un usuario Premium.
+- `adsEnabledProvider` (`lib/presentation/providers/ads_providers.dart`): por defecto `false` en **todo** el código, producción incluida — el SDK de anuncios necesita un canal de plataforma real que los tests de host (`test/`) no tienen. Solo `main()` lo activa a `true` de verdad. `integration_test/` deliberadamente no lo activa tampoco, para no añadir la fragilidad de una llamada de red real a un test que costó estabilizar (ver commits `76c2bd3`/`91453c8`) — queda como ampliación futura, documentada, no una omisión silenciosa.
+- `AdsConsentManager` (`lib/data/ads/`): flujo de consentimiento RGPD (Google UMP), obligatorio antes de pedir cualquier anuncio a usuarios en la UE/Reino Unido, con timeout de 5s para no bloquear el arranque si el servidor de consentimiento no responde.
+- IDs de anuncio: usa los IDs de prueba **oficiales y públicos de Google** (`ad_unit_ids.dart`, `AndroidManifest.xml`, `Info.plist`) — nunca generan ingresos reales, mismo patrón que los precios placeholder del Paso 8 antes de tener cuenta de tienda. Swap a IDs reales documentado en `docs/business/play-console-setup-guide.md` (Paso 6 de esa guía).
+- Verificado: `flutter analyze` limpio, 69/69 tests (2 nuevos, prueban el *gating* por Premium sin tocar nunca el SDK real de anuncios — ver comentarios en `test/premium_gated_banner_ad_test.dart`), `flutter build appbundle --release` compila y enlaza el SDK nativo sin problema (`.aab` de 56.4MB).
+- Documentación actualizada para que coincida con el código real: `docs/business/privacy-policy-draft.md` (sección de publicidad, UMP, AdMob como tercero) y `docs/business/play-console-setup-guide.md` (tabla de seguridad de datos ya no dice "sin anuncios/sin SDK de publicidad" — ahora es cierto que hay uno).
+
+**Pendiente real, no resuelto todavía:**
+- **La política de privacidad publicada en vivo (`gh-pages` → `privacy.html`) NO se ha actualizado** — solo el borrador en `docs/business/privacy-policy-draft.md` (rama `main`) refleja los anuncios. Hasta que el usuario publique la versión actualizada en `gh-pages`, la política de privacidad en vivo no es honesta sobre lo que la app hace. **No publicar con anuncios activos hasta que esto se resuelva** — es un requisito legal (RGPD), no solo prolijidad.
+- Cuenta de AdMob real: no creada todavía, el usuario decide cuándo (ver guía).
+- `integration_test/app_test.dart` no cubre el flujo de anuncios — deliberadamente fuera de alcance de este paso, ver nota de `adsEnabledProvider` arriba.
+- No se ha verificado el build de iOS con la nueva dependencia contra un run de CI real (el `build-android` local sí, ya que este contenedor no tiene Xcode) — pendiente del próximo run de CI, actualmente bloqueado por la incidencia de GitHub Actions en curso.
+
+### Contexto autocontenido
+Anuncios de terceros (Google AdMob) en la versión gratuita, ocultos automáticamente para usuarios Premium, con consentimiento RGPD (UMP) antes de solicitar anuncios en la UE/Reino Unido. IDs de prueba oficiales de Google mientras no exista cuenta de AdMob propia — mismo patrón ya usado para precios de suscripción antes de tener cuenta de tienda (Paso 9).
+
+### Criterio de salida
+Código en verde en CI real (Android + iOS build, más el resto de la suite), cuenta de AdMob creada y con IDs reales, política de privacidad en vivo (`gh-pages`) actualizada con la sección de publicidad — los tres, no solo el primero.
+
+### Rollback
+Quitar `google_mobile_ads` de `pubspec.yaml`, borrar `lib/data/ads/`, `lib/presentation/providers/ads_providers.dart`, `lib/presentation/widgets/premium_gated_banner_ad.dart`, `test/premium_gated_banner_ad_test.dart`, revertir el `bottomNavigationBar` de `LessonListScreen`, revertir `main.dart`, y las entradas de `AndroidManifest.xml`/`Info.plist`.
+
+---
+
 ## Resumen para el usuario
 
 - **14 pasos** (0-14, sin el 4.5 intercalado que hacía falta en MAUI — Flutter separa `android/`/`ios/` de forma nativa en la estructura del proyecto, así que 5 y 6 son paralelos sin necesidad de un paso previo de identidad compartida).

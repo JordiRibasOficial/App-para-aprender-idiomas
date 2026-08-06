@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../domain/models/target_language.dart';
 import '../providers/content_providers.dart';
 import '../providers/progress_providers.dart';
+import '../widgets/premium_gated_banner_ad.dart';
 
 class LessonListScreen extends ConsumerWidget {
   const LessonListScreen({super.key, required this.targetLanguage});
@@ -61,6 +62,7 @@ class LessonListScreen extends ConsumerWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const PremiumGatedBannerAd(),
     );
   }
 }
