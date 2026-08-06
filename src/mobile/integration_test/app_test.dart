@@ -15,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:app_para_aprender_idiomas/main.dart';
+import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -79,13 +80,23 @@ void main() {
 
       // --- Simulate a cold restart: rebuild MyApp fresh and confirm real
       // SharedPreferences persistence lands directly on the lesson list
-      // instead of showing onboarding again. Unlike the earlier in-memory
-      // Riverpod state transitions above, this rebuild triggers a genuine
-      // new SharedPreferences.getInstance() platform-channel round trip on
-      // a real device, which pumpAndSettle() can return before finishing —
-      // confirmed by identical CI failures here on both the Android
-      // emulator and the iOS Simulator. Poll instead of trusting a single
-      // pumpAndSettle() to have waited long enough. ---
+      // instead of showing onboarding again.
+      //
+      // appRouter is a module-level singleton (see app_router.dart), and
+      // integration_test runs the whole test file in a single Dart
+      // process/isolate on the device — so it survives this pumpWidget
+      // exactly like it survives between tests in test/widget files
+      // elsewhere in this suite (hence those files' `tearDown(() =>
+      // appRouter.go('/'))`). Without resetting it here, GoRouter stays on
+      // whatever route the exercise screen left it on, RootScreen (the
+      // widget that actually reads the persisted onboarding state) never
+      // gets rebuilt, and no amount of waiting makes the lesson list
+      // appear — confirmed by this exact assertion timing out on both the
+      // Android emulator and the iOS Simulator even with a 5s poll. A real
+      // cold restart doesn't have this problem: the whole process,
+      // including the GoRouter instance, is freshly created starting at
+      // '/'. `go('/')` here is what actually simulates that. ---
+      appRouter.go('/');
       await tester.pumpWidget(const ProviderScope(child: MyApp()));
       await tester.pumpAndSettle();
 
