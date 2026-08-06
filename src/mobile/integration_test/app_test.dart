@@ -79,12 +79,43 @@ void main() {
 
       // --- Simulate a cold restart: rebuild MyApp fresh and confirm real
       // SharedPreferences persistence lands directly on the lesson list
-      // instead of showing onboarding again. ---
+      // instead of showing onboarding again. Unlike the earlier in-memory
+      // Riverpod state transitions above, this rebuild triggers a genuine
+      // new SharedPreferences.getInstance() platform-channel round trip on
+      // a real device, which pumpAndSettle() can return before finishing —
+      // confirmed by identical CI failures here on both the Android
+      // emulator and the iOS Simulator. Poll instead of trusting a single
+      // pumpAndSettle() to have waited long enough. ---
       await tester.pumpWidget(const ProviderScope(child: MyApp()));
       await tester.pumpAndSettle();
+
+      await _waitForCondition(
+        tester,
+        () => find.text('Inglés · A1').evaluate().isNotEmpty,
+        description: "lesson list ('Inglés · A1') after simulated restart",
+      );
 
       expect(find.text('Inglés · A1'), findsOneWidget);
       expect(find.text('App para Aprender Idiomas'), findsNothing);
     },
   );
+}
+
+/// Polls [condition] by pumping frames, instead of trusting a single
+/// [WidgetTester.pumpAndSettle] call to have waited long enough for a real
+/// platform-channel round trip (e.g. SharedPreferences) plus the resulting
+/// Riverpod rebuild to finish on a real device/emulator/simulator.
+Future<void> _waitForCondition(
+  WidgetTester tester,
+  bool Function() condition, {
+  required String description,
+  Duration timeout = const Duration(seconds: 5),
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (!condition()) {
+    if (DateTime.now().isAfter(deadline)) {
+      throw TestFailure('Timed out waiting for: $description');
+    }
+    await tester.pump(const Duration(milliseconds: 100));
+  }
 }
