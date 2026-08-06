@@ -1,0 +1,90 @@
+// Real-device/emulator/simulator UI test — the counterpart to test/, which
+// only exercises the app against flutter_test's host-only bindings (fake
+// SharedPreferences, no real sqflite, no real platform channels). This runs
+// the actual app end to end: real local storage, real SQLite, and the real
+// InAppPurchaseSubscriptionRepository (not MockSubscriptionRepository).
+//
+// Requires a connected device, a running emulator (Android), or a booted
+// simulator (iOS) — see .github/workflows/mobile-ci.yml for how CI runs
+// this on a KVM-backed Android emulator and a real iOS Simulator on
+// macos-latest. Can't run inside this project's own sandbox (no KVM, no
+// macOS available) — see plans/mobile-mvp-android-ios.md for that context.
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+
+import 'package:app_para_aprender_idiomas/main.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets(
+    'onboarding, a correct answer, the paywall, and persistence across a simulated restart',
+    (tester) async {
+      // --- Fresh install: Welcome screen, not the lesson list ---
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle();
+
+      expect(find.text('App para Aprender Idiomas'), findsOneWidget);
+      expect(find.text('Inglés · A1'), findsNothing);
+
+      // --- Onboarding: language (English default) -> level (A1 default) -> guest ---
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
+      expect(find.text('Elige tu idioma'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
+      expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
+      expect(find.text('¿Cómo quieres continuar?'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Inglés · A1'), findsOneWidget);
+
+      // --- Paywall: must render without crashing even with no real store
+      // connection available in CI (in_app_purchase.isAvailable() is false
+      // there) — this is the one path the mocked test/ suite can't exercise
+      // for real, since it always overrides subscriptionRepositoryProvider.
+      // Visited via the AppBar icon (a real push) before opening a lesson,
+      // so the way back to the lesson list is a reliable pageBack() — the
+      // lesson route below is reached via go(), which doesn't leave a pop
+      // target, so it's visited last instead of navigated away from. ---
+      await tester.tap(find.byIcon(Icons.workspace_premium_outlined));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Hazte Premium'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(find.text('Inglés · A1'), findsOneWidget);
+
+      // --- Answer the first exercise of the first lesson correctly ---
+      await tester.tap(find.text('Saludos básicos'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('¿Cómo se dice \'Hola\' en inglés?'), findsOneWidget);
+      await tester.tap(find.text('Hello'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Comprobar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('¡Correcto!'), findsOneWidget);
+
+      // --- Simulate a cold restart: rebuild MyApp fresh and confirm real
+      // SharedPreferences persistence lands directly on the lesson list
+      // instead of showing onboarding again. ---
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Inglés · A1'), findsOneWidget);
+      expect(find.text('App para Aprender Idiomas'), findsNothing);
+    },
+  );
+}

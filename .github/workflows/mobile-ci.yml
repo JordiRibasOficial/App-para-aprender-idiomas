@@ -83,3 +83,82 @@ jobs:
       # No signing certificates exist yet (Paso 13, requires the Apple
       # Developer account) — this only proves the iOS build compiles.
       - run: flutter build ios --release --no-codesign
+
+  # integration_test/ runs the real app against a real device — real
+  # SharedPreferences, real SQLite, real InAppPurchaseSubscriptionRepository
+  # (not the mocks test/ uses). Can't run in the dev sandbox (no KVM, no
+  # macOS) — this is the actual verification. See integration_test/app_test.dart.
+  integration-test-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - run: flutter pub get
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run integration_test on a real (KVM-accelerated) Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: cd src/mobile && flutter test integration_test/app_test.dart
+
+  integration-test-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - run: flutter pub get
+
+      - name: Boot an available iPhone Simulator
+        run: |
+          UDID=$(xcrun simctl list devices available -j | jq -r '
+            .devices | to_entries[] | .value[] | select(.name | startswith("iPhone")) | .udid
+          ' | head -1)
+          if [ -z "$UDID" ]; then
+            echo "No available iPhone simulator found on this runner image." >&2
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "SIMULATOR_UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+
+      - name: Run integration_test on the iOS Simulator
+        run: flutter test integration_test/app_test.dart -d "$SIMULATOR_UDID"
