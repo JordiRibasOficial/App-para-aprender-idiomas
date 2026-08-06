@@ -150,6 +150,8 @@ Test en verde contra el curso de inglés real.
 
 **Simplificación conocida:** la UI de emparejar no impide seleccionar el mismo valor en dos pares distintos (no hay eliminación de opciones ya usadas) — aceptable para el MVP, revisar en una iteración de pulido de UX si hace falta.
 
+**Contraste de "¡Correcto!" [HECHO — capa de accesibilidad, encontrado en auditoría propia]:** el texto de acierto usaba `Colors.green` (`#4CAF50`) plano — contraste calculado a mano contra una superficie clara: ~2.75:1, por debajo del mínimo WCAG AA de 3:1 incluso para texto en negrita. `colorScheme.error` (usado en el caso de fallo) ya viene calibrado por Material 3, así que solo hacía falta tocar el caso de acierto: ahora usa `Colors.green.shade800` en tema claro (~5.4:1) y `Colors.green.shade300` en tema oscuro (~8:1), ambos con margen sobre el mínimo. De paso se revisó el resto de la capa de accesibilidad verificable sin dispositivo real: la app nunca toca `MediaQuery`/`textScaler` (respeta el escalado de texto del sistema por defecto, sin anti-patrón de bloquearlo), y los espaciados verticales (`SizedBox(height: N)`) son huecos entre elementos, no contenedores de altura fija que puedan recortar texto al escalar la fuente. 65/65 tests, `flutter analyze` limpio, `flutter build appbundle --release` verificado.
+
 ### Contexto autocontenido
 Widgets en `lib/presentation/lessons/`: lista de unidades/lecciones, pantalla de ejercicio (según `Exercise.type`), resumen de lección, barra de progreso. Rutas registradas en `go_router`.
 

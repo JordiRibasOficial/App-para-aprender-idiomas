@@ -141,7 +141,17 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                           ? '¡Correcto!'
                           : 'Incorrecto${exercise.correctAnswer.isNotEmpty ? " — respuesta: ${exercise.correctAnswer}" : ""}',
                       style: TextStyle(
-                        color: _wasCorrect ? Colors.green : Theme.of(context).colorScheme.error,
+                        // Plain Colors.green (#4CAF50) is ~2.75:1 against a
+                        // light surface — below WCAG AA's 3:1 floor even for
+                        // bold text. These shades keep >=4.5:1 in both
+                        // themes (colorScheme.error is already M3-calibrated
+                        // for contrast, so the incorrect branch needs no
+                        // adjustment).
+                        color: _wasCorrect
+                            ? (Theme.of(context).brightness == Brightness.dark
+                                ? Colors.green.shade300
+                                : Colors.green.shade800)
+                            : Theme.of(context).colorScheme.error,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
