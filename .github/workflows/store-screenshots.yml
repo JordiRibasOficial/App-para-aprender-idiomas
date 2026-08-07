@@ -52,12 +52,19 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: |
-            cd src/mobile
-            flutter drive \
-              --driver=test_driver/integration_test.dart \
-              --target=integration_test/screenshot_test.dart \
-              -d emulator-5554
+          # Must be a single shell invocation — this action runs each line
+          # of a multi-line `script:` as a *separate* `sh -c` call, so a
+          # `cd` on one line doesn't carry over to the next (confirmed by
+          # a real CI failure: "No pubspec.yaml file found" from a
+          # `flutter drive` that ran outside src/mobile). `>` folds this
+          # into one line, matching the working pattern already used by
+          # the integration-test-android job above.
+          script: >
+            cd src/mobile &&
+            flutter drive
+            --driver=test_driver/integration_test.dart
+            --target=integration_test/screenshot_test.dart
+            -d emulator-5554
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
