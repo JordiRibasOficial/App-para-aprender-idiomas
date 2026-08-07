@@ -84,6 +84,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pub-
 
+      # CocoaPods spec resolution + Xcode build products. pubspec.lock is
+      # the right cache key here too — it's what changes when a native
+      # iOS dependency (e.g. google_mobile_ads) is added or bumped.
+      - name: Cache CocoaPods and Xcode DerivedData
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-xcode-${{ hashFiles('src/mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-
+
       - run: flutter pub get
       # No signing certificates exist yet (Paso 13, requires the Apple
       # Developer account) — this only proves the iOS build compiles.
@@ -148,6 +161,18 @@ jobs:
           key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-pub-
+
+      # Same cache as build-ios — this job also compiles the whole iOS
+      # app (to install it on the simulator) before running any tests.
+      - name: Cache CocoaPods and Xcode DerivedData
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-xcode-${{ hashFiles('src/mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-
 
       - run: flutter pub get
 
