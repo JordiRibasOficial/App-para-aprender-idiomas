@@ -8,6 +8,16 @@
 // already proven stable in integration-test-android/-ios. Mixing the two
 // in one file would put a `flutter drive`-only requirement on the test
 // that CI's stability took real work to reach.
+//
+// One testWidgets per screenshot, not one long sequential flow: a shared
+// multi-screenshot run kept producing byte-identical captures for
+// consecutive screens (confirmed by checksum across several CI runs) —
+// takeScreenshot()'s native call appears to leave something in a bad
+// state for whatever tap/interaction immediately follows it. Starting
+// each screenshot fresh (its own pumpWidget, its own single
+// takeScreenshot() call with nothing after it) sidesteps the whole
+// failure class instead of chasing timing workarounds for it. Costs more
+// CI time (onboarding repeats per screenshot) in exchange for reliability.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,23 +26,19 @@ import 'package:integration_test/integration_test.dart';
 import 'package:app_para_aprender_idiomas/data/mock_subscription_repository.dart';
 import 'package:app_para_aprender_idiomas/main.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/subscription_providers.dart';
-import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('capture store-listing screenshots along the guest onboarding + lesson flow',
-      (tester) async {
-    // MockSubscriptionRepository, not the real InAppPurchaseSubscriptionRepository:
-    // this emulator has no real Play Store connection, so the real repository
-    // correctly returns an empty plan list — confirmed by a real capture that
-    // came back showing "Los planes de suscripción no están disponibles
-    // todavía." instead of the Premium plans. That's correct app behavior
-    // (already covered by app_test.dart), but useless for a store screenshot,
-    // which needs to actually show the plans. The rest of this test still
-    // exercises the real onboarding/lesson code paths on a real device — this
-    // override only swaps the one piece that structurally can't produce
-    // meaningful content in CI.
+  /// Pumps a fresh app instance. MockSubscriptionRepository, not the real
+  /// InAppPurchaseSubscriptionRepository: this emulator has no real Play
+  /// Store connection, so the real repository correctly returns an empty
+  /// plan list — confirmed by a real capture that came back showing "Los
+  /// planes de suscripción no están disponibles todavía." instead of the
+  /// Premium plans. Correct app behavior (already covered by
+  /// app_test.dart), but useless for a store screenshot, which needs to
+  /// actually show the plans.
+  Future<void> pumpFreshApp(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -44,79 +50,81 @@ void main() {
     await tester.pumpAndSettle();
 
     // Android only, but harmless on iOS too: switches the rendering
-    // surface to something takeScreenshot() can actually read from.
-    // Must happen once, before the first screenshot.
+    // surface to something takeScreenshot() can actually read from. Must
+    // happen once per test, before that test's screenshot.
     await binding.convertFlutterSurfaceToImage();
     await tester.pumpAndSettle();
+  }
 
+  /// Walks Welcome -> language (English default) -> level (A1 default) ->
+  /// guest, landing on the lesson list. Same tap pattern proven stable in
+  /// app_test.dart.
+  Future<void> completeOnboardingAsGuest(WidgetTester tester) async {
+    await tester.tap(find.text('Empezar'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Inglés · A1'), findsOneWidget);
+  }
+
+  testWidgets('01-welcome', (tester) async {
+    await pumpFreshApp(tester);
     await binding.takeScreenshot('01-welcome');
-    await _settleAfterScreenshot(tester);
+  });
 
+  testWidgets('02-idioma', (tester) async {
+    await pumpFreshApp(tester);
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('02-idioma'); // shows the Premium lock badge on pt/fr/ja
-    await _settleAfterScreenshot(tester);
+  });
 
+  testWidgets('03-nivel', (tester) async {
+    await pumpFreshApp(tester);
+    await tester.tap(find.text('Empezar'));
+    await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('03-nivel');
-    await _settleAfterScreenshot(tester);
+  });
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
-    await tester.pumpAndSettle();
+  testWidgets('04-lecciones', (tester) async {
+    await pumpFreshApp(tester);
+    await completeOnboardingAsGuest(tester);
     await binding.takeScreenshot('04-lecciones');
-    await _settleAfterScreenshot(tester);
+  });
 
-    // find.text(lesson title), not find.byType(ListTile).first/.at(1):
-    // the index-based version silently tapped nothing on a real device —
-    // confirmed by a real capture where 04/05/06 came back byte-identical
-    // (all three were the lesson list, navigation never happened). This
-    // is the exact tap pattern already proven stable in app_test.dart.
-    // The expect() calls make a future navigation failure loud instead
-    // of silently capturing the wrong screen again.
+  testWidgets('05-ejercicio', (tester) async {
+    await pumpFreshApp(tester);
+    await completeOnboardingAsGuest(tester);
     await tester.tap(find.text('Saludos básicos'));
     await tester.pumpAndSettle();
     expect(find.text('¿Cómo se dice \'Hola\' en inglés?'), findsOneWidget);
     await binding.takeScreenshot('05-ejercicio');
-    await _settleAfterScreenshot(tester);
+  });
 
-    // Not tester.pageBack(): LessonListScreen navigates to a lesson via
-    // context.go(), which replaces the route instead of pushing on top
-    // of it — there's no pop target for pageBack() to find (confirmed by
-    // a real CI failure: pageBack() found no back button at all).
-    appRouter.go('/');
-    await tester.pumpAndSettle();
-    expect(find.text('Inglés · A1'), findsOneWidget);
-
+  testWidgets('06-ejercicio2', (tester) async {
+    await pumpFreshApp(tester);
+    await completeOnboardingAsGuest(tester);
     await tester.tap(find.text('Presentarse'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('06-ejercicio2');
-    await _settleAfterScreenshot(tester);
+  });
 
-    // Not tester.pageBack(): LessonListScreen navigates to a lesson via
-    // context.go(), which replaces the route instead of pushing on top
-    // of it — there's no pop target for pageBack() to find (confirmed by
-    // a real CI failure: pageBack() found no back button at all).
-    appRouter.go('/');
-    await tester.pumpAndSettle();
-    expect(find.text('Inglés · A1'), findsOneWidget);
-
+  testWidgets('07-premium', (tester) async {
+    await pumpFreshApp(tester);
+    await completeOnboardingAsGuest(tester);
     await tester.tap(find.byIcon(Icons.workspace_premium_outlined));
     await tester.pumpAndSettle();
     expect(find.text('Hazte Premium'), findsOneWidget); // sanity: paywall actually reached
     await binding.takeScreenshot('07-premium');
   });
-}
-
-/// takeScreenshot() itself (the native `captureScreenshot` platform channel
-/// call) appears to leave input dispatch in a transient bad state on
-/// Android — confirmed by a real capture where the tap immediately
-/// following a screenshot silently landed on nothing (the lesson-list
-/// screenshot and the "tap a lesson" screenshot came back byte-identical).
-/// A brief extra settle before the next interaction reliably clears it.
-Future<void> _settleAfterScreenshot(WidgetTester tester) async {
-  await tester.pump(const Duration(milliseconds: 300));
-  await tester.pumpAndSettle();
 }
