@@ -50,20 +50,24 @@ void main() {
     await tester.pumpAndSettle();
 
     await binding.takeScreenshot('01-welcome');
+    await _settleAfterScreenshot(tester);
 
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('02-idioma'); // shows the Premium lock badge on pt/fr/ja
+    await _settleAfterScreenshot(tester);
 
     await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('03-nivel');
+    await _settleAfterScreenshot(tester);
 
     await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('04-lecciones');
+    await _settleAfterScreenshot(tester);
 
     // find.text(lesson title), not find.byType(ListTile).first/.at(1):
     // the index-based version silently tapped nothing on a real device —
@@ -74,8 +78,9 @@ void main() {
     // of silently capturing the wrong screen again.
     await tester.tap(find.text('Saludos básicos'));
     await tester.pumpAndSettle();
-    expect(find.text('¡Correcto!'), findsNothing); // sanity: still on the question, not past it
+    expect(find.text('¿Cómo se dice \'Hola\' en inglés?'), findsOneWidget);
     await binding.takeScreenshot('05-ejercicio');
+    await _settleAfterScreenshot(tester);
 
     // Not tester.pageBack(): LessonListScreen navigates to a lesson via
     // context.go(), which replaces the route instead of pushing on top
@@ -88,6 +93,7 @@ void main() {
     await tester.tap(find.text('Presentarse'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('06-ejercicio2');
+    await _settleAfterScreenshot(tester);
 
     // Not tester.pageBack(): LessonListScreen navigates to a lesson via
     // context.go(), which replaces the route instead of pushing on top
@@ -102,4 +108,15 @@ void main() {
     expect(find.text('Hazte Premium'), findsOneWidget); // sanity: paywall actually reached
     await binding.takeScreenshot('07-premium');
   });
+}
+
+/// takeScreenshot() itself (the native `captureScreenshot` platform channel
+/// call) appears to leave input dispatch in a transient bad state on
+/// Android — confirmed by a real capture where the tap immediately
+/// following a screenshot silently landed on nothing (the lesson-list
+/// screenshot and the "tap a lesson" screenshot came back byte-identical).
+/// A brief extra settle before the next interaction reliably clears it.
+Future<void> _settleAfterScreenshot(WidgetTester tester) async {
+  await tester.pump(const Duration(milliseconds: 300));
+  await tester.pumpAndSettle();
 }
