@@ -22,6 +22,13 @@ void main() {
       (tester) async {
     await tester.pumpWidget(const ProviderScope(child: MyApp()));
     await tester.pumpAndSettle();
+
+    // Android only, but harmless on iOS too: switches the rendering
+    // surface to something takeScreenshot() can actually read from.
+    // Must happen once, before the first screenshot.
+    await binding.convertFlutterSurfaceToImage();
+    await tester.pumpAndSettle();
+
     await binding.takeScreenshot('01-welcome');
 
     await tester.tap(find.text('Empezar'));
