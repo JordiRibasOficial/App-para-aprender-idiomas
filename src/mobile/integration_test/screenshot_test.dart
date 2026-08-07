@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:app_para_aprender_idiomas/data/mock_subscription_repository.dart';
 import 'package:app_para_aprender_idiomas/main.dart';
@@ -48,6 +49,17 @@ void main() {
     // where 03-nivel onward couldn't find "Empezar" because the router was
     // still sitting on the language-selection route from 02-idioma.
     appRouter.go('/');
+
+    // Real on-device SharedPreferences, not a host-test fake — it
+    // persists across tests in this file (same running app process, same
+    // device storage). Confirmed by a real CI failure: 04-lecciones is
+    // the first test to actually complete onboarding (taps "Continuar
+    // como invitado"), and every test after it failed to find "Empezar"
+    // because the app now skipped straight to the lesson list — onboarding
+    // was already marked complete from 04's real, persisted write. Clearing
+    // it here makes every test start from a genuinely fresh install.
+    await (await SharedPreferences.getInstance()).clear();
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
