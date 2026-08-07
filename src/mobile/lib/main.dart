@@ -17,7 +17,17 @@ Future<void> main() async {
   final adsEnabled = !kIsWeb;
   if (adsEnabled) {
     await AdsConsentManager.gatherConsent();
-    await MobileAds.instance.initialize();
+    // Unlike gatherConsent() above, MobileAds.instance.initialize() has no
+    // built-in timeout — if Google's ad servers are slow or unreachable
+    // (observed intermittently on the iOS Simulator in CI), this Future
+    // never completes, main() never returns, and runApp() never runs, so
+    // nothing — not even a test harness — ever gets a first frame. Same
+    // fallback rationale as gatherConsent(): ad requests proceed
+    // uninitialized this launch rather than blocking startup forever.
+    await MobileAds.instance.initialize().timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => InitializationStatus(const {}),
+    );
   }
 
   runApp(
