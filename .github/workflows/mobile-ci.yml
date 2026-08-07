@@ -67,6 +67,11 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
+    # Default job timeout is 360 minutes — far too long for something that
+    # normally takes ~5 min. Fail fast instead of hanging silently for
+    # hours (observed: macOS runners occasionally stall on this step even
+    # with no GitHub-wide incident to blame).
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -145,6 +150,8 @@ jobs:
 
   integration-test-ios:
     runs-on: macos-latest
+    # See build-ios above for why this is set explicitly.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
