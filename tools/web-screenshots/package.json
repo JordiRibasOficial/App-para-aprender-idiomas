@@ -1,0 +1,11 @@
+{
+  "name": "web-screenshots",
+  "private": true,
+  "description": "Dev tool: captures real screenshots of the Flutter Web build for store-listing purposes.",
+  "scripts": {
+    "shoot": "node shoot.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}

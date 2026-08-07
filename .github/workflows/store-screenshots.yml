@@ -1,0 +1,67 @@
+name: Store screenshots
+
+# Manual only — this doesn't need to run on every push, just on demand
+# when the UI changes enough to need fresh store-listing screenshots.
+# Captures real screenshots at the CI Android emulator's actual device
+# resolution (Pixel 6 profile, 1080x2400), via `flutter drive` (required
+# for IntegrationTestWidgetsFlutterBinding.takeScreenshot() to work — see
+# integration_test/screenshot_test.dart and test_driver/integration_test.dart).
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.44.8'
+
+defaults:
+  run:
+    working-directory: src/mobile
+
+jobs:
+  screenshots-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - run: flutter pub get
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Capture screenshots on a real (KVM-accelerated) Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: |
+            cd src/mobile
+            flutter drive \
+              --driver=test_driver/integration_test.dart \
+              --target=integration_test/screenshot_test.dart \
+              -d emulator-5554
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-screenshots-android
+          path: src/mobile/screenshots/
+          if-no-files-found: error

@@ -1,0 +1,277 @@
+{
+  "sourceLanguage": "es",
+  "targetLanguage": "en",
+  "level": "A1",
+  "units": [
+    {
+      "id": "u1",
+      "title": "Saludos y presentaciones",
+      "lessons": [
+        {
+          "id": "u1_l1",
+          "title": "Saludos básicos",
+          "exercises": [
+            { "id": "u1_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Hola' en inglés?", "correctAnswer": "Hello", "options": ["Hello", "Goodbye", "Please", "Thanks"] },
+            { "id": "u1_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Buenos días' en inglés?", "correctAnswer": "Good morning", "options": ["Good morning", "Good night", "Good afternoon", "Good evening"] },
+            { "id": "u1_l1_e3", "type": "fillBlank", "prompt": "Good ___, see you tomorrow!", "correctAnswer": "night" },
+            { "id": "u1_l1_e4", "type": "multipleChoice", "prompt": "¿Cuál es la respuesta natural a 'How are you?'", "correctAnswer": "I'm fine, thanks", "options": ["I'm fine, thanks", "My name is Ana", "I am 20 years old", "See you soon"] },
+            { "id": "u1_l1_e5", "type": "matching", "prompt": "Une cada saludo en español con su traducción en inglés.", "pairs": { "Hola": "Hello", "Adiós": "Goodbye", "Buenas noches": "Good night", "Por favor": "Please" } },
+            { "id": "u1_l1_e6", "type": "fillBlank", "prompt": "___ to meet you!", "correctAnswer": "Nice" }
+          ]
+        },
+        {
+          "id": "u1_l2",
+          "title": "Presentarse",
+          "exercises": [
+            { "id": "u1_l2_e1", "type": "fillBlank", "prompt": "My name ___ Laura.", "correctAnswer": "is" },
+            { "id": "u1_l2_e2", "type": "multipleChoice", "prompt": "¿Cómo preguntas el nombre de alguien?", "correctAnswer": "What's your name?", "options": ["What's your name?", "How old are you?", "Where are you from?", "What do you do?"] },
+            { "id": "u1_l2_e3", "type": "fillBlank", "prompt": "I ___ from Spain.", "correctAnswer": "am" },
+            { "id": "u1_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Tengo 25 años' en inglés?", "correctAnswer": "I am 25 years old", "options": ["I am 25 years old", "I have 25 years", "I do 25 years", "My age is 25 old"] },
+            { "id": "u1_l2_e5", "type": "matching", "prompt": "Une la pregunta con la respuesta correcta.", "pairs": { "What's your name?": "My name is Carlos", "How old are you?": "I am 30 years old", "Where are you from?": "I am from Mexico" } },
+            { "id": "u1_l2_e6", "type": "fillBlank", "prompt": "This ___ my friend, Marc.", "correctAnswer": "is" }
+          ]
+        },
+        {
+          "id": "u1_l3",
+          "title": "Nacionalidades y países",
+          "exercises": [
+            { "id": "u1_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'español' (nacionalidad) en inglés?", "correctAnswer": "Spanish", "options": ["Spanish", "Spain", "Spaniard's", "Espanish"] },
+            { "id": "u1_l3_e2", "type": "matching", "prompt": "Une el país con su nacionalidad en inglés.", "pairs": { "France": "French", "Italy": "Italian", "Germany": "German", "Portugal": "Portuguese" } },
+            { "id": "u1_l3_e3", "type": "fillBlank", "prompt": "She is ___ (de Japón).", "correctAnswer": "Japanese" },
+            { "id": "u1_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es la pregunta correcta para el país de origen?", "correctAnswer": "Where are you from?", "options": ["Where are you from?", "Where do you go?", "What is your country?", "Which country you are?"] },
+            { "id": "u1_l3_e5", "type": "fillBlank", "prompt": "They ___ from Brazil.", "correctAnswer": "are" },
+            { "id": "u1_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Soy de Alemania'?", "correctAnswer": "I am from Germany", "options": ["I am from Germany", "I am German country", "I from Germany am", "I am of Germany"] }
+          ]
+        },
+        {
+          "id": "u1_l4",
+          "title": "Expresiones de cortesía",
+          "exercises": [
+            { "id": "u1_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Por favor'?", "correctAnswer": "Please", "options": ["Please", "Thanks", "Sorry", "Excuse me"] },
+            { "id": "u1_l4_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Perdón' (para llamar la atención)?", "correctAnswer": "Excuse me", "options": ["Excuse me", "Sorry", "Please", "You're welcome"] },
+            { "id": "u1_l4_e3", "type": "fillBlank", "prompt": "Thank you very ___.", "correctAnswer": "much" },
+            { "id": "u1_l4_e4", "type": "matching", "prompt": "Une la expresión en español con su equivalente en inglés.", "pairs": { "De nada": "You're welcome", "Lo siento": "Sorry", "Con permiso": "Excuse me", "Gracias": "Thank you" } },
+            { "id": "u1_l4_e5", "type": "multipleChoice", "prompt": "Alguien te dice 'Thank you'. ¿Qué respondes?", "correctAnswer": "You're welcome", "options": ["You're welcome", "Please", "Sorry", "Excuse me"] },
+            { "id": "u1_l4_e6", "type": "fillBlank", "prompt": "I'm ___ I'm late.", "correctAnswer": "sorry" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "title": "Números y el tiempo",
+      "lessons": [
+        {
+          "id": "u2_l1",
+          "title": "Números del 1 al 20",
+          "exercises": [
+            { "id": "u2_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se escribe el número 7 en inglés?", "correctAnswer": "seven", "options": ["seven", "seventeen", "seventy", "second"] },
+            { "id": "u2_l1_e2", "type": "multipleChoice", "prompt": "¿Cómo se escribe el número 15?", "correctAnswer": "fifteen", "options": ["fifteen", "fifty", "fiveteen", "fifteenth"] },
+            { "id": "u2_l1_e3", "type": "matching", "prompt": "Une el número con su nombre en inglés.", "pairs": { "3": "three", "8": "eight", "12": "twelve", "20": "twenty" } },
+            { "id": "u2_l1_e4", "type": "fillBlank", "prompt": "After 'nine' comes '___'.", "correctAnswer": "ten" },
+            { "id": "u2_l1_e5", "type": "fillBlank", "prompt": "I have ___ (2) brothers.", "correctAnswer": "two" },
+            { "id": "u2_l1_e6", "type": "multipleChoice", "prompt": "¿Cuál es el número 'eleven'?", "correctAnswer": "11", "options": ["11", "1", "17", "7"] }
+          ]
+        },
+        {
+          "id": "u2_l2",
+          "title": "La hora",
+          "exercises": [
+            { "id": "u2_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se pregunta la hora?", "correctAnswer": "What time is it?", "options": ["What time is it?", "What is the time day?", "How many time is it?", "Which hour now?"] },
+            { "id": "u2_l2_e2", "type": "fillBlank", "prompt": "It's three o'___.", "correctAnswer": "clock" },
+            { "id": "u2_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Son las 6 y media'?", "correctAnswer": "It's half past six", "options": ["It's half past six", "It's six half", "It's six and half", "It's the half of six"] },
+            { "id": "u2_l2_e4", "type": "matching", "prompt": "Une la hora con su expresión en inglés.", "pairs": { "9:00": "nine o'clock", "9:15": "quarter past nine", "9:30": "half past nine", "9:45": "quarter to ten" } },
+            { "id": "u2_l2_e5", "type": "fillBlank", "prompt": "The train leaves ___ 5 pm.", "correctAnswer": "at" },
+            { "id": "u2_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'de la mañana' al dar una hora?", "correctAnswer": "am", "options": ["am", "pm", "o'clock", "past"] }
+          ]
+        },
+        {
+          "id": "u2_l3",
+          "title": "Días de la semana",
+          "exercises": [
+            { "id": "u2_l3_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'lunes'?", "correctAnswer": "Monday", "options": ["Monday", "Tuesday", "Sunday", "Moonday"] },
+            { "id": "u2_l3_e2", "type": "matching", "prompt": "Une el día en español con su nombre en inglés.", "pairs": { "miércoles": "Wednesday", "viernes": "Friday", "sábado": "Saturday", "domingo": "Sunday" } },
+            { "id": "u2_l3_e3", "type": "fillBlank", "prompt": "Today is ___ (jueves).", "correctAnswer": "Thursday" },
+            { "id": "u2_l3_e4", "type": "multipleChoice", "prompt": "¿Cuál es el primer día laboral de la semana en el calendario anglosajón?", "correctAnswer": "Monday", "options": ["Monday", "Sunday", "Saturday", "Friday"] },
+            { "id": "u2_l3_e5", "type": "fillBlank", "prompt": "We work from Monday ___ Friday.", "correctAnswer": "to" },
+            { "id": "u2_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'fin de semana'?", "correctAnswer": "weekend", "options": ["weekend", "endweek", "week end day", "final week"] }
+          ]
+        },
+        {
+          "id": "u2_l4",
+          "title": "Meses y estaciones",
+          "exercises": [
+            { "id": "u2_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'enero'?", "correctAnswer": "January", "options": ["January", "June", "July", "Juanuary"] },
+            { "id": "u2_l4_e2", "type": "matching", "prompt": "Une la estación en español con su nombre en inglés.", "pairs": { "primavera": "spring", "verano": "summer", "otoño": "autumn", "invierno": "winter" } },
+            { "id": "u2_l4_e3", "type": "fillBlank", "prompt": "My birthday is in ___ (diciembre).", "correctAnswer": "December" },
+            { "id": "u2_l4_e4", "type": "multipleChoice", "prompt": "¿Cuál es el mes más corto?", "correctAnswer": "February", "options": ["February", "April", "March", "May"] },
+            { "id": "u2_l4_e5", "type": "fillBlank", "prompt": "It's very cold ___ winter.", "correctAnswer": "in" },
+            { "id": "u2_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verano' en inglés americano/británico?", "correctAnswer": "summer", "options": ["summer", "summar", "somer", "sumer"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u3",
+      "title": "Familia y personas",
+      "lessons": [
+        {
+          "id": "u3_l1",
+          "title": "Miembros de la familia",
+          "exercises": [
+            { "id": "u3_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermana'?", "correctAnswer": "sister", "options": ["sister", "brother", "mother", "cousin"] },
+            { "id": "u3_l1_e2", "type": "matching", "prompt": "Une el familiar en español con su nombre en inglés.", "pairs": { "padre": "father", "madre": "mother", "abuelo": "grandfather", "hijo": "son" } },
+            { "id": "u3_l1_e3", "type": "fillBlank", "prompt": "My ___ (tía) lives in Italy.", "correctAnswer": "aunt" },
+            { "id": "u3_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'primo/prima'?", "correctAnswer": "cousin", "options": ["cousin", "nephew", "niece", "sibling"] },
+            { "id": "u3_l1_e5", "type": "fillBlank", "prompt": "I have two ___ (hijas).", "correctAnswer": "daughters" },
+            { "id": "u3_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'hermanos' (en general)?", "correctAnswer": "siblings", "options": ["siblings", "brothers", "cousins", "sisters"] }
+          ]
+        },
+        {
+          "id": "u3_l2",
+          "title": "Describir personas",
+          "exercises": [
+            { "id": "u3_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'alto/a'?", "correctAnswer": "tall", "options": ["tall", "short", "big", "long"] },
+            { "id": "u3_l2_e2", "type": "matching", "prompt": "Une el adjetivo en español con su traducción en inglés.", "pairs": { "joven": "young", "mayor": "old", "amable": "kind", "divertido": "funny" } },
+            { "id": "u3_l2_e3", "type": "fillBlank", "prompt": "She has ___ (pelo largo) hair.", "correctAnswer": "long" },
+            { "id": "u3_l2_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ojos azules'?", "correctAnswer": "blue eyes", "options": ["blue eyes", "eyes blue", "blues eyes", "eye blue"] },
+            { "id": "u3_l2_e5", "type": "fillBlank", "prompt": "He is very ___ (inteligente).", "correctAnswer": "intelligent" },
+            { "id": "u3_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'bajo/a' (estatura)?", "correctAnswer": "short", "options": ["short", "small", "little", "low"] }
+          ]
+        },
+        {
+          "id": "u3_l3",
+          "title": "Pronombres y el verbo 'to be'",
+          "exercises": [
+            { "id": "u3_l3_e1", "type": "fillBlank", "prompt": "She ___ a teacher.", "correctAnswer": "is" },
+            { "id": "u3_l3_e2", "type": "fillBlank", "prompt": "We ___ students.", "correctAnswer": "are" },
+            { "id": "u3_l3_e3", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de 'to be' para 'I'?", "correctAnswer": "am", "options": ["am", "is", "are", "be"] },
+            { "id": "u3_l3_e4", "type": "matching", "prompt": "Une el pronombre con la forma correcta de 'to be'.", "pairs": { "I": "am", "You": "are", "He": "is", "They": "are" } },
+            { "id": "u3_l3_e5", "type": "fillBlank", "prompt": "___ they at home? (pregunta)", "correctAnswer": "Are" },
+            { "id": "u3_l3_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Él no es mi hermano'?", "correctAnswer": "He is not my brother", "options": ["He is not my brother", "He not is my brother", "He no is my brother", "He isn't my brothers"] }
+          ]
+        },
+        {
+          "id": "u3_l4",
+          "title": "Adjetivos posesivos",
+          "exercises": [
+            { "id": "u3_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'mi' (posesivo)?", "correctAnswer": "my", "options": ["my", "me", "mine", "I"] },
+            { "id": "u3_l4_e2", "type": "matching", "prompt": "Une el pronombre con su posesivo en inglés.", "pairs": { "I": "my", "You": "your", "She": "her", "We": "our" } },
+            { "id": "u3_l4_e3", "type": "fillBlank", "prompt": "This is ___ (su, de él) car.", "correctAnswer": "his" },
+            { "id": "u3_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'nuestra casa'?", "correctAnswer": "our house", "options": ["our house", "we house", "ours house", "us house"] },
+            { "id": "u3_l4_e5", "type": "fillBlank", "prompt": "They love ___ (su, de ellos) dog.", "correctAnswer": "their" },
+            { "id": "u3_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'tus padres'?", "correctAnswer": "your parents", "options": ["your parents", "you parents", "yours parents", "yourself parents"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u4",
+      "title": "Comida y bebida",
+      "lessons": [
+        {
+          "id": "u4_l1",
+          "title": "Alimentos básicos",
+          "exercises": [
+            { "id": "u4_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pan'?", "correctAnswer": "bread", "options": ["bread", "meat", "rice", "cheese"] },
+            { "id": "u4_l1_e2", "type": "matching", "prompt": "Une el alimento en español con su nombre en inglés.", "pairs": { "manzana": "apple", "agua": "water", "leche": "milk", "huevo": "egg" } },
+            { "id": "u4_l1_e3", "type": "fillBlank", "prompt": "I eat ___ (arroz) every day.", "correctAnswer": "rice" },
+            { "id": "u4_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'pollo'?", "correctAnswer": "chicken", "options": ["chicken", "fish", "beef", "pork"] },
+            { "id": "u4_l1_e5", "type": "fillBlank", "prompt": "Can I have some ___ (queso), please?", "correctAnswer": "cheese" },
+            { "id": "u4_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'verduras'?", "correctAnswer": "vegetables", "options": ["vegetables", "fruits", "meats", "grains"] }
+          ]
+        },
+        {
+          "id": "u4_l2",
+          "title": "En el restaurante",
+          "exercises": [
+            { "id": "u4_l2_e1", "type": "multipleChoice", "prompt": "¿Cómo pides la cuenta?", "correctAnswer": "The bill, please", "options": ["The bill, please", "The money, please", "The pay, please", "The total, please"] },
+            { "id": "u4_l2_e2", "type": "fillBlank", "prompt": "I would ___ a coffee, please.", "correctAnswer": "like" },
+            { "id": "u4_l2_e3", "type": "multipleChoice", "prompt": "¿Cómo preguntas si hay una mesa libre?", "correctAnswer": "Is there a table free?", "options": ["Is there a table free?", "Have you a table?", "There is table?", "Is a table there?"] },
+            { "id": "u4_l2_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en inglés.", "pairs": { "Quiero reservar una mesa": "I want to book a table", "¿Qué recomienda?": "What do you recommend?", "Está delicioso": "It's delicious", "La cuenta, por favor": "The bill, please" } },
+            { "id": "u4_l2_e5", "type": "fillBlank", "prompt": "Can I ___ the menu, please?", "correctAnswer": "see" },
+            { "id": "u4_l2_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'camarero/a'?", "correctAnswer": "waiter", "options": ["waiter", "cooker", "chef", "server boy"] }
+          ]
+        },
+        {
+          "id": "u4_l3",
+          "title": "El verbo 'to like' y los gustos",
+          "exercises": [
+            { "id": "u4_l3_e1", "type": "fillBlank", "prompt": "I ___ pizza. (me gusta)", "correctAnswer": "like" },
+            { "id": "u4_l3_e2", "type": "multipleChoice", "prompt": "¿Cómo se dice 'A ella le gusta el café'?", "correctAnswer": "She likes coffee", "options": ["She likes coffee", "She like coffee", "She is liking coffee", "She likes to coffee"] },
+            { "id": "u4_l3_e3", "type": "fillBlank", "prompt": "He doesn't ___ fish. (no le gusta)", "correctAnswer": "like" },
+            { "id": "u4_l3_e4", "type": "matching", "prompt": "Une la frase en español con su traducción en inglés.", "pairs": { "Me gusta el chocolate": "I like chocolate", "No me gusta la cebolla": "I don't like onion", "¿Te gusta el té?": "Do you like tea?", "Nos gusta cocinar": "We like cooking" } },
+            { "id": "u4_l3_e5", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de pregunta con 'like' para 'you'?", "correctAnswer": "Do you like...?", "options": ["Do you like...?", "Are you like...?", "Like you...?", "You like...?"] },
+            { "id": "u4_l3_e6", "type": "fillBlank", "prompt": "They love ___ (cocinar) together.", "correctAnswer": "cooking" }
+          ]
+        },
+        {
+          "id": "u4_l4",
+          "title": "Cantidades: some / any",
+          "exercises": [
+            { "id": "u4_l4_e1", "type": "fillBlank", "prompt": "I have ___ apples. (afirmativa)", "correctAnswer": "some" },
+            { "id": "u4_l4_e2", "type": "fillBlank", "prompt": "I don't have ___ bread. (negativa)", "correctAnswer": "any" },
+            { "id": "u4_l4_e3", "type": "multipleChoice", "prompt": "¿Cuál se usa en preguntas: 'Is there ___ milk?'", "correctAnswer": "any", "options": ["any", "some", "a", "many"] },
+            { "id": "u4_l4_e4", "type": "matching", "prompt": "Une la regla con el ejemplo correcto.", "pairs": { "Afirmativa": "some water", "Negativa": "not any water", "Pregunta": "any water?" } },
+            { "id": "u4_l4_e5", "type": "multipleChoice", "prompt": "¿Cómo se dice 'un poco de azúcar'?", "correctAnswer": "some sugar", "options": ["some sugar", "any sugar", "a sugar", "much sugar"] },
+            { "id": "u4_l4_e6", "type": "fillBlank", "prompt": "Would you like ___ tea?", "correctAnswer": "some" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u5",
+      "title": "Rutina diaria",
+      "lessons": [
+        {
+          "id": "u5_l1",
+          "title": "Verbos de rutina diaria",
+          "exercises": [
+            { "id": "u5_l1_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'despertarse'?", "correctAnswer": "to wake up", "options": ["to wake up", "to sleep", "to dream", "to rest"] },
+            { "id": "u5_l1_e2", "type": "matching", "prompt": "Une la acción en español con su verbo en inglés.", "pairs": { "ducharse": "to shower", "desayunar": "to have breakfast", "trabajar": "to work", "dormir": "to sleep" } },
+            { "id": "u5_l1_e3", "type": "fillBlank", "prompt": "I usually ___ (me visto) at 7 am.", "correctAnswer": "get dressed" },
+            { "id": "u5_l1_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'ir a la cama'?", "correctAnswer": "to go to bed", "options": ["to go to bed", "to go to sleep room", "to enter bed", "to lie the bed"] },
+            { "id": "u5_l1_e5", "type": "fillBlank", "prompt": "She ___ (se cepilla los dientes) every morning.", "correctAnswer": "brushes her teeth" },
+            { "id": "u5_l1_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'comer' (comida general)?", "correctAnswer": "to eat", "options": ["to eat", "to drink", "to cook", "to taste"] }
+          ]
+        },
+        {
+          "id": "u5_l2",
+          "title": "Presente simple (afirmativo)",
+          "exercises": [
+            { "id": "u5_l2_e1", "type": "fillBlank", "prompt": "She ___ (trabajar) every day.", "correctAnswer": "works" },
+            { "id": "u5_l2_e2", "type": "multipleChoice", "prompt": "¿Cuál es la forma correcta de 'to go' para 'he'?", "correctAnswer": "goes", "options": ["goes", "go", "going", "gos"] },
+            { "id": "u5_l2_e3", "type": "fillBlank", "prompt": "I ___ (vivir) in Madrid.", "correctAnswer": "live" },
+            { "id": "u5_l2_e4", "type": "matching", "prompt": "Une el sujeto con la forma correcta del verbo 'to study'.", "pairs": { "I": "study", "She": "studies", "We": "study", "He": "studies" } },
+            { "id": "u5_l2_e5", "type": "multipleChoice", "prompt": "¿Cuál es la regla para 'he/she/it' en presente simple?", "correctAnswer": "Se añade -s o -es al verbo", "options": ["Se añade -s o -es al verbo", "Se usa el verbo en infinitivo", "Se añade -ing", "Se usa 'do' siempre"] },
+            { "id": "u5_l2_e6", "type": "fillBlank", "prompt": "They ___ (comer) breakfast at 8.", "correctAnswer": "eat" }
+          ]
+        },
+        {
+          "id": "u5_l3",
+          "title": "Presente simple: preguntas y negaciones",
+          "exercises": [
+            { "id": "u5_l3_e1", "type": "fillBlank", "prompt": "___ you like coffee? (pregunta)", "correctAnswer": "Do" },
+            { "id": "u5_l3_e2", "type": "fillBlank", "prompt": "___ she work on Sundays? (pregunta, él/ella)", "correctAnswer": "Does" },
+            { "id": "u5_l3_e3", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Ellos no trabajan los fines de semana'?", "correctAnswer": "They don't work on weekends", "options": ["They don't work on weekends", "They doesn't work on weekends", "They not work on weekends", "They no work on weekends"] },
+            { "id": "u5_l3_e4", "type": "matching", "prompt": "Une la forma afirmativa con su negación correcta.", "pairs": { "I like tea": "I don't like tea", "She likes tea": "She doesn't like tea", "We work here": "We don't work here" } },
+            { "id": "u5_l3_e5", "type": "fillBlank", "prompt": "He doesn't ___ (vivir) here.", "correctAnswer": "live" },
+            { "id": "u5_l3_e6", "type": "multipleChoice", "prompt": "¿Cuál es correcta?", "correctAnswer": "Does he speak English?", "options": ["Does he speak English?", "Does he speaks English?", "Do he speak English?", "Is he speak English?"] }
+          ]
+        },
+        {
+          "id": "u5_l4",
+          "title": "La casa y las habitaciones",
+          "exercises": [
+            { "id": "u5_l4_e1", "type": "multipleChoice", "prompt": "¿Cómo se dice 'cocina' (habitación)?", "correctAnswer": "kitchen", "options": ["kitchen", "bedroom", "bathroom", "living room"] },
+            { "id": "u5_l4_e2", "type": "matching", "prompt": "Une la habitación en español con su nombre en inglés.", "pairs": { "dormitorio": "bedroom", "baño": "bathroom", "salón": "living room", "jardín": "garden" } },
+            { "id": "u5_l4_e3", "type": "fillBlank", "prompt": "I do my homework in the ___ (dormitorio).", "correctAnswer": "bedroom" },
+            { "id": "u5_l4_e4", "type": "multipleChoice", "prompt": "¿Cómo se dice 'Yo cocino en la cocina'?", "correctAnswer": "I cook in the kitchen", "options": ["I cook in the kitchen", "I cook at kitchen", "I cook on the kitchen", "I cooking in kitchen"] },
+            { "id": "u5_l4_e5", "type": "fillBlank", "prompt": "We watch TV in the ___ (salón).", "correctAnswer": "living room" },
+            { "id": "u5_l4_e6", "type": "multipleChoice", "prompt": "¿Cómo se dice 'garaje'?", "correctAnswer": "garage", "options": ["garage", "garden", "hall", "attic"] }
+          ]
+        }
+      ]
+    }
+  ]
+}
