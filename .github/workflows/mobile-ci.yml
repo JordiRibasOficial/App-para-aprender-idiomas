@@ -150,8 +150,9 @@ jobs:
 
   integration-test-ios:
     runs-on: macos-latest
-    # See build-ios above for why this is set explicitly.
-    timeout-minutes: 20
+    # Bounded by setup plus two 8-minute test attempts below, not by an
+    # arbitrary top-level number — see the retry step for why there are two.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -197,5 +198,23 @@ jobs:
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
 
+      # `flutter test -d <simulator>` has intermittently hung after a
+      # successful Xcode build with zero output — confirmed via CI logs: a
+      # passing run finishes the whole test in under a minute after "Xcode
+      # build done.", but failing runs sit completely silent for 6-17+
+      # minutes until the job timeout kills them. That silence means the
+      # hang is in installing/launching the app on the Simulator, before
+      # any app code (including main()) runs — infra flakiness, not
+      # something fixable from the Dart side. Bound the first attempt
+      # tightly and retry once instead of burning the whole job timeout
+      # waiting on a hang that a retry usually clears.
       - name: Run integration_test on the iOS Simulator
+        id: integration_test_ios_attempt1
+        continue-on-error: true
+        timeout-minutes: 8
+        run: flutter test integration_test/app_test.dart -d "$SIMULATOR_UDID"
+
+      - name: Retry integration_test on the iOS Simulator
+        if: steps.integration_test_ios_attempt1.outcome == 'failure'
+        timeout-minutes: 8
         run: flutter test integration_test/app_test.dart -d "$SIMULATOR_UDID"
