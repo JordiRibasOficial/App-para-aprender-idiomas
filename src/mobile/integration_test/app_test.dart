@@ -43,7 +43,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('¿Cómo quieres continuar?'), findsOneWidget);
 
-      await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
+      await tester.tap(
+        find.widgetWithText(OutlinedButton, 'Continuar como invitado'),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('Inglés · A1'), findsOneWidget);
