@@ -65,12 +65,37 @@ jobs:
           # targets flatly refuses --release ("Flutter Driver (non-web)
           # does not support running in release mode" — confirmed by a
           # real CI failure). Profile mode also has no debug banner.
+          #
+          # Four separate `flutter drive` invocations, not one file with
+          # seven testWidgets: 01-04 share a process fine (confirmed good,
+          # distinct captures), but 05-07 kept coming back byte-identical
+          # to whatever screenshot preceded them in the same process, even
+          # split into their own testWidgets — takeScreenshot() leaves the
+          # native side in a bad state that a fresh testWidgets doesn't
+          # clear, only a fresh process does. Each `&&`-chained command
+          # below launches its own app process against the same emulator,
+          # so 05/06/07 each start from a genuinely clean install.
           script: >
             cd src/mobile &&
             flutter drive
             --profile
             --driver=test_driver/integration_test.dart
             --target=integration_test/screenshot_test.dart
+            -d emulator-5554 &&
+            flutter drive
+            --profile
+            --driver=test_driver/integration_test.dart
+            --target=integration_test/screenshot_05_ejercicio_test.dart
+            -d emulator-5554 &&
+            flutter drive
+            --profile
+            --driver=test_driver/integration_test.dart
+            --target=integration_test/screenshot_06_ejercicio2_test.dart
+            -d emulator-5554 &&
+            flutter drive
+            --profile
+            --driver=test_driver/integration_test.dart
+            --target=integration_test/screenshot_07_premium_test.dart
             -d emulator-5554
 
       - name: Upload screenshots
