@@ -59,13 +59,16 @@ jobs:
           # `flutter drive` that ran outside src/mobile). `>` folds this
           # into one line, matching the working pattern already used by
           # the integration-test-android job above.
-          # --release: debug builds show Flutter's red "DEBUG" ribbon in
-          # the corner of every screen — confirmed present in a real
-          # capture. Not acceptable in store-listing screenshots.
+          # --profile, not --release: debug builds show Flutter's red
+          # "DEBUG" ribbon in the corner of every screen (confirmed
+          # present in a real capture), but `flutter drive` for non-web
+          # targets flatly refuses --release ("Flutter Driver (non-web)
+          # does not support running in release mode" — confirmed by a
+          # real CI failure). Profile mode also has no debug banner.
           script: >
             cd src/mobile &&
             flutter drive
-            --release
+            --profile
             --driver=test_driver/integration_test.dart
             --target=integration_test/screenshot_test.dart
             -d emulator-5554
