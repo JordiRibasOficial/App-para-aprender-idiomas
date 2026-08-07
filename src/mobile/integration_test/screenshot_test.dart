@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:app_para_aprender_idiomas/main.dart';
+import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -51,14 +52,22 @@ void main() {
     await tester.pumpAndSettle();
     await binding.takeScreenshot('05-ejercicio');
 
-    await tester.pageBack();
+    // Not tester.pageBack(): LessonListScreen navigates to a lesson via
+    // context.go(), which replaces the route instead of pushing on top
+    // of it — there's no pop target for pageBack() to find (confirmed by
+    // a real CI failure: pageBack() found no back button at all).
+    appRouter.go('/');
     await tester.pumpAndSettle();
 
     await tester.tap(lessons.at(1));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('06-ejercicio2');
 
-    await tester.pageBack();
+    // Not tester.pageBack(): LessonListScreen navigates to a lesson via
+    // context.go(), which replaces the route instead of pushing on top
+    // of it — there's no pop target for pageBack() to find (confirmed by
+    // a real CI failure: pageBack() found no back button at all).
+    appRouter.go('/');
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.workspace_premium_outlined));
