@@ -65,10 +65,16 @@ void main() {
     await tester.pumpAndSettle();
     await binding.takeScreenshot('04-lecciones');
 
-    final lessons = find.byType(ListTile);
-
-    await tester.tap(lessons.first);
+    // find.text(lesson title), not find.byType(ListTile).first/.at(1):
+    // the index-based version silently tapped nothing on a real device —
+    // confirmed by a real capture where 04/05/06 came back byte-identical
+    // (all three were the lesson list, navigation never happened). This
+    // is the exact tap pattern already proven stable in app_test.dart.
+    // The expect() calls make a future navigation failure loud instead
+    // of silently capturing the wrong screen again.
+    await tester.tap(find.text('Saludos básicos'));
     await tester.pumpAndSettle();
+    expect(find.text('¡Correcto!'), findsNothing); // sanity: still on the question, not past it
     await binding.takeScreenshot('05-ejercicio');
 
     // Not tester.pageBack(): LessonListScreen navigates to a lesson via
@@ -77,8 +83,9 @@ void main() {
     // a real CI failure: pageBack() found no back button at all).
     appRouter.go('/');
     await tester.pumpAndSettle();
+    expect(find.text('Inglés · A1'), findsOneWidget);
 
-    await tester.tap(lessons.at(1));
+    await tester.tap(find.text('Presentarse'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('06-ejercicio2');
 
@@ -88,9 +95,11 @@ void main() {
     // a real CI failure: pageBack() found no back button at all).
     appRouter.go('/');
     await tester.pumpAndSettle();
+    expect(find.text('Inglés · A1'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.workspace_premium_outlined));
     await tester.pumpAndSettle();
+    expect(find.text('Hazte Premium'), findsOneWidget); // sanity: paywall actually reached
     await binding.takeScreenshot('07-premium');
   });
 }
