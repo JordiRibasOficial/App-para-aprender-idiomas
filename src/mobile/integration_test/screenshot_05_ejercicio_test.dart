@@ -15,6 +15,15 @@ void main() {
     await tester.tap(find.text('Saludos básicos'));
     await tester.pumpAndSettle();
     expect(find.text('¿Cómo se dice \'Hola\' en inglés?'), findsOneWidget);
+    // A real-time pause, not another pumpAndSettle(): a real CI run came
+    // back with takeScreenshot() bytes identical to a screenshot from a
+    // *previous, separate* flutter drive process, despite the widget
+    // tree (per the assertion above) already showing this screen —
+    // Android's compositor hadn't caught up with the post-navigation
+    // frame yet when the native capture ran. Giving it a beat of real
+    // wall-clock time is the workaround; pumpAndSettle() only waits for
+    // Flutter-side animations, not the OS-level compositor.
+    await Future<void>.delayed(const Duration(seconds: 1));
     await binding.takeScreenshot('05-ejercicio');
   });
 }

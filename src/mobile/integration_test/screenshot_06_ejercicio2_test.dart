@@ -14,6 +14,10 @@ void main() {
     await completeOnboardingAsGuest(tester);
     await tester.tap(find.text('Presentarse'));
     await tester.pumpAndSettle();
+    // See screenshot_05_ejercicio_test.dart: a beat of real wall-clock
+    // time for Android's compositor to catch up with the post-navigation
+    // frame before the native capture runs.
+    await Future<void>.delayed(const Duration(seconds: 1));
     await binding.takeScreenshot('06-ejercicio2');
   });
 }
