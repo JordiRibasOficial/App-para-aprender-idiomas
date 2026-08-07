@@ -26,6 +26,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:app_para_aprender_idiomas/data/mock_subscription_repository.dart';
 import 'package:app_para_aprender_idiomas/main.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/subscription_providers.dart';
+import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,14 @@ void main() {
   /// app_test.dart), but useless for a store screenshot, which needs to
   /// actually show the plans.
   Future<void> pumpFreshApp(WidgetTester tester) async {
+    // appRouter is a module-level GoRouter singleton (same one app_test.dart
+    // has to reset — see its restart-simulation comment), and every
+    // testWidgets in this file runs in the same process. Without this, each
+    // test after the first starts wherever the previous test's navigation
+    // left off instead of at Welcome — confirmed by a real CI failure
+    // where 03-nivel onward couldn't find "Empezar" because the router was
+    // still sitting on the language-selection route from 02-idioma.
+    appRouter.go('/');
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
