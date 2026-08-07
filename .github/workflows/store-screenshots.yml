@@ -59,9 +59,13 @@ jobs:
           # `flutter drive` that ran outside src/mobile). `>` folds this
           # into one line, matching the working pattern already used by
           # the integration-test-android job above.
+          # --release: debug builds show Flutter's red "DEBUG" ribbon in
+          # the corner of every screen — confirmed present in a real
+          # capture. Not acceptable in store-listing screenshots.
           script: >
             cd src/mobile &&
             flutter drive
+            --release
             --driver=test_driver/integration_test.dart
             --target=integration_test/screenshot_test.dart
             -d emulator-5554
