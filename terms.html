@@ -3,105 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Términos y Condiciones — App para Aprender Idiomas</title>
-<style>
-  :root {
-    --bg: #ffffff;
-    --fg: #1a1a2e;
-    --muted: #5a5a72;
-    --accent: #3d5afe;
-    --card: #f5f6fa;
-    --border: #e2e4ee;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #14141f;
-      --fg: #eceefc;
-      --muted: #a3a6c2;
-      --accent: #7b8cff;
-      --card: #1c1c2c;
-      --border: #2c2c40;
+<script>
+  // Blocking, runs before first paint — sets data-theme from the user's
+  // saved choice so there's no flash of the wrong theme. See theme-toggle.js.
+  (function () {
+    var stored = localStorage.getItem("theme-preference");
+    if (stored === "light" || stored === "dark") {
+      document.documentElement.setAttribute("data-theme", stored);
     }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--fg);
-    line-height: 1.65;
-  }
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 48px 20px 80px;
-  }
-  a.back {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
-  h1 { font-size: 1.6rem; margin: 16px 0 4px; }
-  p.updated { color: var(--muted); margin-top: 0; font-size: 0.9rem; }
-  h2 { font-size: 1.15rem; margin-top: 2.2em; }
-  footer {
-    margin-top: 48px;
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-</style>
+  })();
+</script>
+<title>Términos y Condiciones — App para Aprender Idiomas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@600&family=IBM+Plex+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wrap">
-    <a class="back" href="index.html">&larr; Volver</a>
-    <h1>Términos y Condiciones</h1>
-    <p class="updated">Última actualización: 5 de agosto de 2026</p>
+  <button id="theme-toggle" class="theme-toggle" type="button"></button>
+  <div class="wrap wrap--doc">
+    <a class="back-link" href="index.html">&larr; Volver</a>
+    <h1 class="doc-title">Términos y Condiciones</h1>
+    <p class="doc-date">Última actualización: <time datetime="2026-08-05">5 de agosto de 2026</time></p>
 
-    <h2>1. Aceptación de los términos</h2>
-    <p>Al descargar o usar App para Aprender Idiomas ("la App"), aceptas estos términos. Si no estás de acuerdo, no uses la App.</p>
+    <article class="prose">
+      <h2>1. Aceptación de los términos</h2>
+      <p>Al descargar o usar App para Aprender Idiomas ("la App"), aceptas estos términos. Si no estás de acuerdo, no uses la App.</p>
 
-    <h2>2. Descripción del servicio</h2>
-    <p>La App ofrece cursos de idiomas con lecciones interactivas. Una parte del contenido es gratuita; el acceso completo (más idiomas, funciones adicionales según evolucione el producto) requiere una suscripción de pago.</p>
+      <h2>2. Descripción del servicio</h2>
+      <p>La App ofrece cursos de idiomas con lecciones interactivas. Una parte del contenido es gratuita; el acceso completo (más idiomas, funciones adicionales según evolucione el producto) requiere una suscripción de pago.</p>
 
-    <h2>3. Cuentas y progreso</h2>
-    <p>En esta versión, la App no requiere una cuenta real — el progreso se guarda localmente en el dispositivo. Desinstalar la App o cambiar de dispositivo implica perder el progreso guardado hasta que exista sincronización real entre dispositivos.</p>
+      <h2>3. Cuentas y progreso</h2>
+      <p>En esta versión, la App no requiere una cuenta real — el progreso se guarda localmente en el dispositivo. Desinstalar la App o cambiar de dispositivo implica perder el progreso guardado hasta que exista sincronización real entre dispositivos.</p>
 
-    <h2>4. Suscripciones</h2>
-    <ul>
-      <li>Las suscripciones (mensual/anual) se cobran a través de Google Play o Apple App Store, según la plataforma desde la que se haya descargado la App.</li>
-      <li><strong>Renovación automática</strong>: las suscripciones se renuevan automáticamente al final de cada periodo salvo que se cancelen antes de la fecha de renovación.</li>
-      <li><strong>Cancelación</strong>: se gestiona directamente desde los ajustes de suscripción de Google Play o de la cuenta de Apple, no dentro de la App. No podemos cancelar suscripciones en nombre del usuario.</li>
-      <li><strong>Reembolsos</strong>: sujetos a la política de reembolsos de Google Play o Apple App Store — no gestionamos pagos ni reembolsos directamente.</li>
-      <li>Los precios mostrados dentro de la App son orientativos; el precio final y la moneda los determina la tienda según la región del usuario.</li>
-    </ul>
+      <h2>4. Suscripciones</h2>
+      <ul>
+        <li>Las suscripciones (mensual/anual) se cobran a través de Google Play o Apple App Store, según la plataforma desde la que se haya descargado la App.</li>
+        <li><strong>Renovación automática</strong>: las suscripciones se renuevan automáticamente al final de cada periodo salvo que se cancelen antes de la fecha de renovación.</li>
+        <li><strong>Cancelación</strong>: se gestiona directamente desde los ajustes de suscripción de Google Play o de la cuenta de Apple, no dentro de la App. No podemos cancelar suscripciones en nombre del usuario.</li>
+        <li><strong>Reembolsos</strong>: sujetos a la política de reembolsos de Google Play o Apple App Store — no gestionamos pagos ni reembolsos directamente.</li>
+        <li>Los precios mostrados dentro de la App son orientativos; el precio final y la moneda los determina la tienda según la región del usuario.</li>
+      </ul>
 
-    <h2>5. Propiedad intelectual</h2>
-    <p>
-      El contenido de los cursos (textos, ejercicios, estructura pedagógica) es propiedad de
-      Webapps o de sus licenciantes. Se
-      concede al usuario una licencia personal, no exclusiva e intransferible para usar el
-      contenido dentro de la App, únicamente para uso personal de aprendizaje.
-    </p>
+      <h2>5. Propiedad intelectual</h2>
+      <p>
+        El contenido de los cursos (textos, ejercicios, estructura pedagógica) es propiedad de
+        Webapps o de sus licenciantes. Se
+        concede al usuario una licencia personal, no exclusiva e intransferible para usar el
+        contenido dentro de la App, únicamente para uso personal de aprendizaje.
+      </p>
 
-    <h2>6. Uso aceptable</h2>
-    <p>El usuario se compromete a no realizar ingeniería inversa de la App, no extraer el contenido de los cursos para redistribuirlo, y no usar la App de forma que interfiera con su funcionamiento normal.</p>
+      <h2>6. Uso aceptable</h2>
+      <p>El usuario se compromete a no realizar ingeniería inversa de la App, no extraer el contenido de los cursos para redistribuirlo, y no usar la App de forma que interfiera con su funcionamiento normal.</p>
 
-    <h2>7. Limitación de responsabilidad</h2>
-    <p>La App se ofrece "tal cual". No garantizamos resultados específicos de aprendizaje (por ejemplo, alcanzar un nivel concreto en un plazo determinado).</p>
+      <h2>7. Limitación de responsabilidad</h2>
+      <p>La App se ofrece "tal cual". No garantizamos resultados específicos de aprendizaje (por ejemplo, alcanzar un nivel concreto en un plazo determinado).</p>
 
-    <h2>8. Edad mínima</h2>
-    <p>La aplicación no está dirigida específicamente a menores de 13 años (o la edad mínima aplicable según la jurisdicción).</p>
+      <h2>8. Edad mínima</h2>
+      <p>La aplicación no está dirigida específicamente a menores de 13 años (o la edad mínima aplicable según la jurisdicción).</p>
 
-    <h2>9. Modificaciones</h2>
-    <p>Podemos modificar estos términos; los cambios materiales se notificarán dentro de la App antes de entrar en vigor.</p>
+      <h2>9. Modificaciones</h2>
+      <p>Podemos modificar estos términos; los cambios materiales se notificarán dentro de la App antes de entrar en vigor.</p>
 
-    <h2>10. Ley aplicable</h2>
-    <p>Ley española y de la Unión Europea, aplicable a Webapps.</p>
+      <h2>10. Ley aplicable</h2>
+      <p>Ley española y de la Unión Europea, aplicable a Webapps.</p>
 
-    <h2>11. Contacto</h2>
-    <p><a href="mailto:world.webapps@gmail.com">world.webapps@gmail.com</a></p>
+      <h2>11. Contacto</h2>
+      <p><a href="mailto:world.webapps@gmail.com">world.webapps@gmail.com</a></p>
+    </article>
 
-    <footer>App para Aprender Idiomas</footer>
+    <footer class="site-footer">
+      <p>App para Aprender Idiomas</p>
+    </footer>
   </div>
+  <script src="theme-toggle.js"></script>
 </body>
 </html>

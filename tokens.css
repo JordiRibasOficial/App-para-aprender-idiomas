@@ -1,0 +1,83 @@
+/* Hallmark · design-system: design.md · designed-as-app
+ * genre: editorial · theme: custom (brand-anchored, vibe: "trustworthy, quiet, legible")
+ * paper oklch(100% 0 0) light / oklch(19.7% 0.022 284) dark
+ * accent oklch(55.5% 0.243 269) light / oklch(68% 0.169 275) dark · cool blue
+ * display: Newsreader 600 · body: IBM Plex Sans 400 · outlier: Geist Mono 500
+ */
+
+:root {
+  /* Colour — light (default). Values are the site's own existing brand
+     colours, converted to OKLCH — not a new palette. See design.md. */
+  --color-paper: oklch(99.2% 0.005 275);
+  --color-paper-2: oklch(97.4% 0.005 275);
+  --color-ink: oklch(22.8% 0.038 283);
+  --color-ink-2: oklch(47.7% 0.038 285);
+  --color-rule: oklch(92% 0.014 277);
+  --color-accent: oklch(55.5% 0.243 269);
+  --color-focus: oklch(55.5% 0.243 269);
+
+  /* Type */
+  --font-display: "Newsreader", ui-serif, Georgia, serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-outlier: "Geist Mono", ui-monospace, monospace;
+
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.375rem;
+
+  /* Space — 4pt scale */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 180ms;
+
+  --radius-card: 12px;
+
+  --measure-doc: 65ch;
+  --measure-hub: 52ch;
+}
+
+/* Dark values apply when the OS/browser prefers dark AND the user hasn't
+   explicitly overridden to light via the toggle (data-theme="light"), OR
+   when the user explicitly chose dark regardless of the OS setting. See
+   theme-toggle.js — it sets data-theme on <html> from localStorage, or
+   leaves it unset ("system") so the media query below is what decides. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: oklch(19.7% 0.022 284);
+    --color-paper-2: oklch(23.4% 0.031 284);
+    --color-ink: oklch(95.2% 0.019 280);
+    --color-ink-2: oklch(73.2% 0.04 281);
+    --color-rule: oklch(30.2% 0.036 284);
+    --color-accent: oklch(68% 0.169 275);
+    --color-focus: oklch(68% 0.169 275);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-paper: oklch(19.7% 0.022 284);
+  --color-paper-2: oklch(23.4% 0.031 284);
+  --color-ink: oklch(95.2% 0.019 280);
+  --color-ink-2: oklch(73.2% 0.04 281);
+  --color-rule: oklch(30.2% 0.036 284);
+  --color-accent: oklch(68% 0.169 275);
+  --color-focus: oklch(68% 0.169 275);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-short: 0ms;
+  }
+}

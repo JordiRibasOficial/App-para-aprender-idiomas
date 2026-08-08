@@ -3,86 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>App para Aprender Idiomas — Legal</title>
-<style>
-  :root {
-    --bg: #ffffff;
-    --fg: #1a1a2e;
-    --muted: #5a5a72;
-    --accent: #3d5afe;
-    --card: #f5f6fa;
-    --border: #e2e4ee;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #14141f;
-      --fg: #eceefc;
-      --muted: #a3a6c2;
-      --accent: #7b8cff;
-      --card: #1c1c2c;
-      --border: #2c2c40;
+<script>
+  // Blocking, runs before first paint — sets data-theme from the user's
+  // saved choice so there's no flash of the wrong theme. See theme-toggle.js.
+  (function () {
+    var stored = localStorage.getItem("theme-preference");
+    if (stored === "light" || stored === "dark") {
+      document.documentElement.setAttribute("data-theme", stored);
     }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--fg);
-    line-height: 1.6;
-  }
-  .wrap {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 48px 20px 80px;
-  }
-  h1 { font-size: 1.75rem; margin-bottom: 4px; }
-  p.lead { color: var(--muted); margin-top: 0; }
-  .links {
-    display: grid;
-    gap: 12px;
-    margin-top: 32px;
-  }
-  .links a {
-    display: block;
-    padding: 16px 20px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--fg);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .links a:hover { border-color: var(--accent); }
-  .links span {
-    display: block;
-    font-weight: 400;
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-top: 4px;
-  }
-  footer {
-    margin-top: 48px;
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-</style>
+  })();
+</script>
+<title>App para Aprender Idiomas — Legal</title>
+<meta name="description" content="Documentos legales de App para Aprender Idiomas: política de privacidad y términos y condiciones.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@600&family=IBM+Plex+Sans:wght@400;500&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wrap">
-    <h1>App para Aprender Idiomas</h1>
-    <p class="lead">Documentos legales de la aplicación.</p>
-    <div class="links">
-      <a href="privacy.html">
-        Política de Privacidad
-        <span>Qué datos recoge la app y cómo se tratan.</span>
+  <button id="theme-toggle" class="theme-toggle" type="button"></button>
+  <div class="wrap wrap--hub">
+    <p class="kicker">Documentos legales</p>
+    <h1 class="site-title">App para Aprender Idiomas</h1>
+    <p class="lede">Aprende inglés con lecciones cortas y contenido real. Estos son los documentos legales de la aplicación.</p>
+
+    <nav class="doc-list" aria-label="Documentos legales">
+      <a class="doc-list__item" href="privacy.html">
+        <span class="doc-list__title">Política de Privacidad</span>
+        <span class="doc-list__desc">Qué datos recoge la app y cómo se tratan.</span>
       </a>
-      <a href="terms.html">
-        Términos y Condiciones
-        <span>Condiciones de uso y de la suscripción.</span>
+      <a class="doc-list__item" href="terms.html">
+        <span class="doc-list__title">Términos y Condiciones</span>
+        <span class="doc-list__desc">Condiciones de uso y de la suscripción.</span>
       </a>
-    </div>
-    <footer>App para Aprender Idiomas</footer>
+    </nav>
+
+    <footer class="site-footer">
+      <p>App para Aprender Idiomas</p>
+    </footer>
   </div>
+  <script src="theme-toggle.js"></script>
 </body>
 </html>

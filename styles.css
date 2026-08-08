@@ -1,0 +1,296 @@
+/* Hallmark · macrostructure: Index-First (hub) + Long Document (content pages)
+ * nav: N1a-equivalent (justified — 2 genuine destinations) · footer: Ft2 inline single-line
+ * Nav/footer reasoning, contrast checks, and the full token derivation live in design.md.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ---------- Layout shells ---------- */
+
+.wrap {
+  margin-inline: auto;
+  padding: var(--space-xl) clamp(1.25rem, 4vw, var(--space-lg)) var(--space-2xl);
+}
+
+.wrap--hub {
+  max-width: 34rem;
+}
+
+.wrap--doc {
+  max-width: 42rem;
+}
+
+/* ---------- Kicker / date stamp (outlier face — one slot per page) ---------- */
+
+.kicker,
+.doc-date {
+  font-family: var(--font-outlier);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+  margin: 0 0 var(--space-sm);
+}
+
+.doc-date {
+  text-transform: none;
+  letter-spacing: 0;
+  margin: 0 0 var(--space-xl);
+}
+
+/* ---------- Headings ---------- */
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  line-height: 1.15;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.site-title,
+.doc-title {
+  font-size: var(--text-2xl);
+  margin: 0 0 var(--space-sm);
+}
+
+.lede {
+  font-size: var(--text-md);
+  color: var(--color-ink-2);
+  margin: 0 0 var(--space-xl);
+  max-width: var(--measure-hub);
+}
+
+/* ---------- Hub page: Index-First document list ---------- */
+
+.doc-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.doc-list__item {
+  display: block;
+  padding: var(--space-md);
+  min-height: 44px;
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    transform 100ms var(--ease-out);
+}
+
+.doc-list__item:hover {
+  border-color: var(--color-accent);
+}
+
+.doc-list__item:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.doc-list__item:active {
+  border-color: var(--color-accent);
+  transform: translateY(1px);
+}
+
+.doc-list__title {
+  display: block;
+  font-weight: 600;
+  font-size: var(--text-md);
+  color: var(--color-ink);
+}
+
+.doc-list__desc {
+  display: block;
+  font-weight: 400;
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  margin-top: var(--space-3xs);
+}
+
+/* ---------- Content pages: Long Document ---------- */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out);
+}
+
+.back-link:hover {
+  border-bottom-color: currentColor;
+}
+
+.back-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.back-link:active {
+  opacity: 0.7;
+}
+
+.prose {
+  max-width: var(--measure-doc);
+  line-height: 1.65;
+}
+
+.prose h2 {
+  font-size: var(--text-lg);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+
+.prose h2:first-of-type {
+  /* .doc-date above already carries a var(--space-xl) bottom margin —
+     stacking another xl here would double the gap before the first head. */
+  margin-top: 0;
+}
+
+.prose p {
+  margin: 0 0 1em;
+}
+
+.prose ul {
+  margin: 0 0 1em;
+  padding-inline-start: 1.25em;
+}
+
+.prose li {
+  margin-bottom: 0.5em;
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: opacity var(--dur-short) var(--ease-out);
+}
+
+.prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.prose a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.prose a:active {
+  opacity: 0.7;
+}
+
+.card {
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Theme toggle (system / light / dark) ---------- */
+
+.theme-toggle {
+  position: fixed;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-rule);
+  border-radius: 999px;
+  color: var(--color-ink-2);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out),
+    transform var(--dur-short) var(--ease-out);
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.theme-toggle:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Footer (Ft2 — inline single line) ---------- */
+
+.site-footer {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-rule);
+  color: var(--color-ink-2);
+  font-size: var(--text-xs);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ---------- Narrow viewports ---------- */
+
+@media (max-width: 26rem) {
+  .site-title,
+  .doc-title {
+    font-size: var(--text-xl);
+  }
+}
