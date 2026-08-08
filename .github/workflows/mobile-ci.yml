@@ -150,9 +150,11 @@ jobs:
 
   integration-test-ios:
     runs-on: macos-latest
-    # Bounded by setup plus two 8-minute test attempts below, not by an
-    # arbitrary top-level number — see the retry step for why there are two.
-    timeout-minutes: 25
+    # Bounded by setup, two 8-minute test attempts, and the simulator
+    # reboot between them — not by an arbitrary top-level number. See the
+    # retry step for why there are two attempts, and the reboot step for
+    # why a plain retry wasn't enough.
+    timeout-minutes: 27
     steps:
       - uses: actions/checkout@v4
 
@@ -213,6 +215,21 @@ jobs:
         continue-on-error: true
         timeout-minutes: 8
         run: flutter test integration_test/app_test.dart -d "$SIMULATOR_UDID"
+
+      # A real CI run showed why this can't just re-run flutter test:
+      # attempt 1 timed out (the pre-existing hang above), and the retry
+      # then failed in 13s with "Failed to start Dart Development
+      # Service" — a symptom of the forcibly-killed attempt 1 leaving a
+      # stray process (or a held DDS port) behind on the *same* simulator
+      # instance. A fresh `flutter test` invocation isn't a fresh
+      # simulator. Reboot it before retrying so the retry actually gets
+      # the clean state the first attempt got.
+      - name: Reboot the Simulator before retrying
+        if: steps.integration_test_ios_attempt1.outcome == 'failure'
+        run: |
+          xcrun simctl shutdown "$SIMULATOR_UDID" || true
+          xcrun simctl boot "$SIMULATOR_UDID"
+          xcrun simctl bootstatus "$SIMULATOR_UDID" -b
 
       - name: Retry integration_test on the iOS Simulator
         if: steps.integration_test_ios_attempt1.outcome == 'failure'
