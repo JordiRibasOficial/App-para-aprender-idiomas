@@ -78,16 +78,11 @@ Estos son los precios que confirmaste (14,99 €/mes, 89,94 €/año — un ahor
 
 Una vez creados y **activados** (no solo guardados como borrador), la app real (no la de pruebas con `MockSubscriptionRepository`) podrá cargarlos vía `InAppPurchaseSubscriptionRepository` — ese código ya está implementado y probado (69 tests en `test/`, más los de integración en dispositivo real que están terminando de verificarse en CI ahora mismo).
 
-## 6. Cuenta de AdMob y IDs de anuncio reales
+## 6. Cuenta de AdMob y IDs de anuncio reales [HECHO]
 
-La app ya integra Google AdMob (banner discreto, solo para usuarios sin Premium activo, oculto en el instante en que se activa una suscripción). Ahora mismo usa **los IDs de prueba oficiales de Google** (`ca-app-pub-3940256099942544/...`) — siempre devuelven anuncios de prueba, nunca generan ingresos reales. Para monetizar de verdad:
+La app ya integra Google AdMob (banner discreto, solo para usuarios sin Premium activo, oculto en el instante en que se activa una suscripción). **Cuenta creada y los IDs reales ya están en el código** (publisher `ca-app-pub-6843680802048559`) — `ad_unit_ids.dart`, `AndroidManifest.xml` e `Info.plist` actualizados, `flutter analyze`/`flutter test` verificados en verde. Ya no usa los IDs de prueba de Google.
 
-1. Crea una cuenta en [admob.google.com](https://admob.google.com) (gratis, vinculada a tu cuenta de Google — puede ser la misma que usas para Play Console).
-2. Vincula tu app de Play Console desde AdMob (o crea la entrada de la app manualmente en AdMob con el mismo package name `com.worldwebapps.app.aprenderidioma`).
-3. Crea una unidad de anuncio de tipo **banner** para Android y otra para iOS.
-4. Pásame los dos ID de unidad de anuncio reales y el App ID de AdMob de cada plataforma — actualizo `src/mobile/lib/data/ads/ad_unit_ids.dart` (el ID de la unidad de anuncio) y `AndroidManifest.xml`/`Info.plist` (el App ID) en un momento.
-
-**No subas un build a producción con los IDs de prueba activos** — Google lo prohíbe explícitamente (política de "fraudulent clicks"/spam) y puede suspender la cuenta de AdMob. Los de prueba son solo para desarrollo y para el track de pruebas internas del punto 7.
+**No subas un build a producción con los IDs de prueba activos** — Google lo prohíbe explícitamente (política de "fraudulent clicks"/spam) y puede suspender la cuenta de AdMob. Ya no aplica: los reales están activos desde ahora.
 
 ## 7. Track de pruebas interno (recomendado antes de producción)
 
@@ -113,7 +108,7 @@ Play Console gestiona la firma por ti por defecto ("Play App Signing") — no ha
 - [ ] Sección de seguridad de datos completada (tabla de arriba)
 - [ ] Suscripción `monthly_sub` creada y **activada**
 - [ ] Suscripción `annual_sub` creada y **activada**
-- [ ] Cuenta de AdMob creada y vinculada (o IDs de unidad de anuncio reales enviados para actualizar el código)
+- [x] Cuenta de AdMob creada y vinculada, IDs de unidad de anuncio reales en el código
 - [ ] Primer `.aab` subido al track de pruebas internas
 - [ ] Compra de prueba real completada con tarjeta de prueba
 
