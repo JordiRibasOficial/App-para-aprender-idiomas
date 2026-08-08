@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'data/ads/ads_consent_manager.dart';
 import 'presentation/providers/ads_providers.dart';
+import 'presentation/providers/theme_mode_providers.dart';
 import 'presentation/router/app_router.dart';
 import 'presentation/theme/app_theme.dart';
 
@@ -38,15 +39,25 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // .value, not .when(loading: ...): the SharedPreferences read is fast
+    // but still async, and gating the whole app behind a spinner for it
+    // would be a worse first frame than the one-tick flash from system to
+    // a saved override. AsyncNotifier already gives every other screen
+    // that watches themeModeProvider the loading/data states properly.
+    final themeMode =
+        ref.watch(themeModeProvider).value?.flutterThemeMode ??
+        ThemeMode.system;
+
     return MaterialApp.router(
       title: 'App para Aprender Idiomas',
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
+      themeMode: themeMode,
       routerConfig: appRouter,
     );
   }
