@@ -5,14 +5,17 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../domain/models/entitlement.dart';
 import '../../domain/models/subscription_plan.dart';
 import '../providers/subscription_providers.dart';
+import '../theme/app_theme.dart';
 import 'plan_card.dart';
 
 /// Required by App Store Review Guideline 3.1.2 (and expected by Google
 /// Play's subscriptions policy): auto-renewal terms and links to the legal
 /// docs must be visible on the purchase screen itself, not just buried in
 /// a settings page.
-const _termsUrl = 'https://jordiribasoficial.github.io/App-para-aprender-idiomas/terms.html';
-const _privacyUrl = 'https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html';
+const _termsUrl =
+    'https://jordiribasoficial.github.io/App-para-aprender-idiomas/terms.html';
+const _privacyUrl =
+    'https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html';
 
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
@@ -51,7 +54,11 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       if (!isActive) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(content: Text('No se encontraron compras anteriores.')));
+          ..showSnackBar(
+            const SnackBar(
+              content: Text('No se encontraron compras anteriores.'),
+            ),
+          );
       }
     } finally {
       if (mounted) setState(() => _restoring = false);
@@ -61,7 +68,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   @override
   Widget build(BuildContext context) {
     final plansAsync = ref.watch(subscriptionPlansProvider);
-    final entitlement = ref.watch(entitlementProvider).value ?? const Entitlement();
+    final entitlement =
+        ref.watch(entitlementProvider).value ?? const Entitlement();
 
     ref.listen(purchaseErrorProvider, (previous, next) {
       final message = next.value;
@@ -88,7 +96,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.all(16),
-                      child: Text('Los planes de suscripción no están disponibles todavía.'),
+                      child: Text(
+                        'Los planes de suscripción no están disponibles todavía.',
+                      ),
                     ),
                   );
                 }
@@ -97,7 +107,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   selectedPeriod: _selectedPeriod,
                   purchasing: _purchasing,
                   restoring: _restoring,
-                  onSelect: (period) => setState(() => _selectedPeriod = period),
+                  onSelect: (period) =>
+                      setState(() => _selectedPeriod = period),
                   onPurchase: _purchase,
                   onRestore: _restore,
                 );
@@ -128,35 +139,70 @@ class _PlansView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final monthly = plans.firstWhere((p) => p.period == SubscriptionPeriod.monthly);
-    final annual = plans.firstWhere((p) => p.period == SubscriptionPeriod.annual);
-    final savingsRatio = SubscriptionPlan.annualSavingsRatio(monthly: monthly, annual: annual);
-    final selectedPlan = selectedPeriod == SubscriptionPeriod.monthly ? monthly : annual;
+    final monthly = plans.firstWhere(
+      (p) => p.period == SubscriptionPeriod.monthly,
+    );
+    final annual = plans.firstWhere(
+      (p) => p.period == SubscriptionPeriod.annual,
+    );
+    final savingsRatio = SubscriptionPlan.annualSavingsRatio(
+      monthly: monthly,
+      annual: annual,
+    );
+    final selectedPlan = selectedPeriod == SubscriptionPeriod.monthly
+        ? monthly
+        : annual;
+
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Center(
+            child: Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: scheme.tertiaryContainer,
+              ),
+              child: Icon(
+                Icons.workspace_premium,
+                size: 36,
+                color: scheme.onTertiaryContainer,
+              ),
+            ),
+          ),
+          const SizedBox(height: AppTheme.spaceLg),
           Text(
             'Aprende sin límites',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: textTheme.headlineMedium,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceLg),
+          const _BenefitRow(
+            text:
+                'Los 4 idiomas completos: inglés, portugués, francés y japonés',
+          ),
+          const SizedBox(height: AppTheme.spaceSm),
+          const _BenefitRow(text: 'Sin anuncios, en toda la app'),
+          const SizedBox(height: AppTheme.spaceXl),
           PlanCard(
             plan: monthly,
             selected: selectedPeriod == SubscriptionPeriod.monthly,
             onTap: () => onSelect(SubscriptionPeriod.monthly),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppTheme.spaceSm),
           PlanCard(
             plan: annual,
             selected: selectedPeriod == SubscriptionPeriod.annual,
             savingsRatio: savingsRatio,
             onTap: () => onSelect(SubscriptionPeriod.annual),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceLg),
           FilledButton(
             onPressed: purchasing ? null : () => onPurchase(selectedPlan),
             child: purchasing
@@ -177,16 +223,18 @@ class _PlansView extends StatelessWidget {
                   )
                 : const Text('Restaurar compras'),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spaceSm),
           Text(
             'La suscripción se renueva automáticamente al final de cada periodo '
             '(mensual o anual) salvo que la canceles antes. Se gestiona y se '
             'cancela desde los ajustes de tu cuenta de Google Play o Apple, no '
             'desde la app.',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: textTheme.bodySmall?.copyWith(
+              color: scheme.onSurfaceVariant,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppTheme.spaceXs),
           Wrap(
             alignment: WrapAlignment.center,
             children: [
@@ -206,6 +254,26 @@ class _PlansView extends StatelessWidget {
   }
 }
 
+class _BenefitRow extends StatelessWidget {
+  const _BenefitRow({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        Icon(Icons.check_circle, size: 20, color: scheme.primary),
+        const SizedBox(width: AppTheme.spaceSm),
+        Expanded(
+          child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+        ),
+      ],
+    );
+  }
+}
+
 class _ActiveSubscriptionView extends StatelessWidget {
   const _ActiveSubscriptionView({required this.entitlement});
 
@@ -213,17 +281,37 @@ class _ActiveSubscriptionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppTheme.spaceLg),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.workspace_premium, size: 72, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 16),
-            Text('¡Ya eres Premium!', style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 8),
-            Text('Plan activo: ${entitlement.activeProductId}'),
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: scheme.tertiaryContainer,
+              ),
+              child: Icon(
+                Icons.workspace_premium,
+                size: 48,
+                color: scheme.onTertiaryContainer,
+              ),
+            ),
+            const SizedBox(height: AppTheme.spaceLg),
+            Text('¡Ya eres Premium!', style: textTheme.headlineSmall),
+            const SizedBox(height: AppTheme.spaceXs),
+            Text(
+              'Plan activo: ${entitlement.activeProductId}',
+              style: textTheme.bodyMedium?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
           ],
         ),
       ),
