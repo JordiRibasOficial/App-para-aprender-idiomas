@@ -176,6 +176,9 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                     backgroundColor: _answered
                         ? (_wasCorrect ? scheme.primary : scheme.error)
                         : null,
+                    foregroundColor: _answered && !_wasCorrect
+                        ? scheme.onError
+                        : null,
                   ),
                   child: Text(
                     _answered
@@ -298,8 +301,14 @@ class _OptionCard extends StatelessWidget {
 
     return Semantics(
       button: true,
+      enabled: onTap != null,
       inMutuallyExclusiveGroup: true,
       selected: selected,
+      // InkWell below has excludeFromSemantics: true, so this Semantics
+      // node is the *only* thing assistive tech sees for this card — it
+      // must carry the tap action itself (onTap) or screen reader/switch
+      // users cannot activate the option at all.
+      onTap: onTap,
       label: state == _OptionState.correct
           ? '$label (respuesta correcta)'
           : state == _OptionState.incorrect
@@ -355,31 +364,40 @@ class _FeedbackBanner extends StatelessWidget {
         ? scheme.primaryContainer
         : scheme.errorContainer;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spaceMd,
-        vertical: AppTheme.spaceSm,
-      ),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-      ),
-      child: Row(
-        children: [
-          Icon(correct ? Icons.check_circle : Icons.cancel, color: color),
-          const SizedBox(width: AppTheme.spaceSm),
-          Expanded(
-            child: Text(
-              correct
-                  ? '¡Correcto!'
-                  : 'Incorrecto${correctAnswer.isNotEmpty ? " — respuesta: $correctAnswer" : ""}',
-              style: textTheme.bodyMedium?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w700,
+    final message = correct
+        ? '¡Correcto!'
+        : 'Incorrecto${correctAnswer.isNotEmpty ? " — respuesta: $correctAnswer" : ""}';
+
+    // liveRegion: true makes screen readers announce this banner as soon as
+    // it appears, instead of requiring the user to navigate to it manually
+    // — the pass/fail result must not depend on the user finding it (WCAG
+    // 4.1.3 Status Messages).
+    return Semantics(
+      liveRegion: true,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppTheme.spaceMd,
+          vertical: AppTheme.spaceSm,
+        ),
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+        ),
+        child: Row(
+          children: [
+            Icon(correct ? Icons.check_circle : Icons.cancel, color: color),
+            const SizedBox(width: AppTheme.spaceSm),
+            Expanded(
+              child: Text(
+                message,
+                style: textTheme.bodyMedium?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

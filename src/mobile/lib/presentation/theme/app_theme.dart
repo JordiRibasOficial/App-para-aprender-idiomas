@@ -33,7 +33,9 @@ class AppTheme {
       tertiary: _accent,
     );
 
-    final textTheme = _textTheme(brightness == Brightness.dark ? Colors.white : Colors.black87);
+    final textTheme = _textTheme(
+      brightness == Brightness.dark ? Colors.white : Colors.black87,
+    );
 
     return ThemeData(
       useMaterial3: true,
@@ -47,37 +49,53 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+        titleTextStyle: textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.w700,
+        ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusMd)),
-          textStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMd),
+          ),
+          textStyle: textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusMd)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMd),
+          ),
           side: BorderSide(color: scheme.outlineVariant),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusSm)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusSm),
+          ),
         ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
         color: scheme.surfaceContainerLow,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusLg)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusLg),
+        ),
         margin: EdgeInsets.zero,
       ),
       chipTheme: ChipThemeData(
         backgroundColor: scheme.secondaryContainer,
-        labelStyle: textTheme.labelMedium?.copyWith(color: scheme.onSecondaryContainer),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusSm)),
+        labelStyle: textTheme.labelMedium?.copyWith(
+          color: scheme.onSecondaryContainer,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusSm),
+        ),
         side: BorderSide.none,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -85,11 +103,17 @@ class AppTheme {
         linearTrackColor: scheme.surfaceContainerHighest,
         linearMinHeight: 8,
       ),
-      dividerTheme: DividerThemeData(color: scheme.outlineVariant, space: spaceLg),
+      dividerTheme: DividerThemeData(
+        color: scheme.outlineVariant,
+        space: spaceLg,
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: scheme.surfaceContainerLow,
-        contentPadding: const EdgeInsets.symmetric(horizontal: spaceMd, vertical: spaceMd),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: spaceMd,
+          vertical: spaceMd,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusMd),
           borderSide: BorderSide.none,
@@ -104,19 +128,70 @@ class AppTheme {
   /// on headlines (Material's default type ramp reads as a stock template).
   static TextTheme _textTheme(Color baseColor) {
     return TextTheme(
-      displayLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, letterSpacing: -0.5, height: 1.1, color: baseColor),
-      headlineLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, letterSpacing: -0.3, height: 1.15, color: baseColor),
-      headlineMedium: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.2, height: 1.2, color: baseColor),
-      headlineSmall: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, height: 1.2, color: baseColor),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: baseColor),
-      titleMedium: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: baseColor),
-      titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: baseColor),
+      displayLarge: TextStyle(
+        fontSize: 40,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.5,
+        height: 1.1,
+        color: baseColor,
+      ),
+      headlineLarge: TextStyle(
+        fontSize: 30,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.3,
+        height: 1.15,
+        color: baseColor,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.2,
+        height: 1.2,
+        color: baseColor,
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        height: 1.2,
+        color: baseColor,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: baseColor,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+      ),
       bodyLarge: TextStyle(fontSize: 17, height: 1.5, color: baseColor),
       bodyMedium: TextStyle(fontSize: 15, height: 1.5, color: baseColor),
-      bodySmall: TextStyle(fontSize: 13, height: 1.4, color: baseColor.withValues(alpha: 0.7)),
-      labelLarge: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: baseColor),
-      labelMedium: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: baseColor),
-      labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: baseColor),
+      bodySmall: TextStyle(
+        fontSize: 13,
+        height: 1.4,
+        color: baseColor.withValues(alpha: 0.7),
+      ),
+      labelLarge: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+      ),
     );
   }
 }
