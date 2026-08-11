@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../providers/onboarding_providers.dart';
+import '../theme/app_theme.dart';
 
 class LevelSelectionScreen extends ConsumerWidget {
   const LevelSelectionScreen({super.key});
@@ -13,42 +14,137 @@ class LevelSelectionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = ref.watch(onboardingSelectedLevelProvider);
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(title: const Text('¿Cuál es tu nivel?')),
       body: ListView(
+        padding: const EdgeInsets.all(AppTheme.spaceMd),
         children: [
           RadioGroup<String>(
             groupValue: selected,
             onChanged: (value) {
-              if (value != null) ref.read(onboardingSelectedLevelProvider.notifier).select(value);
+              if (value != null) {
+                ref
+                    .read(onboardingSelectedLevelProvider.notifier)
+                    .select(value);
+              }
             },
             child: Column(
               children: [
                 for (final level in _availableLevels)
-                  RadioListTile<String>(
-                    value: level,
-                    title: Text(level),
-                    subtitle: const Text('Curso completo disponible'),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppTheme.spaceSm),
+                    child: _LevelCard(
+                      level: level,
+                      selected: selected == level,
+                      onTap: () => ref
+                          .read(onboardingSelectedLevelProvider.notifier)
+                          .select(level),
+                    ),
                   ),
               ],
             ),
           ),
-          for (final level in _comingSoonLevels)
-            ListTile(
-              enabled: false,
-              leading: const Icon(Icons.lock_outline),
-              title: Text(level),
-              subtitle: const Text('Próximamente'),
+          if (_comingSoonLevels.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppTheme.spaceSm),
+              child: Text(
+                'Próximamente',
+                style: textTheme.labelMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
+              ),
             ),
+            Wrap(
+              spacing: AppTheme.spaceSm,
+              runSpacing: AppTheme.spaceSm,
+              children: [
+                for (final level in _comingSoonLevels)
+                  Chip(
+                    avatar: Icon(
+                      Icons.lock_outline,
+                      size: 16,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                    label: Text(level),
+                    backgroundColor: scheme.surfaceContainerLow,
+                    labelStyle: textTheme.labelMedium?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                    side: BorderSide.none,
+                  ),
+              ],
+            ),
+          ],
         ],
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppTheme.spaceMd),
           child: FilledButton(
             onPressed: () => context.push('/onboarding/auth'),
             child: const Text('Continuar'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LevelCard extends StatelessWidget {
+  const _LevelCard({
+    required this.level,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String level;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Material(
+      color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.spaceMd,
+            vertical: AppTheme.spaceMd,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+            border: Border.all(
+              color: selected ? scheme.primary : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(level, style: textTheme.titleMedium),
+                    Text(
+                      'Curso completo disponible',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Radio<String>(value: level),
+            ],
           ),
         ),
       ),
