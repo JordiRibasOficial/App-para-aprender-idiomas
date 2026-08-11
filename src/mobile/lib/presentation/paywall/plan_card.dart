@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/subscription_plan.dart';
+import '../theme/app_theme.dart';
 
 class PlanCard extends StatelessWidget {
   const PlanCard({
@@ -21,51 +22,62 @@ class PlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      color: selected ? colorScheme.primaryContainer : null,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: selected ? colorScheme.primary : colorScheme.outlineVariant,
-          width: selected ? 2 : 1,
-        ),
-      ),
+    return Material(
+      color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        child: Container(
+          padding: const EdgeInsets.all(AppTheme.spaceMd),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+            border: Border.all(
+              color: selected ? scheme.primary : Colors.transparent,
+              width: 2,
+            ),
+          ),
           child: Row(
             children: [
               Icon(
-                selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                color: selected ? colorScheme.primary : colorScheme.outline,
+                selected
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                color: selected ? scheme.primary : scheme.outline,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(plan.title, style: Theme.of(context).textTheme.titleMedium),
-                    Text(plan.formattedPrice, style: Theme.of(context).textTheme.bodyMedium),
+                    Text(plan.title, style: textTheme.titleMedium),
+                    Text(
+                      plan.formattedPrice,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
                   ],
                 ),
               ),
               if (savingsRatio != null && savingsRatio! > 0)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spaceSm,
+                    vertical: AppTheme.spaceXs,
+                  ),
                   decoration: BoxDecoration(
-                    color: colorScheme.tertiaryContainer,
-                    borderRadius: BorderRadius.circular(8),
+                    color: scheme.tertiaryContainer,
+                    borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                   ),
                   child: Text(
                     '-${(savingsRatio! * 100).round()}%',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: colorScheme.onTertiaryContainer),
+                    style: textTheme.labelMedium?.copyWith(
+                      color: scheme.onTertiaryContainer,
+                    ),
                   ),
                 ),
             ],

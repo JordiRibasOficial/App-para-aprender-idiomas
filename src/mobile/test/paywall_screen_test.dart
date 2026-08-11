@@ -72,6 +72,7 @@ void main() {
     await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
     await tester.pumpAndSettle();
 
+    await tester.ensureVisible(find.text('Restaurar compras'));
     await tester.tap(find.text('Restaurar compras'));
     await tester.pump(); // enters the restoring state
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
