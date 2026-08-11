@@ -148,12 +148,16 @@ class _CourseStatsHeader extends StatelessWidget {
                       ? scheme.tertiary
                       : scheme.onSurfaceVariant,
                   label: streak == 1 ? '1 día' : '$streak días',
+                  semanticLabel: streak == 1
+                      ? 'Racha: 1 día'
+                      : 'Racha: $streak días',
                 ),
                 const SizedBox(width: AppTheme.spaceMd),
                 _StatPill(
                   icon: Icons.star_rounded,
                   iconColor: scheme.primary,
                   label: '$score pts',
+                  semanticLabel: '$score puntos totales',
                 ),
               ],
             ),
@@ -176,21 +180,34 @@ class _StatPill extends StatelessWidget {
     required this.icon,
     required this.iconColor,
     required this.label,
+    required this.semanticLabel,
   });
 
   final IconData icon;
   final Color iconColor;
   final String label;
 
+  /// The icon here is purely decorative (streak fire / points star) and the
+  /// visible [label] is an abbreviated form ("$score pts", "$streak días")
+  /// that reads ambiguously out of visual context — a screen reader user
+  /// hearing just "3 días" has no way to know that refers to a learning
+  /// streak. [semanticLabel] replaces both with one unambiguous, merged
+  /// announcement.
+  final String semanticLabel;
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 20, color: iconColor),
-        const SizedBox(width: AppTheme.spaceXs),
-        Text(label, style: Theme.of(context).textTheme.labelLarge),
-      ],
+    return Semantics(
+      label: semanticLabel,
+      excludeSemantics: true,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 20, color: iconColor),
+          const SizedBox(width: AppTheme.spaceXs),
+          Text(label, style: Theme.of(context).textTheme.labelLarge),
+        ],
+      ),
     );
   }
 }
@@ -213,50 +230,67 @@ class _LessonCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Material(
-      color: scheme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-      child: InkWell(
+    // Completion is conveyed visually only through icon shape + color
+    // (check mark vs. open book, primary vs. neutral fill) — neither is
+    // exposed to screen readers by default, so it's folded into an explicit
+    // label here instead. excludeFromSemantics on the InkWell prevents the
+    // title/subtitle Text children from also being announced as separate,
+    // redundant swipe stops.
+    final semanticLabel =
+        '$title, $exerciseCount ejercicios${completed ? ', completada' : ''}';
+
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      onTap: onTap,
+      child: Material(
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.spaceMd,
-            vertical: AppTheme.spaceSm,
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: completed
-                      ? scheme.primary
-                      : scheme.surfaceContainerHighest,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+          onTap: onTap,
+          excludeFromSemantics: true,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spaceMd,
+              vertical: AppTheme.spaceSm,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: completed
+                        ? scheme.primary
+                        : scheme.surfaceContainerHighest,
+                  ),
+                  child: Icon(
+                    completed ? Icons.check_rounded : Icons.menu_book_outlined,
+                    color: completed
+                        ? scheme.onPrimary
+                        : scheme.onSurfaceVariant,
+                  ),
                 ),
-                child: Icon(
-                  completed ? Icons.check_rounded : Icons.menu_book_outlined,
-                  color: completed ? scheme.onPrimary : scheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: AppTheme.spaceMd),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: textTheme.titleMedium),
-                    Text(
-                      '$exerciseCount ejercicios',
-                      style: textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
+                const SizedBox(width: AppTheme.spaceMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: textTheme.titleMedium),
+                      Text(
+                        '$exerciseCount ejercicios',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
-            ],
+                Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
+              ],
+            ),
           ),
         ),
       ),

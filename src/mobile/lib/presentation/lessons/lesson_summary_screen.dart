@@ -41,32 +41,34 @@ class LessonSummaryScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              width: 160,
-              height: 160,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: 160,
-                    height: 160,
-                    child: CircularProgressIndicator(
-                      value: data.ratio,
-                      strokeWidth: 10,
-                      strokeCap: StrokeCap.round,
-                      backgroundColor: scheme.surfaceContainerHighest,
-                      color: scheme.primary,
+            Center(
+              child: SizedBox(
+                width: 160,
+                height: 160,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: CircularProgressIndicator(
+                        value: data.ratio,
+                        strokeWidth: 10,
+                        strokeCap: StrokeCap.round,
+                        backgroundColor: scheme.surfaceContainerHighest,
+                        color: scheme.primary,
+                      ),
                     ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(icon, size: 32, color: scheme.primary),
-                      const SizedBox(height: AppTheme.spaceXs),
-                      Text('$percent%', style: textTheme.headlineMedium),
-                    ],
-                  ),
-                ],
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon, size: 32, color: scheme.primary),
+                        const SizedBox(height: AppTheme.spaceXs),
+                        Text('$percent%', style: textTheme.headlineMedium),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: AppTheme.spaceLg),

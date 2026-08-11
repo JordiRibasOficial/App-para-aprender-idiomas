@@ -32,7 +32,14 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                   child: const Center(
-                    child: Text('¡Hola!', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: Colors.white)),
+                    child: Text(
+                      '¡Hola!',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -46,7 +53,9 @@ class WelcomeScreen extends StatelessWidget {
               Text(
                 'Aprende inglés y otros idiomas con lecciones breves cada día.',
                 textAlign: TextAlign.center,
-                style: textTheme.bodyLarge?.copyWith(color: scheme.onSurfaceVariant),
+                style: textTheme.bodyLarge?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(height: AppTheme.spaceXxl),
               FilledButton(
