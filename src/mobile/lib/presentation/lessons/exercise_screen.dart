@@ -8,6 +8,7 @@ import '../../domain/models/exercise.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/content_providers.dart';
 import '../providers/progress_providers.dart';
+import '../theme/app_theme.dart';
 import '../widgets/progress_bar.dart';
 import 'lesson_summary_data.dart';
 
@@ -55,16 +56,17 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   bool get _canSubmit {
     return _selectedOption != null ||
         _fillController.text.trim().isNotEmpty ||
-        _matchSelections.values.every((v) => v != null) && _matchSelections.isNotEmpty;
+        _matchSelections.values.every((v) => v != null) &&
+            _matchSelections.isNotEmpty;
   }
 
   void _submit(Exercise exercise) {
     final Object answer = switch (exercise.type) {
       ExerciseType.multipleChoice => _selectedOption ?? '',
       ExerciseType.fillBlank => _fillController.text.trim(),
-      ExerciseType.matching => Map<String, String>.from(_matchSelections.map(
-          (key, value) => MapEntry(key, value ?? ''),
-        )),
+      ExerciseType.matching => Map<String, String>.from(
+        _matchSelections.map((key, value) => MapEntry(key, value ?? '')),
+      ),
     };
 
     final correct = exercise.isCorrect(answer);
@@ -109,15 +111,20 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     final courseAsync = ref.watch(courseProvider(widget.targetLanguage));
 
     return courseAsync.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stackTrace) => Scaffold(
         body: Center(child: Text('No se pudo cargar la lección: $error')),
       ),
       data: (course) {
-        final matchingUnits = course.units.where((u) => u.id == widget.unitId).toList();
+        final matchingUnits = course.units
+            .where((u) => u.id == widget.unitId)
+            .toList();
         final matchingLessons = matchingUnits.isEmpty
             ? const <Lesson>[]
-            : matchingUnits.first.lessons.where((l) => l.id == widget.lessonId).toList();
+            : matchingUnits.first.lessons
+                  .where((l) => l.id == widget.lessonId)
+                  .toList();
         final lesson = matchingLessons.isEmpty ? null : matchingLessons.first;
 
         // widget.unitId/lessonId come from the route path — a system
@@ -133,10 +140,12 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
         final exercise = lesson.exercises[_index];
 
+        final scheme = Theme.of(context).colorScheme;
+
         return Scaffold(
           appBar: AppBar(title: Text(lesson.title)),
           body: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppTheme.spaceMd),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -144,40 +153,37 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                   value: _index / lesson.exercises.length,
                   label: '${_index + 1} / ${lesson.exercises.length}',
                 ),
-                const SizedBox(height: 24),
-                Text(exercise.prompt, style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppTheme.spaceLg),
+                Text(
+                  exercise.prompt,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: AppTheme.spaceLg),
                 Expanded(child: _buildAnswerArea(exercise)),
                 if (_answered)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      _wasCorrect
-                          ? '¡Correcto!'
-                          : 'Incorrecto${exercise.correctAnswer.isNotEmpty ? " — respuesta: ${exercise.correctAnswer}" : ""}',
-                      style: TextStyle(
-                        // Plain Colors.green (#4CAF50) is ~2.75:1 against a
-                        // light surface — below WCAG AA's 3:1 floor even for
-                        // bold text. These shades keep >=4.5:1 in both
-                        // themes (colorScheme.error is already M3-calibrated
-                        // for contrast, so the incorrect branch needs no
-                        // adjustment).
-                        color: _wasCorrect
-                            ? (Theme.of(context).brightness == Brightness.dark
-                                ? Colors.green.shade300
-                                : Colors.green.shade800)
-                            : Theme.of(context).colorScheme.error,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    padding: const EdgeInsets.only(bottom: AppTheme.spaceSm),
+                    child: _FeedbackBanner(
+                      correct: _wasCorrect,
+                      correctAnswer: exercise.correctAnswer,
                     ),
                   ),
                 FilledButton(
                   onPressed: _answered
                       ? () => _next(lesson)
                       : (_canSubmit ? () => _submit(exercise) : null),
-                  child: Text(_answered
-                      ? (_index + 1 < lesson.exercises.length ? 'Siguiente' : 'Terminar')
-                      : 'Comprobar'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: _answered
+                        ? (_wasCorrect ? scheme.primary : scheme.error)
+                        : null,
+                  ),
+                  child: Text(
+                    _answered
+                        ? (_index + 1 < lesson.exercises.length
+                              ? 'Siguiente'
+                              : 'Terminar')
+                        : 'Comprobar',
+                  ),
                 ),
               ],
             ),
@@ -189,53 +195,192 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
   Widget _buildAnswerArea(Exercise exercise) {
     return switch (exercise.type) {
-      ExerciseType.multipleChoice => RadioGroup<String>(
-          groupValue: _selectedOption,
-          onChanged: (value) {
-            if (!_answered) setState(() => _selectedOption = value);
-          },
-          child: ListView(
-            children: [
-              for (final option in exercise.options)
-                RadioListTile<String>(title: Text(option), value: option),
-            ],
-          ),
-        ),
-      ExerciseType.fillBlank => TextField(
-          controller: _fillController,
-          enabled: !_answered,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Escribe tu respuesta',
-          ),
-          onChanged: (_) => setState(() {}),
-        ),
-      ExerciseType.matching => ListView(
-          children: [
-            for (final key in exercise.pairs.keys)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(key)),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        initialValue: _matchSelections[key],
-                        items: [
-                          for (final option in _shuffledMatchOptions(exercise))
-                            DropdownMenuItem(value: option, child: Text(option)),
-                        ],
-                        onChanged: _answered
-                            ? null
-                            : (value) => setState(() => _matchSelections[key] = value),
-                      ),
-                    ),
-                  ],
-                ),
+      ExerciseType.multipleChoice => ListView(
+        children: [
+          for (final option in exercise.options)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppTheme.spaceSm),
+              child: _OptionCard(
+                label: option,
+                selected: _selectedOption == option,
+                state: !_answered
+                    ? _OptionState.neutral
+                    : _optionCorrect(exercise, option)
+                    ? _OptionState.correct
+                    : (_selectedOption == option
+                          ? _OptionState.incorrect
+                          : _OptionState.neutral),
+                onTap: _answered
+                    ? null
+                    : () => setState(() => _selectedOption = option),
               ),
-          ],
-        ),
+            ),
+        ],
+      ),
+      ExerciseType.fillBlank => TextField(
+        controller: _fillController,
+        enabled: !_answered,
+        decoration: const InputDecoration(hintText: 'Escribe tu respuesta'),
+        onChanged: (_) => setState(() {}),
+      ),
+      ExerciseType.matching => ListView(
+        children: [
+          for (final key in exercise.pairs.keys)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppTheme.spaceXs),
+              child: Row(
+                children: [
+                  Expanded(child: Text(key)),
+                  const SizedBox(width: AppTheme.spaceSm),
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      initialValue: _matchSelections[key],
+                      items: [
+                        for (final option in _shuffledMatchOptions(exercise))
+                          DropdownMenuItem(value: option, child: Text(option)),
+                      ],
+                      onChanged: _answered
+                          ? null
+                          : (value) =>
+                                setState(() => _matchSelections[key] = value),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     };
+  }
+
+  bool _optionCorrect(Exercise exercise, String option) =>
+      option.trim().toLowerCase() ==
+      exercise.correctAnswer.trim().toLowerCase();
+}
+
+enum _OptionState { neutral, correct, incorrect }
+
+class _OptionCard extends StatelessWidget {
+  const _OptionCard({
+    required this.label,
+    required this.selected,
+    required this.state,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final _OptionState state;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    final (Color fill, Color border, IconData? icon) = switch (state) {
+      _OptionState.correct => (
+        scheme.primaryContainer,
+        scheme.primary,
+        Icons.check_circle,
+      ),
+      _OptionState.incorrect => (
+        scheme.errorContainer,
+        scheme.error,
+        Icons.cancel,
+      ),
+      _OptionState.neutral => (
+        selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
+        selected ? scheme.primary : Colors.transparent,
+        null,
+      ),
+    };
+
+    return Semantics(
+      button: true,
+      inMutuallyExclusiveGroup: true,
+      selected: selected,
+      label: state == _OptionState.correct
+          ? '$label (respuesta correcta)'
+          : state == _OptionState.incorrect
+          ? '$label (respuesta incorrecta)'
+          : label,
+      child: Material(
+        color: fill,
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+          onTap: onTap,
+          excludeFromSemantics: true,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spaceMd,
+              vertical: AppTheme.spaceMd,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+              border: Border.all(color: border, width: 2),
+            ),
+            child: Row(
+              children: [
+                Expanded(child: Text(label, style: textTheme.titleMedium)),
+                if (icon != null)
+                  Icon(
+                    icon,
+                    color: state == _OptionState.correct
+                        ? scheme.primary
+                        : scheme.error,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FeedbackBanner extends StatelessWidget {
+  const _FeedbackBanner({required this.correct, required this.correctAnswer});
+
+  final bool correct;
+  final String correctAnswer;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final color = correct ? scheme.primary : scheme.error;
+    final background = correct
+        ? scheme.primaryContainer
+        : scheme.errorContainer;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceMd,
+        vertical: AppTheme.spaceSm,
+      ),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+      ),
+      child: Row(
+        children: [
+          Icon(correct ? Icons.check_circle : Icons.cancel, color: color),
+          const SizedBox(width: AppTheme.spaceSm),
+          Expanded(
+            child: Text(
+              correct
+                  ? '¡Correcto!'
+                  : 'Incorrecto${correctAnswer.isNotEmpty ? " — respuesta: $correctAnswer" : ""}',
+              style: textTheme.bodyMedium?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
