@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../domain/models/onboarding_state.dart';
 import '../providers/onboarding_providers.dart';
+import '../theme/app_theme.dart';
 
 /// Deliberately simple — this only screens for obviously-malformed input
 /// (no "@", no domain), not full RFC 5322 validation. Nothing downstream
@@ -25,7 +26,9 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
     setState(() => _completing = true);
     final level = ref.read(onboardingSelectedLevelProvider);
     final targetLanguage = ref.read(onboardingSelectedLanguageProvider);
-    await ref.read(onboardingProvider.notifier).complete(
+    await ref
+        .read(onboardingProvider.notifier)
+        .complete(
           level: level,
           targetLanguage: targetLanguage,
           authMode: authMode,
@@ -48,41 +51,64 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Guarda tu progreso')),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppTheme.spaceLg),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Center(
+              child: Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: scheme.primaryContainer,
+                ),
+                child: Icon(
+                  Icons.verified_user_outlined,
+                  size: 32,
+                  color: scheme.onPrimaryContainer,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppTheme.spaceLg),
             Text(
               '¿Cómo quieres continuar?',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: textTheme.headlineSmall,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppTheme.spaceSm),
             Text(
               'Tu progreso se guarda en este dispositivo. Aún no hay cuentas '
               'reales — cuando las añadamos podrás sincronizarlo entre '
               'dispositivos.',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppTheme.spaceXl),
             FilledButton(
               onPressed: _completing ? null : _showEmailDialog,
               child: const Text('Continuar con email'),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppTheme.spaceSm),
             OutlinedButton(
               onPressed: _completing ? null : () => _complete(AuthMode.guest),
               child: const Text('Continuar como invitado'),
             ),
             if (_completing)
-              const Padding(
-                padding: EdgeInsets.only(top: 24),
-                child: Center(child: CircularProgressIndicator()),
+              Padding(
+                padding: const EdgeInsets.only(top: AppTheme.spaceLg),
+                child: Center(
+                  child: CircularProgressIndicator(color: scheme.primary),
+                ),
               ),
           ],
         ),
@@ -120,12 +146,18 @@ class _EmailDialogState extends State<_EmailDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+      ),
       title: const Text('Tu email'),
       content: TextField(
         controller: _controller,
         keyboardType: TextInputType.emailAddress,
         autofocus: true,
-        decoration: InputDecoration(hintText: 'tu@email.com', errorText: _error),
+        decoration: InputDecoration(
+          hintText: 'tu@email.com',
+          errorText: _error,
+        ),
         onChanged: (_) {
           if (_error != null) setState(() => _error = null);
         },
@@ -136,10 +168,7 @@ class _EmailDialogState extends State<_EmailDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancelar'),
         ),
-        FilledButton(
-          onPressed: _submit,
-          child: const Text('Continuar'),
-        ),
+        FilledButton(onPressed: _submit, child: const Text('Continuar')),
       ],
     );
   }
