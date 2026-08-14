@@ -25,11 +25,10 @@ supabase/
       handler_test.ts          # Deno tests, using fake verifiers (no real credentials needed)
 ```
 
-**Not done in this pass**: the Flutter app doesn't call this endpoint yet.
-`InAppPurchaseSubscriptionRepository` still grants entitlement from the local
-presence check. Wiring the client is the natural next step once this backend
-is deployed and you have real credentials to test against — see "Next step"
-below.
+The Flutter client is wired up (`src/mobile/lib/data/supabase_purchase_verifier.dart`)
+and the whole path is confirmed working end to end against the real deployed
+project — see "Status" below. The one thing genuinely missing is Google/Apple
+credentials, which only the project owner can provide.
 
 ## The security property this gives you
 
@@ -48,29 +47,38 @@ it gets nothing.
 
 ## Status
 
-**Deployed.** Project ref `nfkhnrwyekqbjxwxmctu` (org "Jordi Ribas Oficial",
-region `eu-west-3`), migration applied, `verify-purchase` is live at
-`https://nfkhnrwyekqbjxwxmctu.supabase.co/functions/v1/verify-purchase`
-with `verify_jwt = true` — confirmed rejecting unauthenticated requests.
-No Google/Apple secrets are set yet, so both platforms currently return 503
-(fails closed, as designed) until those are configured — see "Deploying"
-below.
+**Deployed and confirmed working end to end, minus store credentials.**
+Project ref `nfkhnrwyekqbjxwxmctu` (org "Jordi Ribas Oficial", region
+`eu-west-3`):
+
+- Migration applied (table, RLS, trigger — exercised against a real
+  Postgres, not just written blind).
+- `verify-purchase` live at
+  `https://nfkhnrwyekqbjxwxmctu.supabase.co/functions/v1/verify-purchase`
+  with `verify_jwt = true`.
+- Anonymous sign-ins enabled on the project
+  (`external_anonymous_users_enabled`, matches `config.toml`'s
+  `auth.enable_anonymous_sign_ins = true`).
+- Full round-trip smoke-tested for real: anonymous sign-up against
+  `/auth/v1/signup` → real session JWT → `POST verify-purchase` with that
+  JWT → `503 "Purchase verification is not configured for platform
+  android"`. That 503 is the *correct* answer today — it's the fail-closed
+  path from handler.ts, proving auth, routing, and request validation all
+  work; the only missing piece is Google/Apple credentials, which nobody
+  but the project owner can provide (see `.env.example`). Once those are
+  set, that same request starts returning real verification results.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
 
-One gap from this first deploy: it went through direct Management API calls
+One gap from this deploy: it went through direct Management API calls
 because the CLI's own network transport failed (`Transport error`, but
 `curl` to the same endpoints worked fine) — the Go CLI is fussier about
 something in this network path than curl is. `supabase link` was never run,
 so there's no local link state. If the CLI transport problem doesn't
 reproduce on your machine, `npx supabase link --project-ref
 nfkhnrwyekqbjxwxmctu` should just work and give you the normal CLI-driven
-workflow (`db push`, `functions deploy`, etc.) going forward. This also
-means `config.toml`'s project-level settings (e.g. `auth.enable_anonymous_sign_ins`)
-were never pushed — only the migration and the function were applied
-directly. Push those once linking works, before wiring up the client's
-anonymous sign-in.
+workflow (`db push`, `functions deploy`, etc.) going forward.
 
 ## Local setup
 
@@ -131,9 +139,9 @@ Response: `{ "status": "active" | "expired", "expiresAt": string | null }`.
 
 ## Next step
 
-The client isn't wired up yet. When ready: add `supabase_flutter`, sign the
-user in anonymously (`supabase.auth.signInAnonymously()` — ties in with the
-onboarding screen's existing "no real accounts yet" note, and can be upgraded
-to a real account later via identity linking), and call this function from
-`InAppPurchaseSubscriptionRepository._onPurchaseUpdate` instead of trusting
-the local presence check.
+Just credentials. Set `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME`
+and/or `APPLE_KEY_ID` / `APPLE_ISSUER_ID` / `APPLE_PRIVATE_KEY` /
+`APPLE_BUNDLE_ID` (see `.env.example`) via `npx supabase secrets set` once
+you have them from Play Console / App Store Connect, then a real purchase
+in the app will exercise the whole path — client, anonymous auth, edge
+function, store verification, entitlement — for real.
