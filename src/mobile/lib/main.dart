@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data/ads/ads_consent_manager.dart';
+import 'data/supabase_config.dart';
 import 'presentation/providers/ads_providers.dart';
 import 'presentation/providers/theme_mode_providers.dart';
 import 'presentation/router/app_router.dart';
@@ -11,6 +13,16 @@ import 'presentation/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Only used for purchase verification today (see
+  // SupabasePurchaseVerifier) — no user-facing feature depends on this yet,
+  // so unlike MobileAds below there's nothing to time-box: initialize()
+  // sets up the local client and restores a persisted session from disk,
+  // it doesn't itself make a required network call.
+  await Supabase.initialize(
+    url: SupabaseConfig.url,
+    publishableKey: SupabaseConfig.publishableKey,
+  );
 
   // google_mobile_ads has no web implementation — ads stay off there,
   // same as the subscription repository already falls back to a mock on

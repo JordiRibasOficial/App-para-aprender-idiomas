@@ -174,8 +174,12 @@ enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
 # Allow/disallow new user signups to your project.
 enable_signup = true
-# Allow/disallow anonymous sign-ins to your project.
-enable_anonymous_sign_ins = false
+# Allow/disallow anonymous sign-ins to your project. Required —
+# SupabasePurchaseVerifier signs the user in anonymously before calling
+# verify-purchase, since the app has no real accounts yet (see
+# AuthChoiceScreen). Not pushed to the live project yet — see
+# src/backend/README.md "Status".
+enable_anonymous_sign_ins = true
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
 # Passwords shorter than this value will be rejected as weak. Minimum 6, recommended 8 or more.
