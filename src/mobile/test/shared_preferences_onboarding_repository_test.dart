@@ -4,6 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_para_aprender_idiomas/data/shared_preferences_onboarding_repository.dart';
 import 'package:app_para_aprender_idiomas/domain/models/onboarding_state.dart';
 
+class _FakeSecureEmailStore implements SecureEmailStore {
+  String? _value;
+
+  @override
+  Future<String?> read() async => _value;
+
+  @override
+  Future<void> write(String value) async => _value = value;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -13,7 +23,9 @@ void main() {
 
   group('SharedPreferencesOnboardingRepository', () {
     test('load returns an incomplete state when nothing was saved', () async {
-      final repository = SharedPreferencesOnboardingRepository();
+      final repository = SharedPreferencesOnboardingRepository(
+        secureEmailStore: _FakeSecureEmailStore(),
+      );
 
       final state = await repository.load();
 
@@ -24,21 +36,35 @@ void main() {
       expect(state.email, isNull);
     });
 
-    test('complete persists the choice and load reads it back as guest', () async {
-      final repository = SharedPreferencesOnboardingRepository();
+    test(
+      'complete persists the choice and load reads it back as guest',
+      () async {
+        final repository = SharedPreferencesOnboardingRepository(
+          secureEmailStore: _FakeSecureEmailStore(),
+        );
 
-      await repository.complete(level: 'A1', targetLanguage: 'pt', authMode: AuthMode.guest);
-      final reloaded = await SharedPreferencesOnboardingRepository().load();
+        await repository.complete(
+          level: 'A1',
+          targetLanguage: 'pt',
+          authMode: AuthMode.guest,
+        );
+        final reloaded = await SharedPreferencesOnboardingRepository(
+          secureEmailStore: _FakeSecureEmailStore(),
+        ).load();
 
-      expect(reloaded.completed, isTrue);
-      expect(reloaded.selectedLevel, 'A1');
-      expect(reloaded.targetLanguage, 'pt');
-      expect(reloaded.authMode, AuthMode.guest);
-      expect(reloaded.email, isNull);
-    });
+        expect(reloaded.completed, isTrue);
+        expect(reloaded.selectedLevel, 'A1');
+        expect(reloaded.targetLanguage, 'pt');
+        expect(reloaded.authMode, AuthMode.guest);
+        expect(reloaded.email, isNull);
+      },
+    );
 
     test('complete persists the email when the auth mode is email', () async {
-      final repository = SharedPreferencesOnboardingRepository();
+      final secureEmailStore = _FakeSecureEmailStore();
+      final repository = SharedPreferencesOnboardingRepository(
+        secureEmailStore: secureEmailStore,
+      );
 
       await repository.complete(
         level: 'A1',
@@ -46,7 +72,9 @@ void main() {
         authMode: AuthMode.email,
         email: 'ana@example.com',
       );
-      final reloaded = await SharedPreferencesOnboardingRepository().load();
+      final reloaded = await SharedPreferencesOnboardingRepository(
+        secureEmailStore: secureEmailStore,
+      ).load();
 
       expect(reloaded.completed, isTrue);
       expect(reloaded.authMode, AuthMode.email);
@@ -54,23 +82,27 @@ void main() {
     });
 
     test(
-        'load tolerates an auth mode value that no longer matches a current enum name '
-        'instead of throwing', () async {
-      SharedPreferences.setMockInitialValues({
-        'onboarding_completed': true,
-        'onboarding_level': 'A1',
-        'onboarding_target_language': 'en',
-        // Simulates data written by a future/older app version whose
-        // AuthMode enum doesn't match this build's — e.g. a renamed value.
-        'onboarding_auth_mode': 'sso',
-      });
-      final repository = SharedPreferencesOnboardingRepository();
+      'load tolerates an auth mode value that no longer matches a current enum name '
+      'instead of throwing',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'onboarding_completed': true,
+          'onboarding_level': 'A1',
+          'onboarding_target_language': 'en',
+          // Simulates data written by a future/older app version whose
+          // AuthMode enum doesn't match this build's — e.g. a renamed value.
+          'onboarding_auth_mode': 'sso',
+        });
+        final repository = SharedPreferencesOnboardingRepository(
+          secureEmailStore: _FakeSecureEmailStore(),
+        );
 
-      final state = await repository.load();
+        final state = await repository.load();
 
-      expect(state.completed, isTrue);
-      expect(state.selectedLevel, 'A1');
-      expect(state.authMode, isNull);
-    });
+        expect(state.completed, isTrue);
+        expect(state.selectedLevel, 'A1');
+        expect(state.authMode, isNull);
+      },
+    );
   });
 }
