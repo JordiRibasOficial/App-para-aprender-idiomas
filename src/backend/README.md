@@ -46,12 +46,38 @@ A modified client can send whatever it wants to this endpoint; without a
 Google/Apple purchase token that those companies' own APIs recognize as real,
 it gets nothing.
 
+## Status
+
+**Deployed.** Project ref `nfkhnrwyekqbjxwxmctu` (org "Jordi Ribas Oficial",
+region `eu-west-3`), migration applied, `verify-purchase` is live at
+`https://nfkhnrwyekqbjxwxmctu.supabase.co/functions/v1/verify-purchase`
+with `verify_jwt = true` — confirmed rejecting unauthenticated requests.
+No Google/Apple secrets are set yet, so both platforms currently return 503
+(fails closed, as designed) until those are configured — see "Deploying"
+below.
+
+The database password isn't recorded anywhere in this repo; rotate/view it
+from the dashboard (Project Settings → Database) if you need it.
+
+One gap from this first deploy: it went through direct Management API calls
+because the CLI's own network transport failed (`Transport error`, but
+`curl` to the same endpoints worked fine) — the Go CLI is fussier about
+something in this network path than curl is. `supabase link` was never run,
+so there's no local link state. If the CLI transport problem doesn't
+reproduce on your machine, `npx supabase link --project-ref
+nfkhnrwyekqbjxwxmctu` should just work and give you the normal CLI-driven
+workflow (`db push`, `functions deploy`, etc.) going forward. This also
+means `config.toml`'s project-level settings (e.g. `auth.enable_anonymous_sign_ins`)
+were never pushed — only the migration and the function were applied
+directly. Push those once linking works, before wiring up the client's
+anonymous sign-in.
+
 ## Local setup
 
 ```bash
 cd src/backend
 npx supabase login
-npx supabase link --project-ref <your-project-ref>   # create a project at supabase.com first
+npx supabase link --project-ref nfkhnrwyekqbjxwxmctu
 npx supabase db push                                  # applies the subscriptions migration
 ```
 
