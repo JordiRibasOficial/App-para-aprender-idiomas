@@ -17,18 +17,24 @@ class FakeInAppPurchasePlatform extends InAppPurchasePlatform {
   final List<PurchaseDetails> completedPurchases = [];
   bool restoreCalled = false;
 
-  final _purchaseController = StreamController<List<PurchaseDetails>>.broadcast();
+  final _purchaseController =
+      StreamController<List<PurchaseDetails>>.broadcast();
 
   @override
-  Stream<List<PurchaseDetails>> get purchaseStream => _purchaseController.stream;
+  Stream<List<PurchaseDetails>> get purchaseStream =>
+      _purchaseController.stream;
 
   @override
   Future<bool> isAvailable() async => available;
 
   @override
-  Future<ProductDetailsResponse> queryProductDetails(Set<String> identifiers) async {
+  Future<ProductDetailsResponse> queryProductDetails(
+    Set<String> identifiers,
+  ) async {
     final found = products.where((p) => identifiers.contains(p.id)).toList();
-    final notFound = identifiers.where((id) => products.every((p) => p.id != id)).toList();
+    final notFound = identifiers
+        .where((id) => products.every((p) => p.id != id))
+        .toList();
     return ProductDetailsResponse(productDetails: found, notFoundIDs: notFound);
   }
 

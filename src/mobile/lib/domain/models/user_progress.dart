@@ -37,24 +37,29 @@ class UserProgress {
     final lastActivity = json['lastActivityDate'] as String?;
     return UserProgress(
       targetLanguage: json['targetLanguage'] as String,
-      completedLessonIds: (json['completedLessonIds'] as List<dynamic>? ?? const [])
-          .map((e) => e as String)
-          .toSet(),
+      completedLessonIds:
+          (json['completedLessonIds'] as List<dynamic>? ?? const [])
+              .map((e) => e as String)
+              .toSet(),
       currentStreakDays: json['currentStreakDays'] as int? ?? 0,
       totalScore: json['totalScore'] as int? ?? 0,
-      lastActivityDate: lastActivity == null ? null : DateTime.parse(lastActivity),
+      lastActivityDate: lastActivity == null
+          ? null
+          : DateTime.parse(lastActivity),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'targetLanguage': targetLanguage,
-        'completedLessonIds': completedLessonIds.toList(),
-        'currentStreakDays': currentStreakDays,
-        'totalScore': totalScore,
-        if (lastActivityDate != null) 'lastActivityDate': lastActivityDate!.toIso8601String(),
-      };
+    'targetLanguage': targetLanguage,
+    'completedLessonIds': completedLessonIds.toList(),
+    'currentStreakDays': currentStreakDays,
+    'totalScore': totalScore,
+    if (lastActivityDate != null)
+      'lastActivityDate': lastActivityDate!.toIso8601String(),
+  };
 
-  static DateTime dateOnly(DateTime value) => DateTime(value.year, value.month, value.day);
+  static DateTime dateOnly(DateTime value) =>
+      DateTime(value.year, value.month, value.day);
 
   /// Calendar-day count since the epoch, computed in UTC regardless of the
   /// input's timezone. Deliberately NOT `localDate.difference(other).inDays`
@@ -77,7 +82,8 @@ class UserProgress {
   }) {
     if (previousActivityDate == null) return 1;
 
-    final gapDays = _daysSinceEpoch(completedAt) - _daysSinceEpoch(previousActivityDate);
+    final gapDays =
+        _daysSinceEpoch(completedAt) - _daysSinceEpoch(previousActivityDate);
 
     if (gapDays == 0) return previousStreak == 0 ? 1 : previousStreak;
     if (gapDays == 1) return previousStreak + 1;

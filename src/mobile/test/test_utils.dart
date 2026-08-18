@@ -15,7 +15,9 @@ import 'package:app_para_aprender_idiomas/presentation/providers/progress_provid
 Widget appWithCompletedOnboarding() {
   return ProviderScope(
     overrides: [
-      progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
+      progressRepositoryProvider.overrideWithValue(
+        InMemoryProgressRepository(),
+      ),
       onboardingRepositoryProvider.overrideWithValue(
         InMemoryOnboardingRepository(
           initialState: const OnboardingState(

@@ -58,7 +58,12 @@ void main() {
       id: 'l1',
       title: 'Lesson 1',
       exercises: [
-        Exercise(id: 'e1', type: ExerciseType.fillBlank, prompt: 'p', correctAnswer: 'a'),
+        Exercise(
+          id: 'e1',
+          type: ExerciseType.fillBlank,
+          prompt: 'p',
+          correctAnswer: 'a',
+        ),
       ],
     );
     const unit = CourseUnit(id: 'u1', title: 'Unit 1', lessons: [lesson]);
@@ -75,9 +80,7 @@ void main() {
       sourceLanguage: 'es',
       targetLanguage: 'en',
       level: 'A1',
-      units: [
-        CourseUnit(id: 'u1', title: 'Unit 1', lessons: []),
-      ],
+      units: [CourseUnit(id: 'u1', title: 'Unit 1', lessons: [])],
     );
 
     final roundTripped = Course.fromJson(course.toJson());
@@ -89,33 +92,39 @@ void main() {
   });
 
   group('UserProgress', () {
-    test('JSON round-trip preserves every field, including lastActivityDate', () {
-      final progress = UserProgress(
-        targetLanguage: 'en',
-        completedLessonIds: const {'u1_l1', 'u1_l2'},
-        currentStreakDays: 3,
-        totalScore: 42,
-        lastActivityDate: DateTime(2026, 1, 10),
-      );
+    test(
+      'JSON round-trip preserves every field, including lastActivityDate',
+      () {
+        final progress = UserProgress(
+          targetLanguage: 'en',
+          completedLessonIds: const {'u1_l1', 'u1_l2'},
+          currentStreakDays: 3,
+          totalScore: 42,
+          lastActivityDate: DateTime(2026, 1, 10),
+        );
 
-      final roundTripped = UserProgress.fromJson(progress.toJson());
+        final roundTripped = UserProgress.fromJson(progress.toJson());
 
-      expect(roundTripped.targetLanguage, 'en');
-      expect(roundTripped.completedLessonIds, {'u1_l1', 'u1_l2'});
-      expect(roundTripped.currentStreakDays, 3);
-      expect(roundTripped.totalScore, 42);
-      expect(roundTripped.lastActivityDate, DateTime(2026, 1, 10));
-    });
+        expect(roundTripped.targetLanguage, 'en');
+        expect(roundTripped.completedLessonIds, {'u1_l1', 'u1_l2'});
+        expect(roundTripped.currentStreakDays, 3);
+        expect(roundTripped.totalScore, 42);
+        expect(roundTripped.lastActivityDate, DateTime(2026, 1, 10));
+      },
+    );
 
-    test('toJson omits lastActivityDate when null, fromJson tolerates that', () {
-      const progress = UserProgress(targetLanguage: 'en');
+    test(
+      'toJson omits lastActivityDate when null, fromJson tolerates that',
+      () {
+        const progress = UserProgress(targetLanguage: 'en');
 
-      final json = progress.toJson();
-      expect(json.containsKey('lastActivityDate'), isFalse);
+        final json = progress.toJson();
+        expect(json.containsKey('lastActivityDate'), isFalse);
 
-      final roundTripped = UserProgress.fromJson(json);
-      expect(roundTripped.lastActivityDate, isNull);
-    });
+        final roundTripped = UserProgress.fromJson(json);
+        expect(roundTripped.lastActivityDate, isNull);
+      },
+    );
 
     test('copyWith only overrides the fields passed', () {
       const progress = UserProgress(targetLanguage: 'en', totalScore: 10);
@@ -127,15 +136,18 @@ void main() {
       expect(updated.currentStreakDays, progress.currentStreakDays);
     });
 
-    test('nextStreak treats a corrupt 0 previous streak on the same day as 1', () {
-      final streak = UserProgress.nextStreak(
-        previousActivityDate: DateTime(2026, 1, 10),
-        completedAt: DateTime(2026, 1, 10),
-        previousStreak: 0,
-      );
+    test(
+      'nextStreak treats a corrupt 0 previous streak on the same day as 1',
+      () {
+        final streak = UserProgress.nextStreak(
+          previousActivityDate: DateTime(2026, 1, 10),
+          completedAt: DateTime(2026, 1, 10),
+          previousStreak: 0,
+        );
 
-      expect(streak, 1);
-    });
+        expect(streak, 1);
+      },
+    );
 
     // nextStreak computes the gap via UTC calendar-day arithmetic
     // (_daysSinceEpoch), not DateTime.difference().inDays on local

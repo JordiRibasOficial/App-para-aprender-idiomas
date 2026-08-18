@@ -28,7 +28,9 @@ void main() {
   // A fresh temp dir (and therefore a fresh database file) per test keeps
   // tests isolated from each other.
   setUp(() async {
-    final tempDir = await Directory.systemTemp.createTemp('progress_repository_test');
+    final tempDir = await Directory.systemTemp.createTemp(
+      'progress_repository_test',
+    );
     PathProviderPlatform.instance = _FakePathProviderPlatform(tempDir.path);
   });
 
@@ -44,26 +46,29 @@ void main() {
       expect(progress.currentStreakDays, 0);
     });
 
-    test('recordLessonCompletion persists across repository instances', () async {
-      final repository = SqliteProgressRepository();
+    test(
+      'recordLessonCompletion persists across repository instances',
+      () async {
+        final repository = SqliteProgressRepository();
 
-      await repository.recordLessonCompletion(
-        targetLanguage: 'en',
-        lessonId: 'u1_l1',
-        score: 5,
-        completedAt: DateTime(2026, 1, 10),
-      );
-      final updated = await repository.recordLessonCompletion(
-        targetLanguage: 'en',
-        lessonId: 'u1_l2',
-        score: 4,
-        completedAt: DateTime(2026, 1, 11),
-      );
+        await repository.recordLessonCompletion(
+          targetLanguage: 'en',
+          lessonId: 'u1_l1',
+          score: 5,
+          completedAt: DateTime(2026, 1, 10),
+        );
+        final updated = await repository.recordLessonCompletion(
+          targetLanguage: 'en',
+          lessonId: 'u1_l2',
+          score: 4,
+          completedAt: DateTime(2026, 1, 11),
+        );
 
-      expect(updated.completedLessonIds, {'u1_l1', 'u1_l2'});
-      expect(updated.totalScore, 9);
-      expect(updated.currentStreakDays, 2);
-    });
+        expect(updated.completedLessonIds, {'u1_l1', 'u1_l2'});
+        expect(updated.totalScore, 9);
+        expect(updated.currentStreakDays, 2);
+      },
+    );
 
     test('does not mix progress between different target languages', () async {
       final repository = SqliteProgressRepository();

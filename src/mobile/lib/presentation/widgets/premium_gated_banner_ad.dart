@@ -15,7 +15,8 @@ class PremiumGatedBannerAd extends ConsumerStatefulWidget {
   const PremiumGatedBannerAd({super.key});
 
   @override
-  ConsumerState<PremiumGatedBannerAd> createState() => _PremiumGatedBannerAdState();
+  ConsumerState<PremiumGatedBannerAd> createState() =>
+      _PremiumGatedBannerAdState();
 }
 
 class _PremiumGatedBannerAdState extends ConsumerState<PremiumGatedBannerAd> {
@@ -60,7 +61,7 @@ class _PremiumGatedBannerAdState extends ConsumerState<PremiumGatedBannerAd> {
     final adsEnabled = ref.watch(adsEnabledProvider);
     if (!adsEnabled) return const SizedBox.shrink();
 
-    final isPremium = ref.watch(entitlementProvider).value?.isActive ?? false;
+    final entitlement = ref.watch(entitlementProvider);
 
     ref.listen(entitlementProvider, (previous, next) {
       final active = next.value?.isActive ?? false;
@@ -69,7 +70,22 @@ class _PremiumGatedBannerAdState extends ConsumerState<PremiumGatedBannerAd> {
       }
     });
 
-    if (isPremium) return const SizedBox.shrink();
+    // Until entitlementStream delivers its first value, treat "don't know
+    // yet" the same as Premium: never request or flash an ad for a user
+    // who may turn out to be Premium a moment later. This also keeps a
+    // Premium user's build from ever reaching adsInitializedProvider below
+    // (and touching the real ads SDK) — before this check existed, a
+    // Premium user's very first build (still loading) fell through the
+    // old `.value?.isActive ?? false` unwrap as `false` and reached
+    // _loadAd() for one frame.
+    if (!entitlement.hasValue) return const SizedBox.shrink();
+    if (entitlement.value!.isActive) return const SizedBox.shrink();
+
+    // Gates the one call that touches the real ads SDK (_loadAd, below) on
+    // consent + MobileAds init actually being done — see
+    // adsInitializedProvider.
+    final adsReady = ref.watch(adsInitializedProvider).value ?? false;
+    if (!adsReady) return const SizedBox.shrink();
 
     _loadAd();
 

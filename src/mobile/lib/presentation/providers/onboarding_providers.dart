@@ -31,9 +31,10 @@ class OnboardingNotifier extends AsyncNotifier<OnboardingState> {
   }
 }
 
-final onboardingProvider = AsyncNotifierProvider<OnboardingNotifier, OnboardingState>(
-  OnboardingNotifier.new,
-);
+final onboardingProvider =
+    AsyncNotifierProvider<OnboardingNotifier, OnboardingState>(
+      OnboardingNotifier.new,
+    );
 
 /// Transient selection made on the level screen, read by the auth-choice
 /// screen when it calls [OnboardingNotifier.complete].
@@ -44,9 +45,8 @@ class SelectedLevelNotifier extends Notifier<String> {
   void select(String level) => state = level;
 }
 
-final onboardingSelectedLevelProvider = NotifierProvider<SelectedLevelNotifier, String>(
-  SelectedLevelNotifier.new,
-);
+final onboardingSelectedLevelProvider =
+    NotifierProvider<SelectedLevelNotifier, String>(SelectedLevelNotifier.new);
 
 /// Transient selection made on the language screen, read by the auth-choice
 /// screen when it calls [OnboardingNotifier.complete].
@@ -57,6 +57,7 @@ class SelectedLanguageNotifier extends Notifier<String> {
   void select(String targetLanguage) => state = targetLanguage;
 }
 
-final onboardingSelectedLanguageProvider = NotifierProvider<SelectedLanguageNotifier, String>(
-  SelectedLanguageNotifier.new,
-);
+final onboardingSelectedLanguageProvider =
+    NotifierProvider<SelectedLanguageNotifier, String>(
+      SelectedLanguageNotifier.new,
+    );

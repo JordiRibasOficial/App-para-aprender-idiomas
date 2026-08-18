@@ -15,7 +15,8 @@ class RootScreen extends ConsumerWidget {
     final onboardingAsync = ref.watch(onboardingProvider);
 
     return onboardingAsync.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stackTrace) => Scaffold(
         body: Center(child: Text('No se pudo iniciar la app: $error')),
       ),

@@ -41,7 +41,10 @@ void main() {
       );
 
       expect(exercise.isCorrect({'Hola': 'Hello', 'Adiós': 'Goodbye'}), isTrue);
-      expect(exercise.isCorrect({'Hola': 'Goodbye', 'Adiós': 'Hello'}), isFalse);
+      expect(
+        exercise.isCorrect({'Hola': 'Goodbye', 'Adiós': 'Hello'}),
+        isFalse,
+      );
       expect(exercise.isCorrect({'Hola': 'Hello'}), isFalse);
     });
   });

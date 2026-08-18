@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_utils.dart';
 
 void main() {
-  testWidgets('App boots and shows the lesson list', (WidgetTester tester) async {
+  testWidgets('App boots and shows the lesson list', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(appWithCompletedOnboarding());
     await tester.pumpAndSettle();
 

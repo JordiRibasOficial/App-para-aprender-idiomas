@@ -14,7 +14,10 @@ class ProgressBar extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: LinearProgressIndicator(value: value.clamp(0.0, 1.0), minHeight: 8),
+          child: LinearProgressIndicator(
+            value: value.clamp(0.0, 1.0),
+            minHeight: 8,
+          ),
         ),
         if (label != null) ...[
           const SizedBox(height: 4),

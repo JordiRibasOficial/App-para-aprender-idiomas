@@ -9,7 +9,8 @@ class InMemoryProgressRepository implements ProgressRepository {
 
   @override
   Future<UserProgress> load(String targetLanguage) async {
-    return _byLanguage[targetLanguage] ?? UserProgress(targetLanguage: targetLanguage);
+    return _byLanguage[targetLanguage] ??
+        UserProgress(targetLanguage: targetLanguage);
   }
 
   @override

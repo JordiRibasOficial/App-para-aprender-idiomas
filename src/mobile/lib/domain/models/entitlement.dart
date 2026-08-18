@@ -4,7 +4,10 @@ enum EntitlementStatus { none, active }
 /// verification and the source-of-truth question ("active per which store")
 /// land in Paso 9 — this is just the shape the UI reacts to.
 class Entitlement {
-  const Entitlement({this.status = EntitlementStatus.none, this.activeProductId});
+  const Entitlement({
+    this.status = EntitlementStatus.none,
+    this.activeProductId,
+  });
 
   final EntitlementStatus status;
   final String? activeProductId;

@@ -3,8 +3,9 @@ import '../domain/repositories/onboarding_repository.dart';
 
 /// Session-only [OnboardingRepository] used in tests and widget previews.
 class InMemoryOnboardingRepository implements OnboardingRepository {
-  InMemoryOnboardingRepository({OnboardingState initialState = const OnboardingState()})
-      : _state = initialState;
+  InMemoryOnboardingRepository({
+    OnboardingState initialState = const OnboardingState(),
+  }) : _state = initialState;
 
   OnboardingState _state;
 

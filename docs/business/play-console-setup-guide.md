@@ -88,7 +88,7 @@ La app ya integra Google AdMob (banner discreto, solo para usuarios sin Premium 
 
 **Play Console → Pruebas → Pruebas internas → Crear versión nueva**
 
-Sube el `.aab` (lo genera `flutter build appbundle --release`, ya verificado que compila limpio en CI) a este track primero. Te permite:
+Sube el `.aab` (generado con `flutter build appbundle --release --obfuscate --split-debug-info=build/debug-info` — el nombre de clases/miembros Dart queda ofuscado en el binario público; guarda la carpeta `build/debug-info` fuera del repo, hace falta para poder leer los stack traces de crashes reales más adelante) a este track primero. Te permite:
 - Probar compras reales de suscripción con tarjetas de prueba, sin cobro real
 - Añadir tu propio email como probador y confirmar el flujo completo de principio a fin
 - Detectar cualquier problema de configuración de la ficha antes de exponerla al público

@@ -22,8 +22,8 @@ class Lesson {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'exercises': exercises.map((e) => e.toJson()).toList(),
-      };
+    'id': id,
+    'title': title,
+    'exercises': exercises.map((e) => e.toJson()).toList(),
+  };
 }

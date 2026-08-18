@@ -1,0 +1,80 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../domain/repositories/purchase_verifier.dart';
+
+/// Thrown when the verify-purchase call can't be completed — network
+/// failure, a non-2xx response, or a malformed body. The caller (see
+/// [InAppPurchaseSubscriptionRepository]) treats this the same as a
+/// negative verification result: never grant entitlement on an error.
+class PurchaseVerificationException implements Exception {
+  const PurchaseVerificationException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+/// Calls the `verify-purchase` Supabase Edge Function — see
+/// src/backend/README.md for what it does server-side. Signs the user in
+/// anonymously if there's no session yet: this app has no real accounts
+/// (see AuthChoiceScreen), so an anonymous Supabase identity is enough to
+/// tie a purchase to a device and is upgradable later via identity linking.
+class SupabasePurchaseVerifier implements PurchaseVerifier {
+  const SupabasePurchaseVerifier(this._client);
+
+  final SupabaseClient _client;
+
+  @override
+  Future<PurchaseVerificationResult> verify({
+    required String platform,
+    required String productId,
+    required String purchaseToken,
+  }) async {
+    final accessToken = await _ensureSignedIn();
+
+    final FunctionResponse response;
+    try {
+      response = await _client.functions.invoke(
+        'verify-purchase',
+        headers: {'Authorization': 'Bearer $accessToken'},
+        body: {
+          'platform': platform,
+          'productId': productId,
+          'purchaseToken': purchaseToken,
+        },
+      );
+    } on FunctionException catch (e) {
+      throw PurchaseVerificationException(
+        'verify-purchase respondió ${e.status}: ${e.details}',
+      );
+    }
+
+    final data = response.data;
+    if (data is! Map<String, dynamic>) {
+      throw const PurchaseVerificationException(
+        'verify-purchase devolvió una respuesta con formato inesperado.',
+      );
+    }
+
+    final expiresAtRaw = data['expiresAt'];
+    return PurchaseVerificationResult(
+      isActive: data['status'] == 'active',
+      expiresAt: expiresAtRaw is String ? DateTime.parse(expiresAtRaw) : null,
+    );
+  }
+
+  Future<String> _ensureSignedIn() async {
+    final currentSession = _client.auth.currentSession;
+    if (currentSession != null) return currentSession.accessToken;
+
+    final response = await _client.auth.signInAnonymously();
+    final session = response.session;
+    if (session == null) {
+      throw const PurchaseVerificationException(
+        'No se pudo iniciar sesión anónima con Supabase.',
+      );
+    }
+    return session.accessToken;
+  }
+}

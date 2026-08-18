@@ -21,7 +21,8 @@ class MockSubscriptionRepository implements SubscriptionRepository {
   bool simulateFailure = false;
 
   @override
-  Future<List<SubscriptionPlan>> loadPlans() async => SubscriptionPlan.placeholderPlans;
+  Future<List<SubscriptionPlan>> loadPlans() async =>
+      SubscriptionPlan.placeholderPlans;
 
   @override
   Stream<Entitlement> get entitlementStream => _controller.stream;
@@ -34,11 +35,16 @@ class MockSubscriptionRepository implements SubscriptionRepository {
     await Future<void>.delayed(const Duration(milliseconds: 300));
 
     if (simulateFailure) {
-      _errorController.add('No se pudo completar la compra de ${plan.productId}.');
+      _errorController.add(
+        'No se pudo completar la compra de ${plan.productId}.',
+      );
       return;
     }
 
-    _current = Entitlement(status: EntitlementStatus.active, activeProductId: plan.productId);
+    _current = Entitlement(
+      status: EntitlementStatus.active,
+      activeProductId: plan.productId,
+    );
     _controller.add(_current);
   }
 
