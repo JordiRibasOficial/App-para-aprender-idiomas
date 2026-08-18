@@ -33,6 +33,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pub-
 
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('src/mobile/android/**/*.gradle*', 'src/mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - run: flutter pub get
 
       - name: Enable KVM
@@ -57,9 +67,15 @@ jobs:
           # input, which CI never provides — the timeout kills it once the
           # file is already on disk, so `|| true` turns that expected kill
           # into a non-failure instead of failing the step.
+          # 420s (not 120s): a cold `assembleProfile` with an empty Gradle
+          # cache didn't even finish within 120s on a real run here — it
+          # was still building when the timeout fired, so start_up_info.json
+          # never got written and the subsequent `cat` failed the step.
+          # The Gradle cache above makes every run after the first one on a
+          # given runner-cache generation much faster than this ceiling.
           script: >
             cd src/mobile &&
-            (timeout 120 flutter run --profile --trace-startup -d emulator-5554 || true) &&
+            (timeout 420 flutter run --profile --trace-startup -d emulator-5554 || true) &&
             cat build/start_up_info.json
 
       - name: Upload startup trace
