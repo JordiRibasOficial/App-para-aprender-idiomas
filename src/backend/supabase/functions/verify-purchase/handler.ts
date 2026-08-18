@@ -76,10 +76,13 @@ export async function handleVerifyPurchase(req: Request, deps: HandlerDeps): Pro
   try {
     result = await verifier.verify(input);
   } catch (error) {
-    return jsonResponse(
-      { error: "Verification request to the store failed", detail: String(error) },
-      502,
-    );
+    // The caught error's message includes Google/Apple's raw API response
+    // (see google_play.ts/apple.ts) — useful for debugging, not for the
+    // client. Log it server-side (visible via `supabase functions logs` /
+    // the Dashboard) and return a generic message instead of forwarding
+    // upstream internals to whoever is calling this endpoint.
+    console.error("verify-purchase: store verification call failed", error);
+    return jsonResponse({ error: "Verification request to the store failed" }, 502);
   }
 
   const status = result.isActive ? "active" : "expired";

@@ -117,6 +117,29 @@ Deno.test(
   },
 );
 
+Deno.test(
+  "a verifier error is surfaced as 502 without leaking the upstream error detail to the client",
+  async () => {
+    const { deps, upserts } = buildDeps({
+      verifiers: {
+        android: new FakeVerifier(
+          undefined,
+          new Error("Google Play verification failed: 401 {\"error\":\"invalid_grant\",\"secret_hint\":\"abc\"}"),
+        ),
+      },
+    });
+    const response = await handleVerifyPurchase(
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+      deps,
+    );
+    const body = await response.json();
+
+    assertEquals(response.status, 502);
+    assertEquals(upserts.length, 0);
+    assertEquals(body, { error: "Verification request to the store failed" });
+  },
+);
+
 Deno.test("a verifier error is surfaced as 502 and grants nothing", async () => {
   const { deps, upserts } = buildDeps({
     verifiers: { android: new FakeVerifier(undefined, new Error("network down")) },
