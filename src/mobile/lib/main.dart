@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'data/ads/ads_consent_manager.dart';
 import 'data/supabase_config.dart';
 import 'presentation/providers/ads_providers.dart';
 import 'presentation/providers/theme_mode_providers.dart';
@@ -16,7 +14,7 @@ Future<void> main() async {
 
   // Only used for purchase verification today (see
   // SupabasePurchaseVerifier) — no user-facing feature depends on this yet,
-  // so unlike MobileAds below there's nothing to time-box: initialize()
+  // so unlike ads init below there's nothing to time-box: initialize()
   // sets up the local client and restores a persisted session from disk,
   // it doesn't itself make a required network call.
   await Supabase.initialize(
@@ -27,21 +25,19 @@ Future<void> main() async {
   // google_mobile_ads has no web implementation — ads stay off there,
   // same as the subscription repository already falls back to a mock on
   // web (see subscription_providers.dart).
+  //
+  // Consent gathering + MobileAds.instance.initialize() used to be awaited
+  // right here — two sequential network calls to Google, each with its own
+  // 5s worst-case timeout (see adsInitializedProvider). A real cold-start
+  // measurement on a KVM-accelerated Android emulator
+  // (measure-startup.yml) showed ~3.7s of the ~4.1s time-to-first-frame
+  // happening *after* the Flutter framework itself was already
+  // initialized — i.e. spent sitting in this function, not building the
+  // first frame. Nothing about the first frame actually depends on ads
+  // being ready (PremiumGatedBannerAd already gates its own ad load on
+  // adsInitializedProvider), so that work now runs in the background
+  // instead of blocking runApp().
   final adsEnabled = !kIsWeb;
-  if (adsEnabled) {
-    await AdsConsentManager.gatherConsent();
-    // Unlike gatherConsent() above, MobileAds.instance.initialize() has no
-    // built-in timeout — if Google's ad servers are slow or unreachable
-    // (observed intermittently on the iOS Simulator in CI), this Future
-    // never completes, main() never returns, and runApp() never runs, so
-    // nothing — not even a test harness — ever gets a first frame. Same
-    // fallback rationale as gatherConsent(): ad requests proceed
-    // uninitialized this launch rather than blocking startup forever.
-    await MobileAds.instance.initialize().timeout(
-      const Duration(seconds: 5),
-      onTimeout: () => InitializationStatus(const {}),
-    );
-  }
 
   runApp(
     ProviderScope(
