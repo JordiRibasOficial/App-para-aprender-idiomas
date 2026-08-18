@@ -26,6 +26,7 @@ function buildDeps(overrides: Partial<HandlerDeps> = {}): {
   const upserts: SubscriptionUpsert[] = [];
   const deps: HandlerDeps = {
     getUserId: (authHeader) => Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    isRateLimited: () => Promise.resolve(false),
     verifiers: { android: new FakeVerifier() } as Partial<Record<Platform, PurchaseVerifier>>,
     upsertSubscription: (row) => {
       upserts.push(row);
@@ -56,6 +57,20 @@ Deno.test("rejects requests without a valid auth token, without writing anything
   assertEquals(response.status, 401);
   assertEquals(upserts.length, 0);
 });
+
+Deno.test(
+  "rejects a rate-limited caller with 429, without calling the verifier or writing anything",
+  async () => {
+    const { deps, upserts } = buildDeps({ isRateLimited: () => Promise.resolve(true) });
+    const response = await handleVerifyPurchase(
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+      deps,
+    );
+
+    assertEquals(response.status, 429);
+    assertEquals(upserts.length, 0);
+  },
+);
 
 Deno.test("rejects a malformed body", async () => {
   const { deps, upserts } = buildDeps();

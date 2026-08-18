@@ -12,7 +12,8 @@ entitlement record the app should eventually trust.
 ```
 supabase/
   migrations/
-    ..._create_subscriptions_table.sql   # entitlement table, RLS: clients read-only
+    ..._create_subscriptions_table.sql          # entitlement table, RLS: clients read-only
+    ..._create_verify_purchase_attempts_table.sql # rate-limit log, RLS: no client access at all
   functions/
     verify-purchase/
       index.ts        # Deno.serve entrypoint — wires real Supabase/Google/Apple clients
@@ -35,6 +36,9 @@ credentials, which only the project owner can provide.
 `handler.ts` is written to fail closed everywhere:
 
 - No auth token → 401, nothing written.
+- More than 20 verification attempts from the same user in 10 minutes →
+  429, nothing written (see `verify_purchase_attempts` — logged regardless
+  of outcome, so it also covers repeated failed/rejected attempts).
 - Malformed request → 400, nothing written.
 - Platform has no verifier configured (missing secrets) → 503, nothing written.
 - The store's API call fails → 502, nothing written.

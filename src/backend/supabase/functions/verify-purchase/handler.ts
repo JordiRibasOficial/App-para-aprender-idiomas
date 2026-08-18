@@ -4,6 +4,12 @@ import type { Platform, PurchaseVerifier, SubscriptionUpsert } from "./types.ts"
 export interface HandlerDeps {
   /** Resolves the caller's user id from the request's Authorization header, or null if unauthenticated. */
   getUserId(authHeader: string | null): Promise<string | null>;
+  /**
+   * Records this call as a verification attempt for `userId` and reports
+   * whether they've exceeded the allowed rate — true means reject with 429.
+   * Called once per request, after auth succeeds, before any store call.
+   */
+  isRateLimited(userId: string): Promise<boolean>;
   /** One verifier per platform. A missing entry means that platform isn't configured yet. */
   verifiers: Partial<Record<Platform, PurchaseVerifier>>;
   upsertSubscription(row: SubscriptionUpsert): Promise<void>;
@@ -36,6 +42,13 @@ export async function handleVerifyPurchase(req: Request, deps: HandlerDeps): Pro
   const userId = await deps.getUserId(req.headers.get("Authorization"));
   if (!userId) {
     return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+
+  if (await deps.isRateLimited(userId)) {
+    return jsonResponse(
+      { error: "Too many verification attempts. Try again later." },
+      429,
+    );
   }
 
   let body: unknown;

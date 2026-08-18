@@ -30,6 +30,32 @@ async function getUserId(authHeader: string | null): Promise<string | null> {
   return data.user.id;
 }
 
+// Generous enough for legitimate use (purchase, restore, retries after a
+// flaky network) while stopping a script from hammering this endpoint —
+// each call here is a real Google/Apple API request with its own quota
+// and cost. Tune by watching verify_purchase_attempts volume in prod.
+const RATE_LIMIT_MAX_ATTEMPTS = 20;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+
+async function isRateLimited(userId: string): Promise<boolean> {
+  const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+  const { count, error } = await admin
+    .from("verify_purchase_attempts")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .gte("created_at", windowStart);
+  if (error) throw new Error(`Rate limit check failed: ${error.message}`);
+  if ((count ?? 0) >= RATE_LIMIT_MAX_ATTEMPTS) return true;
+
+  const { error: insertError } = await admin
+    .from("verify_purchase_attempts")
+    .insert({ user_id: userId });
+  if (insertError) {
+    throw new Error(`Failed to record verification attempt: ${insertError.message}`);
+  }
+  return false;
+}
+
 async function upsertSubscription(row: SubscriptionUpsert): Promise<void> {
   const { error } = await admin.from("subscriptions").upsert(
     {
@@ -81,6 +107,7 @@ function buildVerifiers(): Partial<Record<Platform, PurchaseVerifier>> {
 
 const deps: HandlerDeps = {
   getUserId,
+  isRateLimited,
   verifiers: buildVerifiers(),
   upsertSubscription,
 };
