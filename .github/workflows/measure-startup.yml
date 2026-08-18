@@ -1,0 +1,72 @@
+name: Measure Android startup time
+
+# Manual only — diagnostic measurement, not a required gate. Reuses the
+# same KVM-accelerated emulator setup already proven in mobile-ci.yml's
+# integration-test-android job.
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.44.8'
+
+defaults:
+  run:
+    working-directory: src/mobile
+
+jobs:
+  measure-startup-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - run: flutter pub get
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Measure cold start on a real (KVM-accelerated) Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          # Single shell invocation, same reason as store-screenshots.yml's
+          # script (this action runs each script line as its own `sh -c`,
+          # so a `cd` on its own line doesn't carry over).
+          # --trace-startup writes build/start_up_info.json once the first
+          # frame is up; `flutter run` then stays attached waiting for
+          # input, which CI never provides — the timeout kills it once the
+          # file is already on disk, so `|| true` turns that expected kill
+          # into a non-failure instead of failing the step.
+          script: >
+            cd src/mobile &&
+            (timeout 120 flutter run --profile --trace-startup -d emulator-5554 || true) &&
+            cat build/start_up_info.json
+
+      - name: Upload startup trace
+        uses: actions/upload-artifact@v4
+        with:
+          name: start-up-info
+          path: |
+            src/mobile/build/start_up_info.json
+            src/mobile/build/start_up_timeline.json
+          if-no-files-found: error
