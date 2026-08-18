@@ -1,6 +1,9 @@
 import type { PurchaseVerifier, VerificationResult, VerifyPurchaseInput } from "./types.ts";
 import { decodeJwsPayloadUnverified, importPkcs8Key, signJwt } from "./jwt.ts";
 
+// See google_play.ts's FETCH_TIMEOUT_MS doc comment — same reasoning here.
+const FETCH_TIMEOUT_MS = 10_000;
+
 export interface AppleCredentials {
   keyId: string;
   issuerId: string;
@@ -65,7 +68,7 @@ export class AppleVerifier implements PurchaseVerifier {
     // so it's encoded here to keep it confined to its path segment.
     const response = await fetch(
       `${base}/inApps/v1/transactions/${encodeURIComponent(input.purchaseToken)}`,
-      { headers: { Authorization: `Bearer ${token}` } },
+      { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) },
     );
     if (!response.ok) {
       throw new Error(`Apple verification failed: ${response.status} ${await response.text()}`);

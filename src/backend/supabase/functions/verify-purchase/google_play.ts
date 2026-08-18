@@ -1,6 +1,12 @@
 import type { PurchaseVerifier, VerificationResult, VerifyPurchaseInput } from "./types.ts";
 import { importPkcs8Key, signJwt } from "./jwt.ts";
 
+// Deno's fetch has no default timeout — an outbound call that hangs would
+// otherwise hold the invocation open until the platform's own function
+// timeout kills it, wasting a rate-limit slot and leaving the mobile app
+// waiting far longer than necessary for what should be a quick check.
+const FETCH_TIMEOUT_MS = 10_000;
+
 export interface GoogleServiceAccount {
   client_email: string;
   private_key: string;
@@ -32,6 +38,7 @@ async function getAccessToken(serviceAccount: GoogleServiceAccount): Promise<str
       grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
       assertion,
     }),
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
   if (!response.ok) {
     throw new Error(
@@ -68,7 +75,10 @@ export class GooglePlayVerifier implements PurchaseVerifier {
     const url = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/` +
       `${encodeURIComponent(this.packageName)}/purchases/subscriptions/` +
       `${encodeURIComponent(input.productId)}/tokens/${encodeURIComponent(input.purchaseToken)}`;
-    const response = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
     if (!response.ok) {
       throw new Error(`Google Play verification failed: ${response.status} ${await response.text()}`);
     }
