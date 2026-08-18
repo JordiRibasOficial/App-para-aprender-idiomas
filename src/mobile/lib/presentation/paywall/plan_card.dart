@@ -25,62 +25,79 @@ class PlanCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Material(
-      color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-      child: InkWell(
+    final label = savingsRatio != null && savingsRatio! > 0
+        ? '${plan.title}, ${plan.formattedPrice}, ahorras ${(savingsRatio! * 100).round()}%'
+        : '${plan.title}, ${plan.formattedPrice}';
+
+    return Semantics(
+      button: true,
+      inMutuallyExclusiveGroup: true,
+      selected: selected,
+      // Without excludeSemantics, the title/price/badge Text children below
+      // merge their own labels into this node, so screen readers would
+      // narrate "Mensual, €14.99. Mensual. €14.99." — the explicit label
+      // already says everything needed once.
+      excludeSemantics: true,
+      onTap: onTap,
+      label: label,
+      child: Material(
+        color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(AppTheme.spaceMd),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-            border: Border.all(
-              color: selected ? scheme.primary : Colors.transparent,
-              width: 2,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                selected
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-                color: selected ? scheme.primary : scheme.outline,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+          onTap: onTap,
+          excludeFromSemantics: true,
+          child: Container(
+            padding: const EdgeInsets.all(AppTheme.spaceMd),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+              border: Border.all(
+                color: selected ? scheme.primary : Colors.transparent,
+                width: 2,
               ),
-              const SizedBox(width: AppTheme.spaceMd),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(plan.title, style: textTheme.titleMedium),
-                    Text(
-                      plan.formattedPrice,
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  selected
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  color: selected ? scheme.primary : scheme.outline,
+                ),
+                const SizedBox(width: AppTheme.spaceMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(plan.title, style: textTheme.titleMedium),
+                      Text(
+                        plan.formattedPrice,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (savingsRatio != null && savingsRatio! > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppTheme.spaceSm,
+                      vertical: AppTheme.spaceXs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: scheme.tertiaryContainer,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+                    ),
+                    child: Text(
+                      '-${(savingsRatio! * 100).round()}%',
+                      style: textTheme.labelMedium?.copyWith(
+                        color: scheme.onTertiaryContainer,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              if (savingsRatio != null && savingsRatio! > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spaceSm,
-                    vertical: AppTheme.spaceXs,
                   ),
-                  decoration: BoxDecoration(
-                    color: scheme.tertiaryContainer,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSm),
-                  ),
-                  child: Text(
-                    '-${(savingsRatio! * 100).round()}%',
-                    style: textTheme.labelMedium?.copyWith(
-                      color: scheme.onTertiaryContainer,
-                    ),
-                  ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
