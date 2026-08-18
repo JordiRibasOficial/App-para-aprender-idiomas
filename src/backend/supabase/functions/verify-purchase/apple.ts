@@ -60,10 +60,13 @@ export class AppleVerifier implements PurchaseVerifier {
     const base = this.credentials.environment === "production"
       ? "https://api.storekit.itunes.apple.com"
       : "https://api.storekit-sandbox.itunes.apple.com";
-    // `purchaseToken` carries the App Store transaction id for iOS inputs.
-    const response = await fetch(`${base}/inApps/v1/transactions/${input.purchaseToken}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    // `purchaseToken` carries the App Store transaction id for iOS inputs —
+    // validated by VerifyPurchaseInputSchema but still untrusted wire input,
+    // so it's encoded here to keep it confined to its path segment.
+    const response = await fetch(
+      `${base}/inApps/v1/transactions/${encodeURIComponent(input.purchaseToken)}`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
     if (!response.ok) {
       throw new Error(`Apple verification failed: ${response.status} ${await response.text()}`);
     }

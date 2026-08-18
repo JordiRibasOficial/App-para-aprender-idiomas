@@ -49,7 +49,7 @@ function request(body: unknown, authHeader: string | null = "Bearer valid-token"
 Deno.test("rejects requests without a valid auth token, without writing anything", async () => {
   const { deps, upserts } = buildDeps();
   const response = await handleVerifyPurchase(
-    request({ platform: "android", productId: "premium_annual", purchaseToken: "tok" }, null),
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }, null),
     deps,
   );
 
@@ -69,11 +69,31 @@ Deno.test("rejects a malformed body", async () => {
 });
 
 Deno.test(
+  "rejects a productId outside the known whitelist, without calling the verifier",
+  async () => {
+    const { deps, upserts } = buildDeps();
+    const response = await handleVerifyPurchase(
+      request({
+        platform: "android",
+        // Path-injection attempt: this must never reach the outbound
+        // Google/Apple request URL in google_play.ts/apple.ts.
+        productId: "../../edits",
+        purchaseToken: "tok",
+      }),
+      deps,
+    );
+
+    assertEquals(response.status, 400);
+    assertEquals(upserts.length, 0);
+  },
+);
+
+Deno.test(
   "fails closed with 503 and writes nothing when the platform has no configured verifier",
   async () => {
     const { deps, upserts } = buildDeps();
     const response = await handleVerifyPurchase(
-      request({ platform: "ios", productId: "premium_annual", purchaseToken: "tok" }),
+      request({ platform: "ios", productId: "annual_sub", purchaseToken: "tok" }),
       deps,
     );
 
@@ -87,7 +107,7 @@ Deno.test("a verifier error is surfaced as 502 and grants nothing", async () => 
     verifiers: { android: new FakeVerifier(undefined, new Error("network down")) },
   });
   const response = await handleVerifyPurchase(
-    request({ platform: "android", productId: "premium_annual", purchaseToken: "tok" }),
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
     deps,
   );
 
@@ -98,7 +118,7 @@ Deno.test("a verifier error is surfaced as 502 and grants nothing", async () => 
 Deno.test("a positive verification persists an active subscription for the caller", async () => {
   const { deps, upserts } = buildDeps();
   const response = await handleVerifyPurchase(
-    request({ platform: "android", productId: "premium_annual", purchaseToken: "tok-abc" }),
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok-abc" }),
     deps,
   );
 
@@ -109,7 +129,7 @@ Deno.test("a positive verification persists an active subscription for the calle
   assertEquals(upserts[0], {
     userId: "user-1",
     platform: "android",
-    productId: "premium_annual",
+    productId: "annual_sub",
     storeTransactionId: "tok-abc",
     status: "active",
     expiresAt: "2030-01-01T00:00:00.000Z",
@@ -122,7 +142,7 @@ Deno.test("an expired purchase is persisted as expired, not active", async () =>
     verifiers: { android: new FakeVerifier({ isActive: false, expiresAt: null }) },
   });
   const response = await handleVerifyPurchase(
-    request({ platform: "android", productId: "premium_annual", purchaseToken: "tok" }),
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
     deps,
   );
 

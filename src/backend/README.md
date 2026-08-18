@@ -129,7 +129,7 @@ Content-Type: application/json
 
 {
   "platform": "android" | "ios",
-  "productId": "premium_monthly" | "premium_annual",
+  "productId": "monthly_sub" | "annual_sub",  // must match SubscriptionPlan's product ids
   "purchaseToken": "..."   // Android: Play Billing purchase token
                             // iOS: StoreKit 2 transaction id
 }

@@ -61,8 +61,13 @@ export class GooglePlayVerifier implements PurchaseVerifier {
 
   async verify(input: VerifyPurchaseInput): Promise<VerificationResult> {
     const accessToken = await getAccessToken(this.serviceAccount);
+    // productId/purchaseToken are validated by VerifyPurchaseInputSchema but
+    // still untrusted, attacker-influenced wire input — encode them so
+    // neither can break out of its path segment and redirect this
+    // authenticated, service-account-privileged request elsewhere.
     const url = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/` +
-      `${this.packageName}/purchases/subscriptions/${input.productId}/tokens/${input.purchaseToken}`;
+      `${encodeURIComponent(this.packageName)}/purchases/subscriptions/` +
+      `${encodeURIComponent(input.productId)}/tokens/${encodeURIComponent(input.purchaseToken)}`;
     const response = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
     if (!response.ok) {
       throw new Error(`Google Play verification failed: ${response.status} ${await response.text()}`);
