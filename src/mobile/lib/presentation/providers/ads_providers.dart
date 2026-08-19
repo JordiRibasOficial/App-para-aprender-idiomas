@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../data/ads/ads_consent_manager.dart';
+import '../../data/ads/att_tracking_manager.dart';
 
 /// Whether banner ads should actually be requested from AdMob.
 ///
@@ -30,6 +31,10 @@ final adsInitializedProvider = FutureProvider<bool>((ref) async {
   if (!ref.watch(adsEnabledProvider)) return false;
 
   await AdsConsentManager.gatherConsent();
+  // Separate from the GDPR/UMP consent above — required by Apple on iOS
+  // regardless of region, before AdMob may request the IDFA. No-op on
+  // platforms without ATT (see AttTrackingManager).
+  await AttTrackingManager.requestAuthorizationIfNeeded();
   // Same timeout rationale as before the move: if Google's ad servers are
   // slow or unreachable, this must not hang forever — ad requests simply
   // proceed uninitialized this launch.
