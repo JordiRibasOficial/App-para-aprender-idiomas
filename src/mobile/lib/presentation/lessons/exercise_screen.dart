@@ -53,11 +53,19 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     });
   }
 
-  bool get _canSubmit {
-    return _selectedOption != null ||
-        _fillController.text.trim().isNotEmpty ||
-        _matchSelections.values.every((v) => v != null) &&
-            _matchSelections.isNotEmpty;
+  // Takes the exercise rather than reading a bare _matchSelections.isNotEmpty
+  // check: _matchSelections only gains an entry once its dropdown is
+  // touched, so a map with 1 of 2 pairs answered was passing
+  // `.values.every((v) => v != null)` vacuously — the check needs to know
+  // how many pairs the exercise actually has to require all of them.
+  bool _canSubmit(Exercise exercise) {
+    return switch (exercise.type) {
+      ExerciseType.multipleChoice => _selectedOption != null,
+      ExerciseType.fillBlank => _fillController.text.trim().isNotEmpty,
+      ExerciseType.matching => exercise.pairs.keys.every(
+        (key) => _matchSelections[key] != null,
+      ),
+    };
   }
 
   void _submit(Exercise exercise) {
@@ -171,7 +179,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                 FilledButton(
                   onPressed: _answered
                       ? () => _next(lesson)
-                      : (_canSubmit ? () => _submit(exercise) : null),
+                      : (_canSubmit(exercise) ? () => _submit(exercise) : null),
                   style: FilledButton.styleFrom(
                     backgroundColor: _answered
                         ? (_wasCorrect ? scheme.primary : scheme.error)
