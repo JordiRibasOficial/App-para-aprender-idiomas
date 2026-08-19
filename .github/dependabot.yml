@@ -8,3 +8,25 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # The 162 Dart/Flutter dependencies audited in
+  # docs/business/dependency-license-audit.md had no auto-update PRs at
+  # all until now — security fixes (e.g. a CVE in a transitive package)
+  # would otherwise only surface by someone manually running
+  # `flutter pub outdated`.
+  - package-ecosystem: "pub"
+    directory: "/src/mobile"
+    schedule:
+      interval: "weekly"
+
+  # Deno support (>=v2) — each Edge Function has its own deno.json import
+  # map (supabase-js, zod), so each needs its own entry.
+  - package-ecosystem: "deno"
+    directory: "/src/backend/supabase/functions/verify-purchase"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "deno"
+    directory: "/src/backend/supabase/functions/get-course-content"
+    schedule:
+      interval: "weekly"
