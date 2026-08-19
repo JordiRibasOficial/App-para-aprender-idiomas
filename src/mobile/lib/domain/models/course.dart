@@ -31,9 +31,9 @@ class Course {
   }
 
   Map<String, dynamic> toJson() => {
-        'sourceLanguage': sourceLanguage,
-        'targetLanguage': targetLanguage,
-        'level': level,
-        'units': units.map((e) => e.toJson()).toList(),
-      };
+    'sourceLanguage': sourceLanguage,
+    'targetLanguage': targetLanguage,
+    'level': level,
+    'units': units.map((e) => e.toJson()).toList(),
+  };
 }

@@ -60,7 +60,9 @@ class SqliteProgressRepository implements ProgressRepository {
       where: 'target_language = ?',
       whereArgs: [targetLanguage],
     );
-    final completedLessonIds = lessonRows.map((row) => row['lesson_id'] as String).toSet();
+    final completedLessonIds = lessonRows
+        .map((row) => row['lesson_id'] as String)
+        .toSet();
 
     if (progressRows.isEmpty) {
       return UserProgress(
@@ -76,7 +78,9 @@ class SqliteProgressRepository implements ProgressRepository {
       completedLessonIds: completedLessonIds,
       currentStreakDays: row['current_streak_days'] as int,
       totalScore: row['total_score'] as int,
-      lastActivityDate: lastActivityDate == null ? null : DateTime.parse(lastActivityDate),
+      lastActivityDate: lastActivityDate == null
+          ? null
+          : DateTime.parse(lastActivityDate),
     );
   }
 
@@ -103,21 +107,16 @@ class SqliteProgressRepository implements ProgressRepository {
     );
 
     await db.transaction((txn) async {
-      await txn.insert(
-        'user_progress',
-        {
-          'target_language': targetLanguage,
-          'current_streak_days': updated.currentStreakDays,
-          'total_score': updated.totalScore,
-          'last_activity_date': updated.lastActivityDate!.toIso8601String(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      await txn.insert(
-        'completed_lessons',
-        {'target_language': targetLanguage, 'lesson_id': lessonId},
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
+      await txn.insert('user_progress', {
+        'target_language': targetLanguage,
+        'current_streak_days': updated.currentStreakDays,
+        'total_score': updated.totalScore,
+        'last_activity_date': updated.lastActivityDate!.toIso8601String(),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      await txn.insert('completed_lessons', {
+        'target_language': targetLanguage,
+        'lesson_id': lessonId,
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
     });
 
     return updated;

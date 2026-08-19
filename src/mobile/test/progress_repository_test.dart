@@ -16,26 +16,29 @@ void main() {
       expect(progress.lastActivityDate, isNull);
     });
 
-    test('recordLessonCompletion saves and accumulates score across lessons', () async {
-      final repository = InMemoryProgressRepository();
-      final day = DateTime(2026, 1, 10);
+    test(
+      'recordLessonCompletion saves and accumulates score across lessons',
+      () async {
+        final repository = InMemoryProgressRepository();
+        final day = DateTime(2026, 1, 10);
 
-      await repository.recordLessonCompletion(
-        targetLanguage: 'en',
-        lessonId: 'u1_l1',
-        score: 5,
-        completedAt: day,
-      );
-      final progress = await repository.recordLessonCompletion(
-        targetLanguage: 'en',
-        lessonId: 'u1_l2',
-        score: 4,
-        completedAt: day,
-      );
+        await repository.recordLessonCompletion(
+          targetLanguage: 'en',
+          lessonId: 'u1_l1',
+          score: 5,
+          completedAt: day,
+        );
+        final progress = await repository.recordLessonCompletion(
+          targetLanguage: 'en',
+          lessonId: 'u1_l2',
+          score: 4,
+          completedAt: day,
+        );
 
-      expect(progress.completedLessonIds, {'u1_l1', 'u1_l2'});
-      expect(progress.totalScore, 9);
-    });
+        expect(progress.completedLessonIds, {'u1_l1', 'u1_l2'});
+        expect(progress.totalScore, 9);
+      },
+    );
 
     test('does not mix progress between different target languages', () async {
       final repository = InMemoryProgressRepository();

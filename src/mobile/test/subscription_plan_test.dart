@@ -23,7 +23,10 @@ void main() {
       );
 
       // 12 * 10 = 120/year paid monthly vs 60/year paid annually -> 50% saved.
-      final ratio = SubscriptionPlan.annualSavingsRatio(monthly: monthly, annual: annual);
+      final ratio = SubscriptionPlan.annualSavingsRatio(
+        monthly: monthly,
+        annual: annual,
+      );
 
       expect(ratio, closeTo(0.5, 0.0001));
     });
@@ -46,7 +49,10 @@ void main() {
         currencyCode: 'EUR',
       );
 
-      expect(SubscriptionPlan.annualSavingsRatio(monthly: monthly, annual: annual), 0);
+      expect(
+        SubscriptionPlan.annualSavingsRatio(monthly: monthly, annual: annual),
+        0,
+      );
     });
 
     test('the real placeholder plans save a meaningful amount annually', () {

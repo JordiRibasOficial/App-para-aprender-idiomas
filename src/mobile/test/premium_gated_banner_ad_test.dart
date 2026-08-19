@@ -17,11 +17,16 @@ import 'package:app_para_aprender_idiomas/presentation/widgets/premium_gated_ban
 /// purchase flow to get there.
 class _AlreadyPremiumSubscriptionRepository implements SubscriptionRepository {
   @override
-  Future<List<SubscriptionPlan>> loadPlans() async => SubscriptionPlan.placeholderPlans;
+  Future<List<SubscriptionPlan>> loadPlans() async =>
+      SubscriptionPlan.placeholderPlans;
 
   @override
-  Stream<Entitlement> get entitlementStream =>
-      Stream.value(const Entitlement(status: EntitlementStatus.active, activeProductId: 'annual_sub'));
+  Stream<Entitlement> get entitlementStream => Stream.value(
+    const Entitlement(
+      status: EntitlementStatus.active,
+      activeProductId: 'annual_sub',
+    ),
+  );
 
   @override
   Stream<String> get purchaseErrorStream => const Stream.empty();
@@ -43,28 +48,42 @@ void main() {
   // "ads enabled + not Premium -> loads a real ad" path only gets
   // exercised for real in integration_test/ (see ads_providers.dart).
 
-  testWidgets('renders nothing when ads are disabled (the default everywhere but main())',
-      (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [subscriptionRepositoryProvider.overrideWithValue(MockSubscriptionRepository())],
-        child: const MaterialApp(home: Scaffold(bottomNavigationBar: PremiumGatedBannerAd())),
-      ),
-    );
-    await tester.pumpAndSettle();
+  testWidgets(
+    'renders nothing when ads are disabled (the default everywhere but main())',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            subscriptionRepositoryProvider.overrideWithValue(
+              MockSubscriptionRepository(),
+            ),
+          ],
+          child: const MaterialApp(
+            home: Scaffold(bottomNavigationBar: PremiumGatedBannerAd()),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.byType(PremiumGatedBannerAd), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(PremiumGatedBannerAd), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('renders nothing for a Premium user even with ads enabled', (tester) async {
+  testWidgets('renders nothing for a Premium user even with ads enabled', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           adsEnabledProvider.overrideWithValue(true),
-          subscriptionRepositoryProvider.overrideWithValue(_AlreadyPremiumSubscriptionRepository()),
+          subscriptionRepositoryProvider.overrideWithValue(
+            _AlreadyPremiumSubscriptionRepository(),
+          ),
         ],
-        child: const MaterialApp(home: Scaffold(bottomNavigationBar: PremiumGatedBannerAd())),
+        child: const MaterialApp(
+          home: Scaffold(bottomNavigationBar: PremiumGatedBannerAd()),
+        ),
       ),
     );
     await tester.pumpAndSettle();

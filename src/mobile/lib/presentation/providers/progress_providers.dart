@@ -18,7 +18,10 @@ class ProgressNotifier extends AsyncNotifier<UserProgress> {
     return ref.watch(progressRepositoryProvider).load(targetLanguage);
   }
 
-  Future<void> completeLesson({required String lessonId, required int score}) async {
+  Future<void> completeLesson({
+    required String lessonId,
+    required int score,
+  }) async {
     final repository = ref.read(progressRepositoryProvider);
     final updated = await repository.recordLessonCompletion(
       targetLanguage: targetLanguage,
@@ -29,6 +32,7 @@ class ProgressNotifier extends AsyncNotifier<UserProgress> {
   }
 }
 
-final progressProvider = AsyncNotifierProvider.family<ProgressNotifier, UserProgress, String>(
-  ProgressNotifier.new,
-);
+final progressProvider =
+    AsyncNotifierProvider.family<ProgressNotifier, UserProgress, String>(
+      ProgressNotifier.new,
+    );

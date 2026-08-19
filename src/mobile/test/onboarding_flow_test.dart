@@ -20,12 +20,16 @@ import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 /// subscribed before this screen ever loads".
 class _AlreadyPremiumSubscriptionRepository implements SubscriptionRepository {
   @override
-  Future<List<SubscriptionPlan>> loadPlans() async => SubscriptionPlan.placeholderPlans;
+  Future<List<SubscriptionPlan>> loadPlans() async =>
+      SubscriptionPlan.placeholderPlans;
 
   @override
   Stream<Entitlement> get entitlementStream => Stream.value(
-        const Entitlement(status: EntitlementStatus.active, activeProductId: 'annual_sub'),
-      );
+    const Entitlement(
+      status: EntitlementStatus.active,
+      activeProductId: 'annual_sub',
+    ),
+  );
 
   @override
   Stream<String> get purchaseErrorStream => const Stream.empty();
@@ -58,7 +62,9 @@ Future<void> _reachAuthChoiceScreen(WidgetTester tester) async {
   await tester.pumpAndSettle();
   await tester.tap(find.widgetWithText(FilledButton, 'Continuar')); // language
   await tester.pumpAndSettle();
-  await tester.tap(find.widgetWithText(FilledButton, 'Continuar')); // level (A1 default)
+  await tester.tap(
+    find.widgetWithText(FilledButton, 'Continuar'),
+  ); // level (A1 default)
   await tester.pumpAndSettle();
 }
 
@@ -69,16 +75,25 @@ void main() {
   // doesn't leak its location into the next test's fresh widget tree.
   tearDown(() => appRouter.go('/'));
 
-  testWidgets('a new install shows the welcome screen, not the lesson list',
-      (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
-        onboardingRepositoryProvider.overrideWithValue(InMemoryOnboardingRepository()),
-        subscriptionRepositoryProvider.overrideWithValue(MockSubscriptionRepository()),
-      ],
-      child: const MyApp(),
-    ));
+  testWidgets('a new install shows the welcome screen, not the lesson list', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(
+            InMemoryProgressRepository(),
+          ),
+          onboardingRepositoryProvider.overrideWithValue(
+            InMemoryOnboardingRepository(),
+          ),
+          subscriptionRepositoryProvider.overrideWithValue(
+            MockSubscriptionRepository(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('App para Aprender Idiomas'), findsOneWidget);
@@ -86,146 +101,204 @@ void main() {
   });
 
   testWidgets(
-      'completing onboarding as a guest reaches the lesson list and persists the choice',
-      (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
-        onboardingRepositoryProvider.overrideWithValue(InMemoryOnboardingRepository()),
-        subscriptionRepositoryProvider.overrideWithValue(MockSubscriptionRepository()),
-      ],
-      child: const MyApp(),
-    ));
-    await tester.pumpAndSettle();
+    'completing onboarding as a guest reaches the lesson list and persists the choice',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            progressRepositoryProvider.overrideWithValue(
+              InMemoryProgressRepository(),
+            ),
+            onboardingRepositoryProvider.overrideWithValue(
+              InMemoryOnboardingRepository(),
+            ),
+            subscriptionRepositoryProvider.overrideWithValue(
+              MockSubscriptionRepository(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Empezar'));
-    await tester.pumpAndSettle();
-    expect(find.text('Elige tu idioma'), findsOneWidget);
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
+      expect(find.text('Elige tu idioma'), findsOneWidget);
 
-    // English is preselected as the default target language.
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
-    expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
+      // English is preselected as the default target language.
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
+      expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
 
-    // A1 is preselected and the only available level.
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
-    expect(find.text('¿Cómo quieres continuar?'), findsOneWidget);
+      // A1 is preselected and the only available level.
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
+      expect(find.text('¿Cómo quieres continuar?'), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
-    await tester.pumpAndSettle();
+      await tester.tap(
+        find.widgetWithText(OutlinedButton, 'Continuar como invitado'),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('Inglés · A1'), findsOneWidget);
-  });
-
-  testWidgets(
-      'choosing a Premium language without an active subscription is sent to the paywall',
-      (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
-        onboardingRepositoryProvider.overrideWithValue(InMemoryOnboardingRepository()),
-        subscriptionRepositoryProvider.overrideWithValue(MockSubscriptionRepository()),
-      ],
-      child: const MyApp(),
-    ));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Empezar'));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.textContaining('Portugués'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Hazte Premium'), findsOneWidget);
-    expect(find.text('¿Cuál es tu nivel?'), findsNothing);
-  });
+      expect(find.text('Inglés · A1'), findsOneWidget);
+    },
+  );
 
   testWidgets(
-      'choosing a Premium language with an active subscription reaches its lesson list',
-      (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
-        onboardingRepositoryProvider.overrideWithValue(InMemoryOnboardingRepository()),
-        subscriptionRepositoryProvider.overrideWithValue(_AlreadyPremiumSubscriptionRepository()),
-      ],
-      child: const MyApp(),
-    ));
-    await tester.pumpAndSettle();
+    'choosing a Premium language without an active subscription is sent to the paywall',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            progressRepositoryProvider.overrideWithValue(
+              InMemoryProgressRepository(),
+            ),
+            onboardingRepositoryProvider.overrideWithValue(
+              InMemoryOnboardingRepository(),
+            ),
+            subscriptionRepositoryProvider.overrideWithValue(
+              MockSubscriptionRepository(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Empezar'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.textContaining('Portugués'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
-    expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
+      await tester.tap(find.textContaining('Portugués'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
+      expect(find.text('Hazte Premium'), findsOneWidget);
+      expect(find.text('¿Cuál es tu nivel?'), findsNothing);
+    },
+  );
 
-    await tester.tap(find.widgetWithText(OutlinedButton, 'Continuar como invitado'));
-    await tester.pumpAndSettle();
+  testWidgets(
+    'choosing a Premium language with an active subscription reaches its lesson list',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            progressRepositoryProvider.overrideWithValue(
+              InMemoryProgressRepository(),
+            ),
+            onboardingRepositoryProvider.overrideWithValue(
+              InMemoryOnboardingRepository(),
+            ),
+            subscriptionRepositoryProvider.overrideWithValue(
+              _AlreadyPremiumSubscriptionRepository(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('Portugués · A1'), findsOneWidget);
-  });
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
 
-  testWidgets('an obviously malformed email is rejected with an inline error, not accepted',
-      (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
-        onboardingRepositoryProvider.overrideWithValue(InMemoryOnboardingRepository()),
-        subscriptionRepositoryProvider.overrideWithValue(_AlreadyPremiumSubscriptionRepository()),
-      ],
-      child: const MyApp(),
-    ));
-    await tester.pumpAndSettle();
+      await tester.tap(find.textContaining('Portugués'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
+      expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
 
-    await _reachAuthChoiceScreen(tester);
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar con email'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), 'no-es-un-email');
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
+      await tester.tap(
+        find.widgetWithText(OutlinedButton, 'Continuar como invitado'),
+      );
+      await tester.pumpAndSettle();
 
-    // Dialog stays open with an inline error instead of completing onboarding.
-    expect(find.text('Escribe un email válido, p. ej. tu@email.com'), findsOneWidget);
-    expect(find.text('Tu email'), findsOneWidget);
+      expect(find.text('Portugués · A1'), findsOneWidget);
+    },
+  );
 
-    // Close the dialog explicitly — an open showDialog() route is pushed
-    // imperatively on top of appRouter's declarative stack, so it isn't
-    // reset by the file's appRouter.go('/') tearDown and would otherwise
-    // leak into the next test.
-    await tester.tap(find.text('Cancelar'));
-    await tester.pumpAndSettle();
-  });
+  testWidgets(
+    'an obviously malformed email is rejected with an inline error, not accepted',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            progressRepositoryProvider.overrideWithValue(
+              InMemoryProgressRepository(),
+            ),
+            onboardingRepositoryProvider.overrideWithValue(
+              InMemoryOnboardingRepository(),
+            ),
+            subscriptionRepositoryProvider.overrideWithValue(
+              _AlreadyPremiumSubscriptionRepository(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-  testWidgets('a valid email completes onboarding and reaches the lesson list',
-      (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
-        onboardingRepositoryProvider.overrideWithValue(InMemoryOnboardingRepository()),
-        subscriptionRepositoryProvider.overrideWithValue(_AlreadyPremiumSubscriptionRepository()),
-      ],
-      child: const MyApp(),
-    ));
-    await tester.pumpAndSettle();
+      await _reachAuthChoiceScreen(tester);
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Continuar con email'),
+      );
+      await tester.pumpAndSettle();
 
-    await _reachAuthChoiceScreen(tester);
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar con email'));
-    await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'no-es-un-email');
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), 'ana@example.com');
-    await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-    await tester.pumpAndSettle();
+      // Dialog stays open with an inline error instead of completing onboarding.
+      expect(
+        find.text('Escribe un email válido, p. ej. tu@email.com'),
+        findsOneWidget,
+      );
+      expect(find.text('Tu email'), findsOneWidget);
 
-    expect(find.text('Francés · A1'), findsOneWidget);
-  });
+      // Close the dialog explicitly — an open showDialog() route is pushed
+      // imperatively on top of appRouter's declarative stack, so it isn't
+      // reset by the file's appRouter.go('/') tearDown and would otherwise
+      // leak into the next test.
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets(
+    'a valid email completes onboarding and reaches the lesson list',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            progressRepositoryProvider.overrideWithValue(
+              InMemoryProgressRepository(),
+            ),
+            onboardingRepositoryProvider.overrideWithValue(
+              InMemoryOnboardingRepository(),
+            ),
+            subscriptionRepositoryProvider.overrideWithValue(
+              _AlreadyPremiumSubscriptionRepository(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _reachAuthChoiceScreen(tester);
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Continuar con email'),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), 'ana@example.com');
+      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Francés · A1'), findsOneWidget);
+    },
+  );
 }

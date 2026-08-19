@@ -35,19 +35,20 @@ class Exercise {
       options: (json['options'] as List<dynamic>? ?? const [])
           .map((e) => e as String)
           .toList(growable: false),
-      pairs: (json['pairs'] as Map<String, dynamic>? ?? const {})
-          .map((key, value) => MapEntry(key, value as String)),
+      pairs: (json['pairs'] as Map<String, dynamic>? ?? const {}).map(
+        (key, value) => MapEntry(key, value as String),
+      ),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'type': type.name,
-        'prompt': prompt,
-        if (correctAnswer.isNotEmpty) 'correctAnswer': correctAnswer,
-        if (options.isNotEmpty) 'options': options,
-        if (pairs.isNotEmpty) 'pairs': pairs,
-      };
+    'id': id,
+    'type': type.name,
+    'prompt': prompt,
+    if (correctAnswer.isNotEmpty) 'correctAnswer': correctAnswer,
+    if (options.isNotEmpty) 'options': options,
+    if (pairs.isNotEmpty) 'pairs': pairs,
+  };
 
   bool isCorrect(Object answer) {
     return switch (type) {

@@ -24,8 +24,8 @@ class CourseUnit {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'lessons': lessons.map((e) => e.toJson()).toList(),
-      };
+    'id': id,
+    'title': title,
+    'lessons': lessons.map((e) => e.toJson()).toList(),
+  };
 }

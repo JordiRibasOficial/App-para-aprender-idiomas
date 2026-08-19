@@ -1,3 +1,4 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/models/onboarding_state.dart';
@@ -17,12 +18,40 @@ AuthMode? _authModeFromName(String? name) {
   return null;
 }
 
+/// Reads/writes the onboarding email. Split out from
+/// [SharedPreferencesOnboardingRepository] so tests can inject an in-memory
+/// fake instead of exercising the real secure-storage platform channel.
+abstract interface class SecureEmailStore {
+  Future<String?> read();
+  Future<void> write(String value);
+}
+
+/// Backs [SecureEmailStore] with `flutter_secure_storage` — Keychain on iOS,
+/// EncryptedSharedPreferences on Android — so the user's email (PII) isn't
+/// sitting in a plaintext prefs file on disk.
+class _FlutterSecureEmailStore implements SecureEmailStore {
+  const _FlutterSecureEmailStore();
+
+  static const _storage = FlutterSecureStorage();
+  static const _key = 'onboarding_email';
+
+  @override
+  Future<String?> read() => _storage.read(key: _key);
+
+  @override
+  Future<void> write(String value) => _storage.write(key: _key, value: value);
+}
+
 class SharedPreferencesOnboardingRepository implements OnboardingRepository {
+  SharedPreferencesOnboardingRepository({SecureEmailStore? secureEmailStore})
+    : _secureEmailStore = secureEmailStore ?? const _FlutterSecureEmailStore();
+
   static const _completedKey = 'onboarding_completed';
   static const _levelKey = 'onboarding_level';
   static const _targetLanguageKey = 'onboarding_target_language';
   static const _authModeKey = 'onboarding_auth_mode';
-  static const _emailKey = 'onboarding_email';
+
+  final SecureEmailStore _secureEmailStore;
 
   @override
   Future<OnboardingState> load() async {
@@ -35,7 +64,7 @@ class SharedPreferencesOnboardingRepository implements OnboardingRepository {
       selectedLevel: prefs.getString(_levelKey),
       targetLanguage: prefs.getString(_targetLanguageKey),
       authMode: _authModeFromName(prefs.getString(_authModeKey)),
-      email: prefs.getString(_emailKey),
+      email: await _secureEmailStore.read(),
     );
   }
 
@@ -51,7 +80,7 @@ class SharedPreferencesOnboardingRepository implements OnboardingRepository {
     await prefs.setString(_levelKey, level);
     await prefs.setString(_targetLanguageKey, targetLanguage);
     await prefs.setString(_authModeKey, authMode.name);
-    if (email != null) await prefs.setString(_emailKey, email);
+    if (email != null) await _secureEmailStore.write(email);
 
     return OnboardingState(
       completed: true,

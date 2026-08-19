@@ -10,7 +10,13 @@ final contentRepositoryProvider = Provider<ContentRepository>((ref) {
 
 /// Loads the course for whichever target language onboarding selected
 /// (`en`/`pt`/`fr`/`ja`).
-final courseProvider = FutureProvider.family<Course, String>((ref, targetLanguage) {
+final courseProvider = FutureProvider.family<Course, String>((
+  ref,
+  targetLanguage,
+) {
   final repository = ref.watch(contentRepositoryProvider);
-  return repository.loadCourse(sourceLanguage: 'es', targetLanguage: targetLanguage);
+  return repository.loadCourse(
+    sourceLanguage: 'es',
+    targetLanguage: targetLanguage,
+  );
 });
