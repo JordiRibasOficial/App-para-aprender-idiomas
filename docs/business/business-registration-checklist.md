@@ -25,7 +25,7 @@
 ## 5. Protección de datos (RGPD)
 
 - [ ] **Pendiente de asesor legal**: revisar y aprobar `privacy-policy-draft.md` antes de publicarla como definitiva.
-- [ ] **Pendiente de asesor legal**: confirmar si, dado que actualmente no hay backend ni recogida de datos personales más allá de lo descrito en el borrador, se requiere registro como responsable del tratamiento ante la AEPD (España) — probablemente no mientras no haya backend, pero debe confirmarse.
+- [x] **Actualizado — ya no aplica tal como estaba escrito**: esta nota asumía que no había backend; ahora sí lo hay (Supabase, verificación de compra, identidad anónima — ver `privacy-policy-draft.md` sección 2). Además, el "registro ante la AEPD" que citaba es del régimen antiguo (LOPD 1999) — el RGPD lo sustituyó por el **registro interno de actividades de tratamiento** (art. 30), que no se presenta ante la AEPD, se mantiene internamente. Ya existe: `docs/business/records-of-processing-activities.md`. `[PENDIENTE: el asesor legal debe revisar igualmente ese registro y confirmar que no aplica ninguna obligación adicional de notificación previa para este caso concreto.]`
 
 ## 6. Cuentas de plataforma (acción directa del usuario, no de un asesor)
 

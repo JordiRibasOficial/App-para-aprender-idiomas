@@ -105,7 +105,7 @@ Play Console gestiona la firma por ti por defecto ("Play App Signing") — no ha
 
 - [ ] App creada con el package name correcto
 - [ ] Ficha de tienda rellenada (textos de `store-listing.md`)
-- [ ] Gráficos subidos (icono, feature graphic, capturas — placeholder válido por ahora)
+- [ ] Gráficos subidos (icono, feature graphic, 7 capturas reales — ya generados y verificados, ver `store-listing.md` § "Lo que falta", solo falta subirlos)
 - [ ] Cuestionario de clasificación de contenido completado
 - [ ] Sección de seguridad de datos completada (tabla de arriba)
 - [ ] Suscripción `monthly_sub` creada y **activada**

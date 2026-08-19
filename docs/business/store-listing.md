@@ -96,6 +96,23 @@ Apple exige esto en el cuestionario "App Privacy" de App Store Connect, en categ
 
 **[RESUELTO]** El prompt de **App Tracking Transparency (ATT)** ya está implementado: `AttTrackingManager` (`src/mobile/lib/data/ads/att_tracking_manager.dart`), llamado desde `adsInitializedProvider` justo después del consentimiento UMP/GDPR y antes de `MobileAds.instance.initialize()`, más la clave `NSUserTrackingUsageDescription` en `Info.plist`. Se optó por la opción de mantener el mismo modelo de ingresos que Android (pedir tracking) en vez de restringir iOS a anuncios no personalizados.
 
+### Declaración de cifrado (Export Compliance)
+
+**[RESUELTO]** App Store Connect pregunta esto en cada build subido si no está declarado en el binario. Ya está resuelto en `Info.plist` (`ITSAppUsesNonExemptEncryption` = `false`): el único uso de cifrado en la app es HTTPS/TLS estándar (Supabase, AdMob, StoreKit) y el Keychain del sistema (`flutter_secure_storage`) — sin criptografía propia — lo que encaja en la categoría exenta de la License Exception ENC. `[PENDIENTE: confirmar esta clasificación con el asesor legal antes del primer envío real — es una calificación legal de control de exportación, no solo técnica.]`
+
+### Checklist rápido — App Store Connect
+
+- [ ] App creada en App Store Connect con el bundle ID correcto
+- [ ] Ficha de tienda rellenada (textos de arriba)
+- [x] Gráficos listos para subir (icono, capturas — mismos assets que Play Console, ver "Lo que falta" abajo)
+- [ ] Cuestionario de clasificación de edad completado
+- [ ] Cuestionario "App Privacy" completado (tabla de arriba)
+- [x] Declaración de cifrado resuelta en `Info.plist` (`ITSAppUsesNonExemptEncryption`)
+- [ ] Productos de suscripción `monthly_sub`/`annual_sub` creados en App Store Connect y **enviados a revisión** junto con el binario (Apple exige que las suscripciones se revisen junto a la primera build que las usa)
+- [ ] Certificado de distribución y perfil de aprovisionamiento configurados (`build-ios` en CI solo compila con `--no-codesign` — la firma real para subir a App Store Connect es un paso manual aparte, Paso 13 del checklist de negocio)
+- [ ] Primera build subida a TestFlight
+- [ ] Compra de prueba real completada en sandbox
+
 ---
 
 ## Lo que falta (fuera del alcance de este documento)
