@@ -15,7 +15,7 @@
 - **Categorías de interesados:** usuarios de la App con una suscripción Premium activa o intentada.
 - **Categorías de datos:** identidad anónima de sesión (UUID sin nombre/email), plataforma (Android/iOS), producto adquirido, estado de la suscripción, fecha de expiración, token de compra (verificado, no almacenado en claro tras la verificación — ver `src/backend/README.md`).
 - **Destinatarios / encargados del tratamiento:** Supabase (alojamiento y base de datos — encargado, DPA incorporado automáticamente en sus Términos de Servicio, ver sección "Encargados" más abajo); Google Play Billing / Apple App Store (verificación de la compra en sí — actúan como responsables independientes de esa parte, no como encargados nuestros).
-- **Transferencias internacionales:** Supabase aloja este proyecto en AWS, región `[PENDIENTE: confirmar región AWS concreta del proyecto — Project Settings → General en el Dashboard]`; si la región está fuera del EEE, aplican las Cláusulas Contractuales Tipo (SCC) de Supabase.
+- **Transferencias internacionales:** ninguna — Supabase aloja este proyecto en AWS región `eu-west-3` (París, dentro del EEE; confirmado en `src/backend/README.md` § Status). No aplican Cláusulas Contractuales Tipo porque no hay transferencia fuera del EEE.
 - **Plazo de conservación:** mientras la suscripción esté activa o pueda ser objeto de disputa/reembolso; sin fecha de purga automática definida hoy. `[PENDIENTE: definir plazo de purga para suscripciones expiradas hace mucho tiempo.]`
 - **Medidas de seguridad:** RLS en Supabase (cada fila solo accesible por su propio dueño vía el backend), cifrado en reposo AES-256 (verificado, ver `src/backend/README.md`), TLS en tránsito, rate limiting sobre el endpoint de verificación.
 

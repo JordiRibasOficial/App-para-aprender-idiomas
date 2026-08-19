@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+import { createGetUserId } from "../_shared/auth.ts";
 import { handleVerifyPurchase } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { Platform, PurchaseVerifier, SubscriptionUpsert } from "./types.ts";
@@ -16,19 +17,7 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 // insert/update policy on `subscriptions`, only this function does).
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-async function getUserId(authHeader: string | null): Promise<string | null> {
-  if (!authHeader?.startsWith("Bearer ")) return null;
-  const jwt = authHeader.slice("Bearer ".length);
-  // A fresh anon-key client per call, authenticated as the caller — this
-  // validates the JWT the same way any other Supabase client would,
-  // without needing to hand-parse or verify it ourselves.
-  const asCaller = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  const { data, error } = await asCaller.auth.getUser(jwt);
-  if (error || !data.user) return null;
-  return data.user.id;
-}
+const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
 
 // Generous enough for legitimate use (purchase, restore, retries after a
 // flaky network) while stopping a script from hammering this endpoint —

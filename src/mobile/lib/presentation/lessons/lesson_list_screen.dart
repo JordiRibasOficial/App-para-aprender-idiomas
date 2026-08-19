@@ -53,6 +53,11 @@ class LessonListScreen extends ConsumerWidget {
             tooltip: 'Hazte Premium',
             onPressed: () => context.push('/paywall'),
           ),
+          IconButton(
+            icon: const Icon(Icons.download_outlined),
+            tooltip: 'Mis datos',
+            onPressed: () => context.push('/data-export'),
+          ),
         ],
       ),
       body: courseAsync.when(

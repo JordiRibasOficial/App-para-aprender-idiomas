@@ -45,7 +45,7 @@ Los logs técnicos del backend (Supabase) — incluidas las peticiones a los end
 
 ## 6. Derechos del usuario
 
-Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya tiene control total: desinstalar la app elimina todos los datos locales, incluidos el email opcional y la identidad anónima de sesión. Para solicitar la eliminación de los datos de verificación de compra guardados en nuestro backend (sección 2), puede escribirse a world.webapps@gmail.com indicando la plataforma (Android/iOS) y, si se conoce, la fecha aproximada de la suscripción.
+Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya tiene control total: desinstalar la app elimina todos los datos locales, incluidos el email opcional y la identidad anónima de sesión. Para acceder a los datos guardados en nuestro backend (sección 2) o exportarlos, puede usar la opción "Mis datos" dentro de la propia App (descarga inmediata, sin necesidad de escribir), o solicitarlo por email a world.webapps@gmail.com. Para solicitar su eliminación, puede escribirse a ese mismo email indicando la plataforma (Android/iOS) y, si se conoce, la fecha aproximada de la suscripción.
 
 En caso de una brecha de seguridad que afecte a tus datos personales y suponga un riesgo para tus derechos, lo notificaremos a la Agencia Española de Protección de Datos en el plazo legal y, cuando el riesgo sea alto, también a ti directamente. Procedimiento interno en `docs/business/data-breach-response-plan.md` (documento interno, no público).
 

@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../legal_urls.dart';
+import '../providers/terms_acceptance_providers.dart';
 import '../theme/app_theme.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends ConsumerStatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  ConsumerState<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
+  // Local, not read from termsAcceptanceProvider: this screen only shows
+  // when onboarding hasn't completed yet (see RootScreen), so there's
+  // nothing meaningful to pre-check even on a re-visit within the same
+  // onboarding pass.
+  bool _accepted = false;
+
+  Future<void> _start() async {
+    await ref.read(termsAcceptanceProvider.notifier).accept();
+    if (!mounted) return;
+    context.push('/onboarding/language');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +85,69 @@ class WelcomeScreen extends StatelessWidget {
                   color: scheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: AppTheme.spaceXxl),
+              const SizedBox(height: AppTheme.spaceXl),
+              // Explicit clickwrap acceptance, not just implied-by-use: a
+              // checkbox the user must tick themselves, not pre-checked —
+              // stronger evidence of consent than the terms' own "al usar
+              // la app, aceptas" fallback language if it's ever disputed.
+              CheckboxListTile(
+                value: _accepted,
+                onChanged: (value) =>
+                    setState(() => _accepted = value ?? false),
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: EdgeInsets.zero,
+                title: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Text('He leído y acepto los '),
+                    _InlineLinkButton(label: 'Términos', url: kTermsUrl),
+                    const Text(' y la '),
+                    _InlineLinkButton(
+                      label: 'Política de Privacidad',
+                      url: kPrivacyUrl,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppTheme.spaceSm),
               FilledButton(
-                onPressed: () => context.push('/onboarding/language'),
+                onPressed: _accepted ? _start : null,
                 child: const Text('Empezar'),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// TextButton, not a bare InkWell/GestureDetector: gets correct button
+/// semantics and the platform's tap-target handling for free, same as the
+/// paywall's own links to these same URLs. Shrink-wrapped because these
+/// sit inline inside a sentence — WCAG 2.5.8 explicitly exempts inline
+/// text links from the 24x24 CSS px minimum target size that applies to
+/// standalone controls.
+class _InlineLinkButton extends StatelessWidget {
+  const _InlineLinkButton({required this.label, required this.url});
+
+  final String label;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => launchUrl(Uri.parse(url)),
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          decoration: TextDecoration.underline,
         ),
       ),
     );

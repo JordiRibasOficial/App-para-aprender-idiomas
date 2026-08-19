@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app_para_aprender_idiomas/data/in_memory_onboarding_repository.dart';
 import 'package:app_para_aprender_idiomas/data/in_memory_progress_repository.dart';
+import 'package:app_para_aprender_idiomas/data/in_memory_terms_acceptance_repository.dart';
 import 'package:app_para_aprender_idiomas/data/mock_subscription_repository.dart';
 import 'package:app_para_aprender_idiomas/domain/models/entitlement.dart';
 import 'package:app_para_aprender_idiomas/domain/models/subscription_plan.dart';
@@ -12,6 +13,7 @@ import 'package:app_para_aprender_idiomas/main.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/onboarding_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/progress_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/subscription_providers.dart';
+import 'package:app_para_aprender_idiomas/presentation/providers/terms_acceptance_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 
 /// Already has an active Premium entitlement the moment anything subscribes
@@ -55,9 +57,15 @@ class _AlreadyPremiumSubscriptionRepository implements SubscriptionRepository {
 /// here avoids colliding with either. Root-causing the exact framework
 /// interaction wasn't worth it for a widget test that isn't exercising
 /// anything language-specific in the first place.
-Future<void> _reachAuthChoiceScreen(WidgetTester tester) async {
+Future<void> _acceptTermsAndStart(WidgetTester tester) async {
+  await tester.tap(find.byType(Checkbox));
+  await tester.pump();
   await tester.tap(find.text('Empezar'));
   await tester.pumpAndSettle();
+}
+
+Future<void> _reachAuthChoiceScreen(WidgetTester tester) async {
+  await _acceptTermsAndStart(tester);
   await tester.tap(find.textContaining('Francés'));
   await tester.pumpAndSettle();
   await tester.tap(find.widgetWithText(FilledButton, 'Continuar')); // language
@@ -87,6 +95,9 @@ void main() {
           onboardingRepositoryProvider.overrideWithValue(
             InMemoryOnboardingRepository(),
           ),
+          termsAcceptanceRepositoryProvider.overrideWithValue(
+            InMemoryTermsAcceptanceRepository(),
+          ),
           subscriptionRepositoryProvider.overrideWithValue(
             MockSubscriptionRepository(),
           ),
@@ -98,6 +109,52 @@ void main() {
 
     expect(find.text('App para Aprender Idiomas'), findsOneWidget);
     expect(find.text('Inglés · A1'), findsNothing);
+  });
+
+  testWidgets('"Empezar" stays disabled until the terms checkbox is ticked', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressRepositoryProvider.overrideWithValue(
+            InMemoryProgressRepository(),
+          ),
+          onboardingRepositoryProvider.overrideWithValue(
+            InMemoryOnboardingRepository(),
+          ),
+          termsAcceptanceRepositoryProvider.overrideWithValue(
+            InMemoryTermsAcceptanceRepository(),
+          ),
+          subscriptionRepositoryProvider.overrideWithValue(
+            MockSubscriptionRepository(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      tester
+          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
+          .onPressed,
+      isNull,
+    );
+
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
+
+    expect(
+      tester
+          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
+          .onPressed,
+      isNotNull,
+    );
+
+    // Still on the welcome screen — ticking the box alone must not
+    // navigate on its own.
+    expect(find.text('App para Aprender Idiomas'), findsOneWidget);
   });
 
   testWidgets(
@@ -112,6 +169,9 @@ void main() {
             onboardingRepositoryProvider.overrideWithValue(
               InMemoryOnboardingRepository(),
             ),
+            termsAcceptanceRepositoryProvider.overrideWithValue(
+              InMemoryTermsAcceptanceRepository(),
+            ),
             subscriptionRepositoryProvider.overrideWithValue(
               MockSubscriptionRepository(),
             ),
@@ -121,8 +181,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Empezar'));
-      await tester.pumpAndSettle();
+      await _acceptTermsAndStart(tester);
       expect(find.text('Elige tu idioma'), findsOneWidget);
 
       // English is preselected as the default target language.
@@ -156,6 +215,9 @@ void main() {
             onboardingRepositoryProvider.overrideWithValue(
               InMemoryOnboardingRepository(),
             ),
+            termsAcceptanceRepositoryProvider.overrideWithValue(
+              InMemoryTermsAcceptanceRepository(),
+            ),
             subscriptionRepositoryProvider.overrideWithValue(
               MockSubscriptionRepository(),
             ),
@@ -165,8 +227,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Empezar'));
-      await tester.pumpAndSettle();
+      await _acceptTermsAndStart(tester);
 
       await tester.tap(find.textContaining('Portugués'));
       await tester.pumpAndSettle();
@@ -190,6 +251,9 @@ void main() {
             onboardingRepositoryProvider.overrideWithValue(
               InMemoryOnboardingRepository(),
             ),
+            termsAcceptanceRepositoryProvider.overrideWithValue(
+              InMemoryTermsAcceptanceRepository(),
+            ),
             subscriptionRepositoryProvider.overrideWithValue(
               _AlreadyPremiumSubscriptionRepository(),
             ),
@@ -199,8 +263,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Empezar'));
-      await tester.pumpAndSettle();
+      await _acceptTermsAndStart(tester);
 
       await tester.tap(find.textContaining('Portugués'));
       await tester.pumpAndSettle();
@@ -231,6 +294,9 @@ void main() {
             ),
             onboardingRepositoryProvider.overrideWithValue(
               InMemoryOnboardingRepository(),
+            ),
+            termsAcceptanceRepositoryProvider.overrideWithValue(
+              InMemoryTermsAcceptanceRepository(),
             ),
             subscriptionRepositoryProvider.overrideWithValue(
               _AlreadyPremiumSubscriptionRepository(),
@@ -278,6 +344,9 @@ void main() {
             ),
             onboardingRepositoryProvider.overrideWithValue(
               InMemoryOnboardingRepository(),
+            ),
+            termsAcceptanceRepositoryProvider.overrideWithValue(
+              InMemoryTermsAcceptanceRepository(),
             ),
             subscriptionRepositoryProvider.overrideWithValue(
               _AlreadyPremiumSubscriptionRepository(),
