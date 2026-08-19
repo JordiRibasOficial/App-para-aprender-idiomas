@@ -77,51 +77,75 @@ class _LanguageOptionCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Material(
-      color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-      child: InkWell(
+    return Semantics(
+      button: true,
+      inMutuallyExclusiveGroup: true,
+      selected: selected,
+      // excludeSemantics drops the title/subtitle Text and the decorative
+      // Radio/Icon below from the accessibility tree — otherwise they'd
+      // show up as extra, redundant swipe stops alongside this label.
+      excludeSemantics: true,
+      onTap: onTap,
+      label: locked
+          ? '${language.displayName}, requiere Premium'
+          : language.displayName,
+      child: Material(
+        color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.spaceMd,
-            vertical: AppTheme.spaceSm,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-            border: Border.all(
-              color: selected ? scheme.primary : Colors.transparent,
-              width: 2,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+          onTap: onTap,
+          excludeFromSemantics: true,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spaceMd,
+              vertical: AppTheme.spaceSm,
             ),
-          ),
-          child: Row(
-            children: [
-              Text(language.flagEmoji, style: const TextStyle(fontSize: 32)),
-              const SizedBox(width: AppTheme.spaceMd),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(language.displayName, style: textTheme.titleMedium),
-                    Text(
-                      locked
-                          ? 'Requiere Premium'
-                          : 'Curso A1 completo disponible',
-                      style: textTheme.bodySmall?.copyWith(
-                        color: locked
-                            ? scheme.tertiary
-                            : scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+              border: Border.all(
+                color: selected ? scheme.primary : Colors.transparent,
+                width: 2,
               ),
-              if (locked)
-                Icon(Icons.workspace_premium_outlined, color: scheme.tertiary)
-              else
-                Radio<String>(value: language.code),
-            ],
+            ),
+            child: Row(
+              children: [
+                Text(language.flagEmoji, style: const TextStyle(fontSize: 32)),
+                const SizedBox(width: AppTheme.spaceMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        language.displayName,
+                        // Selected fill is scheme.primaryContainer — follow
+                        // its matching "on container" role rather than the
+                        // app's default text color.
+                        style: textTheme.titleMedium?.copyWith(
+                          color: selected ? scheme.onPrimaryContainer : null,
+                        ),
+                      ),
+                      Text(
+                        locked
+                            ? 'Requiere Premium'
+                            : 'Curso A1 completo disponible',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: locked
+                              ? scheme.tertiary
+                              : selected
+                              ? scheme.onPrimaryContainer
+                              : scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (locked)
+                  Icon(Icons.workspace_premium_outlined, color: scheme.tertiary)
+                else
+                  Radio<String>(value: language.code),
+              ],
+            ),
           ),
         ),
       ),

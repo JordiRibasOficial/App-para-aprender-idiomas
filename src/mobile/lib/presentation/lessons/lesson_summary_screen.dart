@@ -59,13 +59,19 @@ class LessonSummaryScreen extends StatelessWidget {
                         color: scheme.primary,
                       ),
                     ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(icon, size: 32, color: scheme.primary),
-                        const SizedBox(height: AppTheme.spaceXs),
-                        Text('$percent%', style: textTheme.headlineMedium),
-                      ],
+                    SizedBox(
+                      width: 120,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(icon, size: 32, color: scheme.primary),
+                            const SizedBox(height: AppTheme.spaceXs),
+                            Text('$percent%', style: textTheme.headlineMedium),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),

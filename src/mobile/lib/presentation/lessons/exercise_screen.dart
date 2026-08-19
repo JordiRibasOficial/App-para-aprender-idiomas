@@ -231,7 +231,10 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       ExerciseType.fillBlank => TextField(
         controller: _fillController,
         enabled: !_answered,
-        decoration: const InputDecoration(hintText: 'Escribe tu respuesta'),
+        decoration: const InputDecoration(
+          labelText: 'Tu respuesta',
+          hintText: 'Escribe tu respuesta',
+        ),
         onChanged: (_) => setState(() {}),
       ),
       ExerciseType.matching => ListView(
@@ -246,6 +249,9 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       initialValue: _matchSelections[key],
+                      decoration: InputDecoration(
+                        labelText: 'Traducción de "$key"',
+                      ),
                       items: [
                         for (final option in _shuffledMatchOptions(exercise))
                           DropdownMenuItem(value: option, child: Text(option)),
@@ -289,20 +295,34 @@ class _OptionCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    final (Color fill, Color border, IconData? icon) = switch (state) {
+    // Text color follows the fill's matching M3 "on container" role rather
+    // than the app's default black87/white — those are only guaranteed to
+    // contrast against the default surface, not against primaryContainer/
+    // errorContainer tones (see PlanCard's onTertiaryContainer badge for
+    // the same pattern). null keeps the default textTheme color for the
+    // unselected/neutral case, which sits on the default surface.
+    final (
+      Color fill,
+      Color border,
+      Color? onFill,
+      IconData? icon,
+    ) = switch (state) {
       _OptionState.correct => (
         scheme.primaryContainer,
         scheme.primary,
+        scheme.onPrimaryContainer,
         Icons.check_circle,
       ),
       _OptionState.incorrect => (
         scheme.errorContainer,
         scheme.error,
+        scheme.onErrorContainer,
         Icons.cancel,
       ),
       _OptionState.neutral => (
         selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
         selected ? scheme.primary : Colors.transparent,
+        selected ? scheme.onPrimaryContainer : null,
         null,
       ),
     };
@@ -312,10 +332,13 @@ class _OptionCard extends StatelessWidget {
       enabled: onTap != null,
       inMutuallyExclusiveGroup: true,
       selected: selected,
-      // InkWell below has excludeFromSemantics: true, so this Semantics
-      // node is the *only* thing assistive tech sees for this card — it
-      // must carry the tap action itself (onTap) or screen reader/switch
-      // users cannot activate the option at all.
+      // excludeSemantics: true drops the Text/Icon descendants' own
+      // semantics nodes — without it a screen reader visits this label AND
+      // the child Text separately ("Madrid, respuesta correcta, Madrid").
+      // InkWell's excludeFromSemantics only removes its own tap-target
+      // node, so this Semantics node must carry onTap itself, or
+      // screen reader/switch users cannot activate the option at all.
+      excludeSemantics: true,
       onTap: onTap,
       label: state == _OptionState.correct
           ? '$label (respuesta correcta)'
@@ -340,7 +363,12 @@ class _OptionCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Expanded(child: Text(label, style: textTheme.titleMedium)),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: textTheme.titleMedium?.copyWith(color: onFill),
+                  ),
+                ),
                 if (icon != null)
                   Icon(
                     icon,

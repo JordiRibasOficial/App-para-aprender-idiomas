@@ -109,42 +109,64 @@ class _LevelCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Material(
-      color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-      child: InkWell(
+    return Semantics(
+      button: true,
+      inMutuallyExclusiveGroup: true,
+      selected: selected,
+      // excludeSemantics drops the title/subtitle Text and the decorative
+      // Radio below from the accessibility tree — otherwise they'd show up
+      // as extra, redundant swipe stops alongside this label.
+      excludeSemantics: true,
+      onTap: onTap,
+      label: level,
+      child: Material(
+        color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.spaceMd,
-            vertical: AppTheme.spaceMd,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-            border: Border.all(
-              color: selected ? scheme.primary : Colors.transparent,
-              width: 2,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+          onTap: onTap,
+          excludeFromSemantics: true,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spaceMd,
+              vertical: AppTheme.spaceMd,
             ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(level, style: textTheme.titleMedium),
-                    Text(
-                      'Curso completo disponible',
-                      style: textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+              border: Border.all(
+                color: selected ? scheme.primary : Colors.transparent,
+                width: 2,
               ),
-              Radio<String>(value: level),
-            ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        level,
+                        // Selected fill is scheme.primaryContainer — follow
+                        // its matching "on container" role rather than the
+                        // app's default text color.
+                        style: textTheme.titleMedium?.copyWith(
+                          color: selected ? scheme.onPrimaryContainer : null,
+                        ),
+                      ),
+                      Text(
+                        'Curso completo disponible',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: selected
+                              ? scheme.onPrimaryContainer
+                              : scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Radio<String>(value: level),
+              ],
+            ),
           ),
         ),
       ),

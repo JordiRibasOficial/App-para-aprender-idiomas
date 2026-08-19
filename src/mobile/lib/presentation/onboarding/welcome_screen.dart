@@ -25,19 +25,26 @@ class WelcomeScreen extends StatelessWidget {
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [scheme.primary, scheme.tertiary],
-                    ),
+                    // Solid scheme.primary, not a primary→tertiary gradient:
+                    // the tertiary (accent orange) corner only gave ~2.8:1
+                    // contrast against the white text, below the WCAG AA
+                    // 3:1 minimum for large/bold text. scheme.primary alone
+                    // measures ~5.2:1, comfortably passing.
+                    color: scheme.primary,
                   ),
                   child: const Center(
-                    child: Text(
-                      '¡Hola!',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          '¡Hola!',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
