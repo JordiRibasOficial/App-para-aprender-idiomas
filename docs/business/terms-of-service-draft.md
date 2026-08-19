@@ -2,7 +2,7 @@
 
 > **BORRADOR. No publicar sin revisión de un abogado real.** Nombre y email ya rellenados según lo indicado por el usuario — la jurisdicción (sección 10) y el resto de puntos `[PENDIENTE]` siguen sin confirmar con un asesor real.
 
-**Última actualización: 5 de agosto de 2026**
+**Última actualización: 19 de agosto de 2026**
 
 ## 1. Aceptación de los términos
 
@@ -44,10 +44,14 @@ La App se ofrece "tal cual". No garantizamos resultados específicos de aprendiz
 
 Podemos modificar estos términos; los cambios materiales se notificarán dentro de la App antes de entrar en vigor.
 
-## 10. Ley aplicable
+## 10. Ley aplicable y jurisdicción
 
-Ley española y de la Unión Europea, aplicable a Webapps. `[PENDIENTE: confirmar formalmente con el asesor legal, especialmente en su interacción con las políticas de Apple/Google que a veces imponen su propia jurisdicción para disputas de pago.]`
+Estos términos se rigen por la legislación española y de la Unión Europea. Cuando el usuario actúe como consumidor, y sin perjuicio de las normas imperativas de protección al consumidor que resulten de aplicación, serán competentes los tribunales de su domicilio, conforme al Reglamento (UE) n.º 1215/2012 (Bruselas I bis). No se somete al usuario a arbitraje obligatorio: este fuero no sustituye ni limita su derecho a acudir a los tribunales. `[PENDIENTE: confirmar formalmente con el asesor legal, especialmente en su interacción con las políticas de Apple/Google que a veces imponen su propia jurisdicción para disputas de pago.]`
 
-## 11. Contacto
+## 11. Resolución amistosa de conflictos
+
+Antes de iniciar cualquier acción legal, se invita al usuario a contactar primero a través de world.webapps@gmail.com para intentar resolver la disputa de forma amistosa. Este contacto previo es un paso voluntario y no vinculante: no es un requisito para poder acudir a los tribunales ni sustituye el derecho del usuario a hacerlo.
+
+## 12. Contacto
 
 world.webapps@gmail.com
