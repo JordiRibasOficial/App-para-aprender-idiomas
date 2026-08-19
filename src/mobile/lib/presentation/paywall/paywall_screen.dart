@@ -206,20 +206,26 @@ class _PlansView extends StatelessWidget {
           FilledButton(
             onPressed: purchasing ? null : () => onPurchase(selectedPlan),
             child: purchasing
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                ? Semantics(
+                    label: 'Procesando compra',
+                    child: const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
                   )
                 : Text('Suscribirse — ${selectedPlan.formattedPrice}'),
           ),
           TextButton(
             onPressed: restoring ? null : onRestore,
             child: restoring
-                ? const SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                ? Semantics(
+                    label: 'Restaurando compras',
+                    child: const SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
                   )
                 : const Text('Restaurar compras'),
           ),

@@ -233,15 +233,17 @@ class _LessonCard extends StatelessWidget {
     // Completion is conveyed visually only through icon shape + color
     // (check mark vs. open book, primary vs. neutral fill) — neither is
     // exposed to screen readers by default, so it's folded into an explicit
-    // label here instead. excludeFromSemantics on the InkWell prevents the
-    // title/subtitle Text children from also being announced as separate,
-    // redundant swipe stops.
+    // label here instead. excludeSemantics on this node drops the
+    // title/subtitle Text children's own semantics so they aren't also
+    // announced as separate, redundant swipe stops (excludeFromSemantics on
+    // the InkWell below only removes its own tap-target node, not theirs).
     final semanticLabel =
         '$title, $exerciseCount ejercicios${completed ? ', completada' : ''}';
 
     return Semantics(
       button: true,
       label: semanticLabel,
+      excludeSemantics: true,
       onTap: onTap,
       child: Material(
         color: scheme.surfaceContainerLow,

@@ -69,11 +69,23 @@ class PlanCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(plan.title, style: textTheme.titleMedium),
+                      Text(
+                        plan.title,
+                        // Selected fill is scheme.primaryContainer — follow
+                        // its matching "on container" role rather than the
+                        // app's default text color, which is only
+                        // guaranteed to contrast against the default
+                        // surface (same pattern as the savings badge below).
+                        style: textTheme.titleMedium?.copyWith(
+                          color: selected ? scheme.onPrimaryContainer : null,
+                        ),
+                      ),
                       Text(
                         plan.formattedPrice,
                         style: textTheme.bodyMedium?.copyWith(
-                          color: scheme.onSurfaceVariant,
+                          color: selected
+                              ? scheme.onPrimaryContainer
+                              : scheme.onSurfaceVariant,
                         ),
                       ),
                     ],
