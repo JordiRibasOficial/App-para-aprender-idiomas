@@ -7,7 +7,11 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('AssetContentRepository', () {
-    for (final targetLanguage in ['en', 'pt', 'fr', 'ja']) {
+    // Only 'en' is bundled as an asset today — pt/fr/ja moved to
+    // get-course-content (see supabase_content_repository_test.dart), since
+    // bundling Premium content client-side meant it sat on every device
+    // regardless of payment status.
+    for (final targetLanguage in ['en']) {
       test(
         'loads the $targetLanguage course with at least 5 well-formed units',
         () async {
@@ -58,7 +62,7 @@ void main() {
       () async {
         final repository = AssetContentRepository();
 
-        for (final targetLanguage in ['en', 'pt', 'fr', 'ja']) {
+        for (final targetLanguage in ['en']) {
           final course = await repository.loadCourse(
             sourceLanguage: 'es',
             targetLanguage: targetLanguage,

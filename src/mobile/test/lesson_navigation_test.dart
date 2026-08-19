@@ -4,14 +4,35 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app_para_aprender_idiomas/data/in_memory_onboarding_repository.dart';
 import 'package:app_para_aprender_idiomas/data/in_memory_progress_repository.dart';
+import 'package:app_para_aprender_idiomas/domain/models/course.dart';
 import 'package:app_para_aprender_idiomas/domain/models/onboarding_state.dart';
+import 'package:app_para_aprender_idiomas/domain/repositories/content_repository.dart';
 import 'package:app_para_aprender_idiomas/main.dart';
 import 'package:app_para_aprender_idiomas/presentation/lessons/exercise_screen.dart';
+import 'package:app_para_aprender_idiomas/presentation/providers/content_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/onboarding_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/progress_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/router/app_router.dart';
 
 import 'test_utils.dart';
+
+// pt/ja are Premium-gated languages fetched over the network in production
+// (see supabase_content_repository.dart) — this fake stands in for that so
+// the two tests below (which use pt/ja only to sidestep an unrelated
+// same-target-language pumpAndSettle hang, not to exercise real premium
+// content) don't need a live backend.
+class _FakeEmptyContentRepository implements ContentRepository {
+  @override
+  Future<Course> loadCourse({
+    required String sourceLanguage,
+    required String targetLanguage,
+  }) async => Course(
+    sourceLanguage: sourceLanguage,
+    targetLanguage: targetLanguage,
+    level: 'A1',
+    units: const [],
+  );
+}
 
 void main() {
   tearDown(() => appRouter.go('/'));
@@ -55,6 +76,9 @@ void main() {
             progressRepositoryProvider.overrideWithValue(
               InMemoryProgressRepository(),
             ),
+            contentRepositoryProvider.overrideWithValue(
+              _FakeEmptyContentRepository(),
+            ),
           ],
           child: const MaterialApp(
             home: ExerciseScreen(
@@ -93,6 +117,9 @@ void main() {
                   authMode: AuthMode.guest,
                 ),
               ),
+            ),
+            contentRepositoryProvider.overrideWithValue(
+              _FakeEmptyContentRepository(),
             ),
           ],
           child: const MyApp(),
