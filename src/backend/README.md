@@ -233,6 +233,42 @@ npx supabase db dump --linked -f backup-$(date +%Y%m%d).sql
 Keep that file out of git (it contains real user data) — store it wherever
 you keep other backups, not in this repo.
 
+## Monitoring & alerts
+
+Every failure path in both functions already logs server-side via
+`console.error` before returning a generic error to the client (see
+`handleVerifyPurchase`'s and `handleGetCourseContent`'s top-level
+catch-all, plus the verifier/upsert-specific catches) — that's what shows
+up in:
+
+```bash
+npx supabase functions logs verify-purchase
+npx supabase functions logs get-course-content
+```
+
+or **Dashboard → Edge Functions → \<function\> → Logs** for project ref
+`nfkhnrwyekqbjxwxmctu`. There's no gap in *what* gets logged; the gap is
+that nobody gets notified when it happens — today you'd only find out by
+going and looking.
+
+**Log-based alerts** (Dashboard → Logs & Analytics → Alerts, availability
+depends on plan) can close that: worth setting up an alert on a spike in
+5xx responses from either function (real bugs — Postgres down, a bad
+deploy) and, separately, a spike in 401/403/429 responses on
+`verify-purchase` (repeated failed verification attempts from one caller
+looks like someone probing for a way to fake Premium, not normal usage —
+`verify_purchase_attempts` already has the timestamps to build that alert
+condition on). This is Dashboard configuration, not code — nothing here
+can turn it on for you.
+
+**Crash reporting for the mobile app**: none is wired up yet. `main.dart`
+now has global handlers (`FlutterError.onError`,
+`PlatformDispatcher.instance.onError`, `runZonedGuarded`) funneling every
+uncaught error through `lib/error_reporting.dart`'s `reportError` — today
+that just logs locally, but it's the single place a Sentry/Crashlytics
+call would go once one of those is set up (needs a DSN/project from your
+own account on that service, which nobody but you can create).
+
 ## Next step
 
 Just credentials. Set `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME`
