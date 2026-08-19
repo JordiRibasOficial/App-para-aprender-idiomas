@@ -1,6 +1,6 @@
 # Términos y Condiciones (borrador) — App para Aprender Idiomas
 
-> **BORRADOR. No publicar sin revisión de un abogado real.** Nombre y email ya rellenados según lo indicado por el usuario — la jurisdicción (sección 11) y el resto de puntos `[PENDIENTE]` siguen sin confirmar con un asesor real. La sección 7 (DMCA/LSSI) no debe activarse ni publicarse hasta que exista una función real de subida de contenido por el usuario.
+> **BORRADOR. No publicar sin revisión de un abogado real.** Nombre y email ya rellenados según lo indicado por el usuario — la jurisdicción (sección 12) y el resto de puntos `[PENDIENTE]` siguen sin confirmar con un asesor real. La sección 7 (DMCA/LSSI) no debe activarse ni publicarse hasta que exista una función real de subida de contenido por el usuario; la sección 8 (normas de conducta), hasta que exista alguna función de interacción entre usuarios.
 
 **Última actualización: 19 de agosto de 2026**
 
@@ -50,26 +50,34 @@ En caso de que la App permita a los usuarios subir, publicar o compartir imágen
 
 **7.6. Límites de este procedimiento.** El cumplimiento del DMCA y de la LSSI protege a Webapps frente a responsabilidad por Contenido de usuario ilícito subido por terceros, siempre que se implemente el proceso completo (no solo esta cláusula) y no exista conocimiento previo de la infracción. No convierte automáticamente al usuario que sube el contenido en el único responsable frente a terceros: quien sube contenido infractor sigue siendo responsable frente al titular de los derechos con independencia de lo que diga esta cláusula.
 
-## 8. Limitación de responsabilidad
+## 8. Normas de conducta y moderación de contenido
+
+`[PENDIENTE: esta sección entera solo aplica si/cuando la App incorpore alguna función de interacción entre usuarios (comentarios, chat, clasificaciones con nombre de usuario visible, foros, etc.) — a día de hoy no existe ninguna función así en el código. Se deja redactada de antemano por el mismo motivo que la sección 7: no improvisarla bajo presión el día que se active. Complementa, no sustituye, la sección 7 (que cubre la legalidad del contenido subido, no la conducta entre usuarios).]`
+
+En caso de que la App incorpore funciones de interacción entre usuarios, el usuario se compromete a no: acosar, amenazar o intimidar a otros usuarios; publicar contenido de odio, discriminatorio o sexualmente explícito; suplantar la identidad de otra persona o entidad; enviar spam o contenido publicitario no solicitado; ni usar dichas funciones para recopilar datos de otros usuarios sin su consentimiento.
+
+Webapps podrá eliminar contenido que incumpla estas normas y suspender o cancelar, sin previo aviso, la cuenta o el acceso del usuario responsable, de forma proporcional a la gravedad y reincidencia de la infracción. Esta facultad de moderación no implica una obligación general de supervisar el contenido de forma previa o continua.
+
+## 9. Limitación de responsabilidad
 
 La App se ofrece "tal cual". No garantizamos resultados específicos de aprendizaje (p. ej. alcanzar un nivel concreto en un plazo determinado). `[PENDIENTE: el asesor legal debe revisar el alcance exacto de esta cláusula según la jurisdicción aplicable — las cláusulas de exención de responsabilidad tienen límites legales distintos según el país.]`
 
-## 9. Edad mínima
+## 10. Edad mínima
 
 `[PENDIENTE: definir con el asesor legal, ver también privacy-policy-draft.md sección 7.]`
 
-## 10. Modificaciones
+## 11. Modificaciones
 
 Podemos modificar estos términos; los cambios materiales se notificarán dentro de la App antes de entrar en vigor.
 
-## 11. Ley aplicable y jurisdicción
+## 12. Ley aplicable y jurisdicción
 
 Estos términos se rigen por la legislación española y de la Unión Europea. Cuando el usuario actúe como consumidor, y sin perjuicio de las normas imperativas de protección al consumidor que resulten de aplicación, serán competentes los tribunales de su domicilio, conforme al Reglamento (UE) n.º 1215/2012 (Bruselas I bis). No se somete al usuario a arbitraje obligatorio: este fuero no sustituye ni limita su derecho a acudir a los tribunales. `[PENDIENTE: confirmar formalmente con el asesor legal, especialmente en su interacción con las políticas de Apple/Google que a veces imponen su propia jurisdicción para disputas de pago.]`
 
-## 12. Resolución amistosa de conflictos
+## 13. Resolución amistosa de conflictos
 
 Antes de iniciar cualquier acción legal, se invita al usuario a contactar primero a través de world.webapps@gmail.com para intentar resolver la disputa de forma amistosa. Este contacto previo es un paso voluntario y no vinculante: no es un requisito para poder acudir a los tribunales ni sustituye el derecho del usuario a hacerlo.
 
-## 13. Contacto
+## 14. Contacto
 
 world.webapps@gmail.com

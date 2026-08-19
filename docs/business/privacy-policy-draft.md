@@ -39,7 +39,7 @@ Los logs técnicos del backend (Supabase) — incluidas las peticiones a los end
 ## 5. Servicios de terceros
 
 - **Google Play Billing / Apple StoreKit**: procesan los pagos de la suscripción. Sujetos a las políticas de privacidad de Google y Apple respectivamente.
-- **Supabase** (nuestro proveedor de backend, alojado en la UE): actúa como encargado del tratamiento para la identidad anónima de sesión y los datos de verificación de compra descritos en la sección 2. Sujeto a la [política de privacidad de Supabase](https://supabase.com/privacy).
+- **Supabase** (nuestro proveedor de backend, alojado en la UE): actúa como encargado del tratamiento para la identidad anónima de sesión y los datos de verificación de compra descritos en la sección 2. Sujeto a la [política de privacidad de Supabase](https://supabase.com/privacy). Su Acuerdo de Encargado del Tratamiento (DPA) queda incorporado automáticamente al aceptar sus Términos de Servicio — verificado, no requiere firma ni acción separada nuestra (detalle en `docs/business/records-of-processing-activities.md`).
 - **Google AdMob**: muestra anuncios a usuarios sin suscripción Premium activa. Sujeto a la [política de privacidad de Google](https://policies.google.com/privacy). Google actúa como encargado/responsable del tratamiento según corresponda a su propio rol — ver su documentación para publishers de AdMob.
 - `[PENDIENTE: si en el futuro se añade analítica (p. ej. Firebase Analytics, un SDK de crash reporting como Sentry) o un backend de cuentas real, esta sección debe actualizarse antes de publicar esa versión — no anticipar aquí servicios que todavía no existen.]`
 
