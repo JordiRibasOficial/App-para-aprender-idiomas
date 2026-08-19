@@ -49,6 +49,19 @@ A modified client can send whatever it wants to this endpoint; without a
 Google/Apple purchase token that those companies' own APIs recognize as real,
 it gets nothing.
 
+### CORS
+
+This endpoint sets no `Access-Control-Allow-Origin` header, on purpose. CORS
+is a browser-only mechanism — it can't restrict which *app* calls the
+endpoint (mobile clients, `curl`, another server never send an `Origin`
+header, so CORS doesn't apply to them). The only client is the Flutter app,
+which never runs inside a browser origin, so there is no legitimate origin
+to allow. Omitting the header means a browser-based caller (e.g. a
+malicious page trying to reuse a leaked anon key from a victim's session)
+has its request blocked by the browser itself. The real access control is
+the Bearer-token check (`getUserId`) plus rate limiting above — that's what
+actually determines who can call this, not CORS.
+
 ## Status
 
 **Deployed and confirmed working end to end, minus store credentials.**
