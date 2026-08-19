@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Keeps third-party Actions current — matters more once they're pinned
+  # to a commit SHA (see the workflow files' own comments): a SHA pin
+  # doesn't auto-update like a `@v2` tag would, so something has to open
+  # the bump PRs instead.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
