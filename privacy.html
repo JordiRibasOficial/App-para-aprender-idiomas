@@ -25,7 +25,7 @@
   <div class="wrap wrap--doc">
     <a class="back-link" href="index.html">&larr; Volver</a>
     <h1 class="doc-title">Política de Privacidad</h1>
-    <p class="doc-date">Última actualización: <time datetime="2026-08-06">6 de agosto de 2026</time></p>
+    <p class="doc-date">Última actualización: <time datetime="2026-08-19">19 de agosto de 2026</time></p>
 
     <article class="prose">
       <h2>1. Quiénes somos</h2>
@@ -38,21 +38,37 @@
 
       <h2>2. Qué datos recogemos</h2>
       <p>
-        A fecha de esta versión, la aplicación <strong>no tiene backend propio</strong> — el
-        progreso de aprendizaje se almacena únicamente en el dispositivo del usuario.
-        Los datos que se recogen son:
+        La aplicación tiene un backend propio (Supabase), pero con un alcance
+        deliberadamente reducido: solo verifica compras de suscripción contra Google Play /
+        Apple, y sirve el contenido de los cursos de pago a quien tiene una suscripción
+        activa. No gestiona cuentas de usuario ni recoge email. Los datos que se recogen son:
       </p>
       <div class="card">
         <p><strong>Progreso de aprendizaje</strong> (lecciones completadas, puntuación, racha):
         almacenado localmente en el dispositivo, no se envía a ningún servidor nuestro.</p>
         <p><strong>Email (opcional)</strong>: si el usuario elige "Continuar con email" en el
-        registro inicial, se guarda localmente en el dispositivo. No se usa para crear una
-        cuenta real ni se envía a ningún servidor en esta versión — se pedirá de nuevo, de
-        forma más completa y con backend real, cuando exista un sistema de cuentas.</p>
-        <p><strong>Datos de compra de suscripción</strong>: gestionados directamente por
-        Google Play / Apple App Store, no por nosotros. No tenemos acceso a datos de
-        tarjetas ni de pago — solo recibimos confirmación de que existe una suscripción
-        activa, a través de la API oficial de cada tienda.</p>
+        registro inicial, se guarda localmente en el dispositivo, cifrado (Keychain en iOS,
+        almacenamiento cifrado en Android). No se usa para crear una cuenta real ni se envía a
+        ningún servidor en esta versión — se pedirá de nuevo, de forma más completa y con
+        backend real, cuando exista un sistema de cuentas.</p>
+        <p><strong>Identidad anónima de sesión</strong>: para verificar una compra o descargar
+        un curso de pago, la app crea automáticamente una identidad anónima en nuestro backend
+        — un identificador técnico sin nombre, email ni ningún dato personal asociado, que solo
+        sirve para vincular esas dos operaciones a un mismo dispositivo. Se guarda cifrada en
+        el dispositivo, igual que el email opcional.</p>
+        <p><strong>Datos de verificación de compra</strong>: cuando el usuario compra o
+        restaura una suscripción, la app envía el token de compra a nuestro backend, que lo
+        verifica directamente contra la API oficial de Google Play / Apple App Store y guarda
+        el resultado (plataforma, producto, estado, fecha de expiración) asociado a la
+        identidad anónima anterior — nunca a un nombre o email. No tenemos acceso a datos de
+        tarjetas ni de pago en ningún momento; eso lo gestionan Google/Apple directamente.
+        También se registra la marca de tiempo de cada intento de verificación, únicamente
+        para limitar el abuso de este mecanismo.</p>
+        <p><strong>Qué curso de pago se está descargando</strong>: al abrir un idioma de pago
+        (portugués, francés o japonés), la app pide su contenido a nuestro backend, que
+        comprueba que la identidad anónima tiene una suscripción activa antes de responder.
+        Esto revela a nuestro backend qué idioma está estudiando un usuario Premium en el
+        momento de la descarga. El progreso dentro de ese curso sigue siendo 100% local.</p>
         <p><strong>Publicidad (solo usuarios sin suscripción Premium activa)</strong>: la
         versión gratuita muestra anuncios de Google AdMob. AdMob puede recoger un
         identificador de publicidad del dispositivo y datos técnicos para mostrar y medir
@@ -73,7 +89,7 @@
       <ul>
         <li>Progreso local: no sale del dispositivo, por lo que no constituye un tratamiento por nuestra parte en el sentido del RGPD más allá de facilitar el almacenamiento local.</li>
         <li>Email opcional: consentimiento explícito del usuario al elegir proporcionar su email.</li>
-        <li>Datos de suscripción: ejecución del contrato de suscripción, necesario para prestar el servicio de pago.</li>
+        <li>Identidad anónima de sesión y datos de verificación de compra: ejecución del contrato de suscripción, necesario para prestar el servicio de pago.</li>
         <li>Publicidad: consentimiento del usuario (recogido vía el formulario UMP de Google para usuarios en la UE/Reino Unido) o interés legítimo donde el RGPD lo permita, según la región.</li>
       </ul>
 
@@ -81,10 +97,14 @@
       <p>
         Google Play Billing / Apple StoreKit procesan los pagos de la suscripción, sujetos a
         las políticas de privacidad de Google y Apple respectivamente.
+        <strong>Supabase</strong> (nuestro proveedor de backend, alojado en la UE) actúa como
+        encargado del tratamiento para la identidad anónima de sesión y los datos de
+        verificación de compra descritos en la sección 2 — sujeto a la
+        <a href="https://supabase.com/privacy">política de privacidad de Supabase</a>.
         <strong>Google AdMob</strong> muestra anuncios a usuarios sin suscripción Premium
         activa, sujeto a la
         <a href="https://policies.google.com/privacy">política de privacidad de Google</a>.
-        Esta sección se actualizará si en el futuro se añade analítica o un backend de
+        Esta sección se actualizará si en el futuro se añade analítica o un sistema de
         cuentas real.
       </p>
 
@@ -92,9 +112,11 @@
       <p>
         Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el
         tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya
-        tiene control total: desinstalar la app elimina todos los datos locales. Para el
-        email opcional, si se proporcionó, puede solicitarse su eliminación escribiendo a
-        <a href="mailto:world.webapps@gmail.com">world.webapps@gmail.com</a>.
+        tiene control total: desinstalar la app elimina todos los datos locales, incluidos el
+        email opcional y la identidad anónima de sesión. Para solicitar la eliminación de los
+        datos de verificación de compra guardados en nuestro backend, puede escribirse a
+        <a href="mailto:world.webapps@gmail.com">world.webapps@gmail.com</a> indicando la
+        plataforma (Android/iOS) y, si se conoce, la fecha aproximada de la suscripción.
       </p>
 
       <h2>7. Menores de edad</h2>
