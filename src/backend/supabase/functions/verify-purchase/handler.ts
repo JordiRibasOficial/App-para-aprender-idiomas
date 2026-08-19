@@ -18,7 +18,17 @@ export interface HandlerDeps {
 function jsonResponse(body: unknown, status: number): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      // Most browser-facing security headers (CSP, X-Frame-Options,
+      // Referrer-Policy, Permissions-Policy) protect HTML pages from
+      // clickjacking/script injection/leaky referrers — this endpoint never
+      // serves HTML, so they'd be theater. nosniff is the one exception:
+      // it costs nothing and blocks a browser from reinterpreting this
+      // JSON body as something executable if it's ever loaded directly
+      // (e.g. a phishing page linking straight to the raw endpoint).
+      "X-Content-Type-Options": "nosniff",
+    },
   });
 }
 
