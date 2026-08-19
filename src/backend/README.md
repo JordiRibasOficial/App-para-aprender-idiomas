@@ -233,6 +233,27 @@ npx supabase db dump --linked -f backup-$(date +%Y%m%d).sql
 Keep that file out of git (it contains real user data) — store it wherever
 you keep other backups, not in this repo.
 
+## Encryption at rest
+
+Also a platform-level property, not something this repo's code controls —
+documenting it here so it's answered once instead of re-investigated every
+time it comes up.
+
+Per Supabase's own security page (supabase.com/security): **"All customer
+data is encrypted at rest with AES-256 and in transit via TLS."** This is a
+platform default applied to every project on AWS (where this project is
+hosted, project ref `nfkhnrwyekqbjxwxmctu`) — it is not a paid add-on and
+is not something to configure here; it covers the Postgres database (the
+`subscriptions` / `verify_purchase_attempts` tables), Auth, and Storage.
+This is separate from **Point-in-Time Recovery** above, which *is*
+Pro-plan-and-up and opt-in — encryption at rest applies regardless of plan.
+
+`[PENDIENTE: si el asesor de protección de datos necesita esto por escrito
+para el registro de actividades de tratamiento (RGPD), pedir confirmación
+directa a Supabase (son "encargado del tratamiento" — ver
+docs/business/privacy-policy-draft.md sección 5) en vez de citar solo la
+página pública de marketing.]`
+
 ## Monitoring & alerts
 
 Every failure path in both functions already logs server-side via
