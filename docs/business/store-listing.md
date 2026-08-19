@@ -80,6 +80,22 @@ ingles,aprender ingles,curso ingles,idiomas,vocabulario,gramatica,a1 ingles,ingl
 **URL de soporte (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/` — misma página, sirve como landing de soporte/legal.
 **URL de política de privacidad (obligatoria):** `https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html` — publicada y en vivo.
 
+### App Privacy ("etiqueta de privacidad" / nutrition label)
+
+Apple exige esto en el cuestionario "App Privacy" de App Store Connect, en categorías propias (distintas de las de Google Play). Misma auditoría del código que la sección 4 de `play-console-setup-guide.md`, mapeada a las categorías de Apple. La diferencia clave frente a Google: Apple solo exige declarar un dato como "recopilado" si **sale del dispositivo** — por eso el email y el progreso, que Play sí lista (más conservador) por quedar solo en el dispositivo, aquí no se declaran.
+
+| Categoría Apple | Dato | ¿Vinculado a tu identidad? | ¿Se usa para rastreo (tracking)? | Detalle |
+|---|---|---|---|---|
+| Identificadores | ID de usuario (identidad anónima de sesión) | Sí, vinculado (aunque no a nombre/email) | No | Igual que en Play: creado en nuestro backend al comprar/restaurar suscripción o descargar un curso de pago. |
+| Compras | Historial de compras | Sí, vinculado | No | Verificación de compra contra la API de Apple, guardada con estado y fecha de expiración junto al ID anónimo de arriba. |
+| Otros datos | Idioma de estudio (solo Premium) | Sí, vinculado | No | `get-course-content` revela a nuestro backend qué idioma está estudiando el usuario al abrir un curso de pago. |
+| Datos de uso | Datos de publicidad | Sí, si el usuario acepta el prompt de ATT (ver abajo) | **Sí, si acepta el prompt de App Tracking Transparency (ATT)** | Google AdMob. Marca "Datos usados para rastrearte" en el cuestionario de Apple para esta fila. |
+| Contacto | Email | **No se declara** | No | Se guarda cifrado solo en el dispositivo (`flutter_secure_storage`); nunca se transmite — no cumple la definición de "recopilado" de Apple. `[PENDIENTE: confirmar este criterio con el asesor antes de enviar el cuestionario real.]` |
+| — | Progreso de aprendizaje | No se declara | No | Mismo motivo: solo local, nunca se transmite. |
+| Diagnóstico | Ninguno | — | — | No hay SDK de crash reporting ni analítica de terceros integrado. |
+
+**[RESUELTO]** El prompt de **App Tracking Transparency (ATT)** ya está implementado: `AttTrackingManager` (`src/mobile/lib/data/ads/att_tracking_manager.dart`), llamado desde `adsInitializedProvider` justo después del consentimiento UMP/GDPR y antes de `MobileAds.instance.initialize()`, más la clave `NSUserTrackingUsageDescription` en `Info.plist`. Se optó por la opción de mantener el mismo modelo de ingresos que Android (pedir tracking) en vez de restringir iOS a anuncios no personalizados.
+
 ---
 
 ## Lo que falta (fuera del alcance de este documento)

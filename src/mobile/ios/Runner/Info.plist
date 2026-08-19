@@ -30,6 +30,13 @@
 	     docs/business/play-console-setup-guide.md § 6. -->
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6843680802048559~5853009743</string>
+	<!-- App Tracking Transparency (ATT), required since iOS 14.5 before
+	     AdMob can access the IDFA for personalized ads or cross-app
+	     measurement — see AttTrackingManager and
+	     docs/business/store-listing.md § App Privacy. Without this key,
+	     any call to requestTrackingAuthorization() crashes at runtime. -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Usamos este identificador para mostrarte anuncios más relevantes y medir su rendimiento.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
