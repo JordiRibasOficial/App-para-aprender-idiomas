@@ -429,3 +429,13 @@ entrypoint = "./functions/verify-purchase/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/verify-purchase/*.html" ]
+
+[functions.get-course-content]
+enabled = true
+verify_jwt = true
+import_map = "./functions/get-course-content/deno.json"
+entrypoint = "./functions/get-course-content/index.ts"
+# The Premium course JSON in content/ is bundled via `import ... with {
+# type: "json" }` in index.ts, not static_files — see index.ts's comment
+# for why (Deno.readTextFileSync crashed the deployed function at
+# module-load time).
