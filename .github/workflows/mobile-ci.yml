@@ -16,6 +16,13 @@ on:
   # commits weren't reliably starting a run on their own.
   workflow_dispatch:
 
+# Default GITHUB_TOKEN permissions can be broader than a workflow actually
+# needs (repo/org setting, not visible here). None of these jobs write to
+# the repo, comment on anything, or publish a release — checkout + build +
+# upload-artifact only need read access to repo contents.
+permissions:
+  contents: read
+
 env:
   FLUTTER_VERSION: '3.44.8'
 
@@ -27,16 +34,16 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
 
       - name: Cache pub packages
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
@@ -44,7 +51,7 @@ jobs:
             ${{ runner.os }}-pub-
 
       - name: Cache Gradle
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: |
             ~/.gradle/caches
@@ -59,7 +66,7 @@ jobs:
       - run: flutter build appbundle --release
 
       - name: Upload release .aab
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: app-release-aab
           path: src/mobile/build/app/outputs/bundle/release/app-release.aab
@@ -73,16 +80,16 @@ jobs:
     # with no GitHub-wide incident to blame).
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
 
       - name: Cache pub packages
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
@@ -93,7 +100,7 @@ jobs:
       # the right cache key here too — it's what changes when a native
       # iOS dependency (e.g. google_mobile_ads) is added or bumped.
       - name: Cache CocoaPods and Xcode DerivedData
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: |
             ~/Library/Caches/CocoaPods
@@ -114,16 +121,16 @@ jobs:
   integration-test-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
 
       - name: Cache pub packages
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
@@ -139,7 +146,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Run integration_test on a real (KVM-accelerated) Android emulator
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 34
           target: google_apis
@@ -156,16 +163,16 @@ jobs:
     # why a plain retry wasn't enough.
     timeout-minutes: 27
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
 
       - name: Cache pub packages
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
@@ -175,7 +182,7 @@ jobs:
       # Same cache as build-ios — this job also compiles the whole iOS
       # app (to install it on the simulator) before running any tests.
       - name: Cache CocoaPods and Xcode DerivedData
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: |
             ~/Library/Caches/CocoaPods

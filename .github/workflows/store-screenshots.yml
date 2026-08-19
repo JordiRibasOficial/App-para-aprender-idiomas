@@ -9,6 +9,11 @@ name: Store screenshots
 on:
   workflow_dispatch:
 
+# See mobile-ci.yml's permissions block — same rationale: nothing here
+# writes to the repo, only checkout + build + upload-artifact.
+permissions:
+  contents: read
+
 env:
   FLUTTER_VERSION: '3.44.8'
 
@@ -20,16 +25,16 @@ jobs:
   screenshots-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
 
       - name: Cache pub packages
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('src/mobile/pubspec.lock') }}
@@ -45,7 +50,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Capture screenshots on a real (KVM-accelerated) Android emulator
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 34
           target: google_apis
@@ -99,7 +104,7 @@ jobs:
             -d emulator-5554
 
       - name: Upload screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: store-screenshots-android
           path: src/mobile/screenshots/
