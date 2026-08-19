@@ -4,6 +4,16 @@ import { handleGetCourseContent } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { PremiumLanguage } from "./types.ts";
 
+// Import attributes bundle these directly into the deployed function —
+// Deno.readTextFileSync against the deployed bundle's own directory
+// crashed at module-load time in production (WORKER_ERROR, no logs reached
+// our own error handling), even though it works fine locally. This is
+// Supabase's documented pattern for shipping static JSON with an Edge
+// Function.
+import ptCourse from "./content/pt.json" with { type: "json" };
+import frCourse from "./content/fr.json" with { type: "json" };
+import jaCourse from "./content/ja.json" with { type: "json" };
+
 // Supabase injects these into every Edge Function automatically.
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
@@ -37,15 +47,10 @@ async function hasActivePremium(userId: string): Promise<boolean> {
   return (count ?? 0) > 0;
 }
 
-function loadCourseJson(filename: string): unknown {
-  const path = new URL(`./content/${filename}`, import.meta.url);
-  return JSON.parse(Deno.readTextFileSync(path));
-}
-
 const courseContent: Record<PremiumLanguage, unknown> = {
-  pt: loadCourseJson("pt.json"),
-  fr: loadCourseJson("fr.json"),
-  ja: loadCourseJson("ja.json"),
+  pt: ptCourse,
+  fr: frCourse,
+  ja: jaCourse,
 };
 
 const deps: HandlerDeps = {

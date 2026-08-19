@@ -435,7 +435,7 @@ enabled = true
 verify_jwt = true
 import_map = "./functions/get-course-content/deno.json"
 entrypoint = "./functions/get-course-content/index.ts"
-# Bundles the Premium course JSON with the deployed function — see
-# handler.ts's doc comment for why this content lives here and not in the
-# mobile app's assets.
-static_files = ["./functions/get-course-content/content/*.json"]
+# The Premium course JSON in content/ is bundled via `import ... with {
+# type: "json" }` in index.ts, not static_files — see index.ts's comment
+# for why (Deno.readTextFileSync crashed the deployed function at
+# module-load time).
