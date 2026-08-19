@@ -201,6 +201,14 @@ Deno.test("rejects a GET request", async () => {
   assertEquals(response.status, 405);
 });
 
+Deno.test("every JSON response sets X-Content-Type-Options: nosniff", async () => {
+  const { deps } = buildDeps();
+  const response = await handleVerifyPurchase(request({}, null), deps);
+
+  assertEquals(response.status, 401);
+  assertEquals(response.headers.get("X-Content-Type-Options"), "nosniff");
+});
+
 Deno.test(
   "an OPTIONS preflight gets a bare 204 with no Access-Control-Allow-Origin — this endpoint has no browser client to allow",
   async () => {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'data/secure_supabase_local_storage.dart';
 import 'data/supabase_config.dart';
 import 'presentation/providers/ads_providers.dart';
 import 'presentation/providers/theme_mode_providers.dart';
@@ -20,6 +21,13 @@ Future<void> main() async {
   await Supabase.initialize(
     url: SupabaseConfig.url,
     publishableKey: SupabaseConfig.publishableKey,
+    // Default persistence is plaintext SharedPreferences, which would put
+    // the refresh token (a standing credential) in a less-protected spot
+    // than the onboarding email already gets — see
+    // SecureSupabaseLocalStorage's doc comment.
+    authOptions: FlutterAuthClientOptions(
+      localStorage: SecureSupabaseLocalStorage(),
+    ),
   );
 
   // google_mobile_ads has no web implementation — ads stay off there,
