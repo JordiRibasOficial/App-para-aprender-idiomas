@@ -200,3 +200,18 @@ Deno.test("rejects a GET request", async () => {
 
   assertEquals(response.status, 405);
 });
+
+Deno.test(
+  "an OPTIONS preflight gets a bare 204 with no Access-Control-Allow-Origin — this endpoint has no browser client to allow",
+  async () => {
+    const { deps } = buildDeps();
+    const req = new Request("http://localhost/verify-purchase", {
+      method: "OPTIONS",
+      headers: { Origin: "https://evil.example" },
+    });
+    const response = await handleVerifyPurchase(req, deps);
+
+    assertEquals(response.status, 204);
+    assertEquals(response.headers.get("Access-Control-Allow-Origin"), null);
+  },
+);
