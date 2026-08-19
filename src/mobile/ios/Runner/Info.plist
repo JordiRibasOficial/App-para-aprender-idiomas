@@ -37,6 +37,21 @@
 	     any call to requestTrackingAuthorization() crashes at runtime. -->
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Usamos este identificador para mostrarte anuncios más relevantes y medir su rendimiento.</string>
+	<!-- Export compliance (US EAR / App Store Connect "Uses Encryption?"
+	     prompt on every submission if unset). false = "exempt": this app's
+	     only encryption use is standard HTTPS/TLS (Supabase, AdMob,
+	     StoreKit) and the OS-provided Keychain (flutter_secure_storage) —
+	     no custom/proprietary cryptography is implemented anywhere in the
+	     app's own code. That combination qualifies for License Exception
+	     ENC's mass-market/exempt category, so App Store Connect can skip
+	     asking at each build upload. See
+	     docs/business/play-console-setup-guide.md for the equivalent
+	     Play Console step (Google doesn't require this declaration).
+	     [PENDIENTE: confirm this classification with the legal advisor
+	     before the very first submission — export-control classification
+	     is a legal call, not a purely technical one.] -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
