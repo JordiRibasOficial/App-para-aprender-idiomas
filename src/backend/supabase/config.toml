@@ -439,3 +439,9 @@ entrypoint = "./functions/get-course-content/index.ts"
 # type: "json" }` in index.ts, not static_files — see index.ts's comment
 # for why (Deno.readTextFileSync crashed the deployed function at
 # module-load time).
+
+[functions.export-user-data]
+enabled = true
+verify_jwt = true
+import_map = "./functions/export-user-data/deno.json"
+entrypoint = "./functions/export-user-data/index.ts"

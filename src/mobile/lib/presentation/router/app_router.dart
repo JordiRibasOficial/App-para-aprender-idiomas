@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../data_export_screen.dart';
 import '../lessons/exercise_screen.dart';
 import '../lessons/lesson_summary_data.dart';
 import '../lessons/lesson_summary_screen.dart';
@@ -13,6 +14,10 @@ import '../root_screen.dart';
 final appRouter = GoRouter(
   routes: [
     GoRoute(path: '/', builder: (context, state) => const RootScreen()),
+    GoRoute(
+      path: '/data-export',
+      builder: (context, state) => const DataExportScreen(),
+    ),
     GoRoute(
       path: '/onboarding/language',
       builder: (context, state) => const LanguageSelectionScreen(),

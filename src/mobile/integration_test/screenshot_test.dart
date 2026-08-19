@@ -28,6 +28,8 @@ void main() {
 
   testWidgets('02-idioma', (tester) async {
     await pumpFreshApp(tester, binding);
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot(
@@ -37,6 +39,8 @@ void main() {
 
   testWidgets('03-nivel', (tester) async {
     await pumpFreshApp(tester, binding);
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));

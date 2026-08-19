@@ -4,18 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../domain/models/entitlement.dart';
 import '../../domain/models/subscription_plan.dart';
+import '../legal_urls.dart';
 import '../providers/subscription_providers.dart';
 import '../theme/app_theme.dart';
 import 'plan_card.dart';
-
-/// Required by App Store Review Guideline 3.1.2 (and expected by Google
-/// Play's subscriptions policy): auto-renewal terms and links to the legal
-/// docs must be visible on the purchase screen itself, not just buried in
-/// a settings page.
-const _termsUrl =
-    'https://jordiribasoficial.github.io/App-para-aprender-idiomas/terms.html';
-const _privacyUrl =
-    'https://jordiribasoficial.github.io/App-para-aprender-idiomas/privacy.html';
 
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
@@ -245,11 +237,11 @@ class _PlansView extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: [
               TextButton(
-                onPressed: () => launchUrl(Uri.parse(_termsUrl)),
+                onPressed: () => launchUrl(Uri.parse(kTermsUrl)),
                 child: const Text('Términos de servicio'),
               ),
               TextButton(
-                onPressed: () => launchUrl(Uri.parse(_privacyUrl)),
+                onPressed: () => launchUrl(Uri.parse(kPrivacyUrl)),
                 child: const Text('Política de privacidad'),
               ),
             ],

@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+import { createGetUserId } from "../_shared/auth.ts";
 import { handleGetCourseContent } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { PremiumLanguage } from "./types.ts";
@@ -25,16 +26,7 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 // second round-trip to mint a scoped client per request.
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-async function getUserId(authHeader: string | null): Promise<string | null> {
-  if (!authHeader?.startsWith("Bearer ")) return null;
-  const jwt = authHeader.slice("Bearer ".length);
-  const asCaller = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  const { data, error } = await asCaller.auth.getUser(jwt);
-  if (error || !data.user) return null;
-  return data.user.id;
-}
+const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
 
 async function hasActivePremium(userId: string): Promise<boolean> {
   const { count, error } = await admin

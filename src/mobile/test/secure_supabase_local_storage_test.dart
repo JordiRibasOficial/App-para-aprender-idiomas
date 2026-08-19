@@ -27,12 +27,15 @@ void main() {
     expect(await storage.hasAccessToken(), isFalse);
   });
 
-  test('persistSession makes hasAccessToken true and roundtrips accessToken', () async {
-    await storage.persistSession('{"access_token":"abc"}');
+  test(
+    'persistSession makes hasAccessToken true and roundtrips accessToken',
+    () async {
+      await storage.persistSession('{"access_token":"abc"}');
 
-    expect(await storage.hasAccessToken(), isTrue);
-    expect(await storage.accessToken(), '{"access_token":"abc"}');
-  });
+      expect(await storage.hasAccessToken(), isTrue);
+      expect(await storage.accessToken(), '{"access_token":"abc"}');
+    },
+  );
 
   test('removePersistedSession clears the stored session', () async {
     await storage.persistSession('{"access_token":"abc"}');

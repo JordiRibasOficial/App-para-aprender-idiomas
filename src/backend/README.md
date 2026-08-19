@@ -94,6 +94,27 @@ has its request blocked by the browser itself. The real access control is
 the Bearer-token check (`getUserId`) plus rate limiting above — that's what
 actually determines who can call this, not CORS.
 
+## export-user-data
+
+RGPD art. 15/20 (right of access / data portability) — lets the caller pull
+everything this backend holds about their own anonymous session identity in
+one request: their `subscriptions` row(s) and `verify_purchase_attempts`
+timestamps. No input body — there's nothing to specify, `getUserId` already
+determines whose data comes back, and every query in `buildExport` is scoped
+to that same userId (see `index.ts`).
+
+Deliberately excludes `store_transaction_id` and `raw_response` from the
+`subscriptions` rows it returns — those are opaque store-internal
+identifiers and the full raw verification payload kept for our own
+support/audit trail, not something meaningfully "about" the user beyond
+what the other fields already summarize. `[PENDIENTE: confirm this scoping
+decision with the data protection advisor.]`
+
+Same fail-closed shape as the other two functions: no auth → 401, a query
+failure → generic 500 (not the raw Postgres error). The mobile app's "Mis
+datos" screen (`presentation/data_export_screen.dart`) calls this and lets
+the user copy the resulting JSON to their clipboard.
+
 ## Status
 
 **Deployed and confirmed working end to end, minus store credentials.**
@@ -156,12 +177,13 @@ not force-add it.
 npx supabase secrets set --env-file supabase/functions/.env
 npx supabase functions deploy verify-purchase
 npx supabase functions deploy get-course-content
+npx supabase functions deploy export-user-data
 ```
 
 ## Running the tests
 
-No Supabase project or credentials needed — both functions' `handler_test.ts`
-exercise `handler.ts` against fake deps, and `get-course-content`'s
+No Supabase project or credentials needed — every function's `handler_test.ts`
+exercises `handler.ts` against fake deps, and `get-course-content`'s
 `content_test.ts` validates the real bundled JSON:
 
 ```bash
@@ -173,6 +195,11 @@ deno lint
 cd ../get-course-content
 deno test --allow-env --allow-read
 deno check index.ts handler.ts handler_test.ts content_test.ts types.ts
+deno lint
+
+cd ../export-user-data
+deno test --allow-env handler_test.ts
+deno check index.ts handler.ts handler_test.ts types.ts
 deno lint
 ```
 
@@ -203,6 +230,13 @@ Content-Type: application/json
 
 Response: the course JSON (same shape `Course.fromJson` expects in the
 mobile app), or `403` if the caller has no active subscription.
+
+```
+POST /functions/v1/export-user-data
+Authorization: Bearer <Supabase user JWT>
+```
+
+No body. Response: `{ "userId", "exportedAt", "subscriptions": [...], "verificationAttempts": [...] }`.
 
 ## Backups
 
@@ -265,6 +299,7 @@ up in:
 ```bash
 npx supabase functions logs verify-purchase
 npx supabase functions logs get-course-content
+npx supabase functions logs export-user-data
 ```
 
 or **Dashboard → Edge Functions → \<function\> → Logs** for project ref
