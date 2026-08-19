@@ -201,6 +201,41 @@ Deno.test("rejects a GET request", async () => {
   assertEquals(response.status, 405);
 });
 
+Deno.test(
+  "a rate-limit check failure surfaces as a generic 500, not the raw Postgres error",
+  async () => {
+    const { deps, upserts } = buildDeps({
+      isRateLimited: () => Promise.reject(new Error("Rate limit check failed: connection refused")),
+    });
+    const response = await handleVerifyPurchase(
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+      deps,
+    );
+    const body = await response.json();
+
+    assertEquals(response.status, 500);
+    assertEquals(upserts.length, 0);
+    assertEquals(body, { error: "Internal server error" });
+  },
+);
+
+Deno.test(
+  "an upsert failure after a positive verification surfaces as a generic 500, not the raw Postgres error",
+  async () => {
+    const { deps } = buildDeps({
+      upsertSubscription: () => Promise.reject(new Error("Failed to persist subscription: unique violation")),
+    });
+    const response = await handleVerifyPurchase(
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+      deps,
+    );
+    const body = await response.json();
+
+    assertEquals(response.status, 500);
+    assertEquals(body, { error: "Internal server error" });
+  },
+);
+
 Deno.test("every JSON response sets X-Content-Type-Options: nosniff", async () => {
   const { deps } = buildDeps();
   const response = await handleVerifyPurchase(request({}, null), deps);

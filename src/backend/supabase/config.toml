@@ -429,3 +429,13 @@ entrypoint = "./functions/verify-purchase/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/verify-purchase/*.html" ]
+
+[functions.get-course-content]
+enabled = true
+verify_jwt = true
+import_map = "./functions/get-course-content/deno.json"
+entrypoint = "./functions/get-course-content/index.ts"
+# Bundles the Premium course JSON with the deployed function — see
+# handler.ts's doc comment for why this content lives here and not in the
+# mobile app's assets.
+static_files = ["./functions/get-course-content/content/*.json"]

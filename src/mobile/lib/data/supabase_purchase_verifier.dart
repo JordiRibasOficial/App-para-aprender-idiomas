@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../domain/repositories/purchase_verifier.dart';
+import 'supabase_session.dart';
 
 /// Thrown when the verify-purchase call can't be completed — network
 /// failure, a non-2xx response, or a malformed body. The caller (see
@@ -31,7 +32,7 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
     required String productId,
     required String purchaseToken,
   }) async {
-    final accessToken = await _ensureSignedIn();
+    final accessToken = await ensureAnonymousSession(_client);
 
     final FunctionResponse response;
     try {
@@ -62,19 +63,5 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
       isActive: data['status'] == 'active',
       expiresAt: expiresAtRaw is String ? DateTime.parse(expiresAtRaw) : null,
     );
-  }
-
-  Future<String> _ensureSignedIn() async {
-    final currentSession = _client.auth.currentSession;
-    if (currentSession != null) return currentSession.accessToken;
-
-    final response = await _client.auth.signInAnonymously();
-    final session = response.session;
-    if (session == null) {
-      throw const PurchaseVerificationException(
-        'No se pudo iniciar sesión anónima con Supabase.',
-      );
-    }
-    return session.accessToken;
   }
 }

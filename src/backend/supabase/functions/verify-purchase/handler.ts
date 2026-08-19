@@ -1,3 +1,4 @@
+import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
 import { VerifyPurchaseInputSchema } from "./types.ts";
 import type { Platform, PurchaseVerifier, SubscriptionUpsert } from "./types.ts";
 
@@ -15,38 +16,20 @@ export interface HandlerDeps {
   upsertSubscription(row: SubscriptionUpsert): Promise<void>;
 }
 
-function jsonResponse(body: unknown, status: number): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      // Most browser-facing security headers (CSP, X-Frame-Options,
-      // Referrer-Policy, Permissions-Policy) protect HTML pages from
-      // clickjacking/script injection/leaky referrers — this endpoint never
-      // serves HTML, so they'd be theater. nosniff is the one exception:
-      // it costs nothing and blocks a browser from reinterpreting this
-      // JSON body as something executable if it's ever loaded directly
-      // (e.g. a phishing page linking straight to the raw endpoint).
-      "X-Content-Type-Options": "nosniff",
-    },
-  });
-}
-
-// CORS is a browser-only mechanism — it can't restrict which *app* calls
-// this endpoint (mobile clients, curl, another server never send an Origin
-// header, so CORS doesn't apply to them at all). The actual access control
-// is the Bearer-token check in getUserId() below plus rate limiting. This
-// function's only client is the Flutter app, which never runs inside a
-// browser origin, so there is no legitimate Origin to allow — omitting
-// Access-Control-Allow-Origin entirely means any browser-based caller (e.g.
-// a malicious page trying to reuse a leaked anon key from a victim's
-// session) gets its request blocked by the browser itself before this code
-// ever sees the response. Deno.serve's default response to an OPTIONS
-// preflight would otherwise fall through to the 405 below with no CORS
-// headers, which browsers already treat as a deny — this makes that denial
-// explicit instead of incidental.
-function corsPreflightResponse(): Response {
-  return new Response(null, { status: 204 });
+/**
+ * Entry point Deno.serve calls. Wraps the real logic below in a catch-all:
+ * failures outside the store-verifier call (rate limit check, subscription
+ * upsert — see index.ts) throw raw Postgres error messages, and this is
+ * the net that keeps those off the client instead of relying on the
+ * runtime's default unhandled-exception behavior.
+ */
+export async function handleVerifyPurchase(req: Request, deps: HandlerDeps): Promise<Response> {
+  try {
+    return await handleVerifyPurchaseUnsafe(req, deps);
+  } catch (error) {
+    console.error("verify-purchase: unhandled error", error);
+    return jsonResponse({ error: "Internal server error" }, 500);
+  }
 }
 
 /**
@@ -61,7 +44,7 @@ function corsPreflightResponse(): Response {
  * back to "assume active." A modified client cannot self-grant Premium by
  * sending a well-formed request; it still needs a store to vouch for it.
  */
-export async function handleVerifyPurchase(req: Request, deps: HandlerDeps): Promise<Response> {
+async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Promise<Response> {
   if (req.method === "OPTIONS") {
     return corsPreflightResponse();
   }
