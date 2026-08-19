@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,13 +8,33 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data/secure_supabase_local_storage.dart';
 import 'data/supabase_config.dart';
+import 'error_reporting.dart';
 import 'presentation/providers/ads_providers.dart';
 import 'presentation/providers/theme_mode_providers.dart';
 import 'presentation/router/app_router.dart';
 import 'presentation/theme/app_theme.dart';
 
-Future<void> main() async {
+void main() {
+  // Catches everything reportError's own callers can't: an uncaught error
+  // in an async gap that isn't running inside a Flutter-framework error
+  // zone. WidgetsFlutterBinding.ensureInitialized() and runApp() must both
+  // run inside this same guarded zone — splitting them across zones is a
+  // documented Flutter footgun.
+  runZonedGuarded(_main, reportError);
+}
+
+Future<void> _main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final previousOnError = FlutterError.onError;
+  FlutterError.onError = (details) {
+    previousOnError?.call(details);
+    reportError(details.exception, details.stack);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    reportError(error, stack);
+    return true;
+  };
 
   // Only used for purchase verification today (see
   // SupabasePurchaseVerifier) — no user-facing feature depends on this yet,
