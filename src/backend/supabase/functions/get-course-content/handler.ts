@@ -5,6 +5,12 @@ import type { PremiumLanguage } from "./types.ts";
 export interface HandlerDeps {
   /** Resolves the caller's user id from the request's Authorization header, or null if unauthenticated. */
   getUserId(authHeader: string | null): Promise<string | null>;
+  /**
+   * Records this call as a request for `userId` and reports whether
+   * they've exceeded the allowed rate — true means reject with 429. Called
+   * once per request, after auth succeeds, before the premium check.
+   */
+  isRateLimited(userId: string): Promise<boolean>;
   /** Whether `userId` has a currently-active (unexpired) subscription row. */
   hasActivePremium(userId: string): Promise<boolean>;
   /** The 3 Premium course JSON blobs, keyed by language — see index.ts for how these are loaded. */
@@ -48,6 +54,10 @@ async function handleGetCourseContentUnsafe(req: Request, deps: HandlerDeps): Pr
   const userId = await deps.getUserId(req.headers.get("Authorization"));
   if (!userId) {
     return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+
+  if (await deps.isRateLimited(userId)) {
+    return jsonResponse({ error: "Too many requests. Try again later." }, 429);
   }
 
   let body: unknown;

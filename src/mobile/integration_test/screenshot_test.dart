@@ -28,8 +28,13 @@ void main() {
 
   testWidgets('02-idioma', (tester) async {
     await pumpFreshApp(tester, binding);
-    await tester.tap(find.byType(Checkbox));
-    await tester.pump();
+    // pumpAndSettle (not a single pump) between the two checkbox taps —
+    // see app_test.dart's comment: a bare pump() hung this on a real
+    // device/simulator.
+    await tester.tap(find.byType(Checkbox).at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Checkbox).at(1));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
     await binding.takeScreenshot(
@@ -39,8 +44,13 @@ void main() {
 
   testWidgets('03-nivel', (tester) async {
     await pumpFreshApp(tester, binding);
-    await tester.tap(find.byType(Checkbox));
-    await tester.pump();
+    // pumpAndSettle (not a single pump) between the two checkbox taps —
+    // see app_test.dart's comment: a bare pump() hung this on a real
+    // device/simulator.
+    await tester.tap(find.byType(Checkbox).at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Checkbox).at(1));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Empezar'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));

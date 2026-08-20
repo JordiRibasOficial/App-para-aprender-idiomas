@@ -23,6 +23,7 @@ En esta versión, la App no requiere una cuenta real — el progreso se guarda l
 - **Cancelación**: se gestiona directamente desde los ajustes de suscripción de Google Play o de la cuenta de Apple, no dentro de la App. No podemos cancelar suscripciones en nombre del usuario.
 - **Reembolsos**: sujetos a la política de reembolsos de Google Play o Apple App Store, no a una política propia — no gestionamos pagos ni reembolsos directamente.
 - Los precios mostrados dentro de la App son orientativos; el precio final y la moneda los determina la tienda según la región del usuario.
+- **Renuncia al derecho de desistimiento.** Al confirmar una suscripción, el acceso al contenido digital comienza de inmediato. Conforme al art. 103.m) del Texto Refundido de la Ley General para la Defensa de los Consumidores y Usuarios (TRLGDCU) y al art. 16.m) de la Directiva 2011/83/UE, el usuario que actúe como consumidor pierde su derecho de desistimiento de 14 días una vez ha dado su consentimiento previo expreso a que el servicio empiece de inmediato y ha reconocido expresamente esa pérdida — consentimiento que se recoge mediante una casilla específica, no premarcada, en la pantalla de suscripción, separada de la aceptación general de estos términos. `[PENDIENTE: confirmar con el asesor legal si la confirmación de compra que emite la tienda (Google Play/Apple) satisface por sí sola el requisito de confirmación en soporte duradero de los arts. 98.7/99.2 TRLGDCU, o si hace falta un correo de confirmación propio.]`
 
 ## 5. Propiedad intelectual
 
@@ -64,7 +65,7 @@ La App se ofrece "tal cual". No garantizamos resultados específicos de aprendiz
 
 ## 10. Edad mínima
 
-`[PENDIENTE: definir con el asesor legal, ver también privacy-policy-draft.md sección 7.]`
+La edad mínima para usar la App es **16 años**. Este umbral es deliberadamente más alto que el mínimo legal de cualquier jurisdicción relevante (14 años en España según el art. 7 de la LOPDGDD, 13 años según el RGPD del Reino Unido, 13 años según la COPPA en EE. UU.), para evitar tener que aplicar un umbral distinto según el país del usuario. Durante el registro, el usuario debe confirmar mediante una casilla específica que cumple esta edad mínima; se trata de una declaración del propio usuario, no de una verificación de edad con documentación. `[PENDIENTE: confirmar con el asesor legal si una autodeclaración sin verificación documental es suficiente para esta App, o si conviene reforzarla en el futuro si la base de usuarios crece significativamente.]`
 
 ## 11. Modificaciones
 

@@ -12,7 +12,9 @@ const FAKE_CONTENT: Record<PremiumLanguage, unknown> = {
 
 function buildDeps(overrides: Partial<HandlerDeps> = {}): HandlerDeps {
   return {
-    getUserId: (authHeader) => Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    getUserId: (authHeader) =>
+      Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    isRateLimited: () => Promise.resolve(false),
     hasActivePremium: () => Promise.resolve(true),
     courseContent: FAKE_CONTENT,
     ...overrides,
@@ -30,9 +32,35 @@ function request(body: unknown, authHeader: string | null = "Bearer valid-token"
 }
 
 Deno.test("rejects requests without a valid auth token", async () => {
-  const response = await handleGetCourseContent(request({ targetLanguage: "pt" }, null), buildDeps());
+  const response = await handleGetCourseContent(
+    request({ targetLanguage: "pt" }, null),
+    buildDeps(),
+  );
   assertEquals(response.status, 401);
 });
+
+Deno.test(
+  "rejects a rate-limited caller with 429, without checking premium or leaking course content",
+  async () => {
+    const deps = buildDeps({ isRateLimited: () => Promise.resolve(true) });
+    const response = await handleGetCourseContent(request({ targetLanguage: "pt" }), deps);
+    assertEquals(response.status, 429);
+  },
+);
+
+Deno.test(
+  "a rate-limit check failure surfaces as a generic 500, not the raw Postgres error",
+  async () => {
+    const deps = buildDeps({
+      isRateLimited: () => Promise.reject(new Error("Rate limit check failed: connection refused")),
+    });
+    const response = await handleGetCourseContent(request({ targetLanguage: "pt" }), deps);
+    const body = await response.json();
+
+    assertEquals(response.status, 500);
+    assertEquals(body, { error: "Internal server error" });
+  },
+);
 
 Deno.test("rejects a malformed body", async () => {
   const response = await handleGetCourseContent(request({}), buildDeps());

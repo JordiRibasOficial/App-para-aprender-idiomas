@@ -4,6 +4,12 @@ import type { UserDataExport } from "./types.ts";
 export interface HandlerDeps {
   /** Resolves the caller's user id from the request's Authorization header, or null if unauthenticated. */
   getUserId(authHeader: string | null): Promise<string | null>;
+  /**
+   * Records this call as a request for `userId` and reports whether
+   * they've exceeded the allowed rate — true means reject with 429. Called
+   * once per request, after auth succeeds, before building the export.
+   */
+  isRateLimited(userId: string): Promise<boolean>;
   /** Assembles the caller's own export — see index.ts for the real Supabase queries. */
   buildExport(userId: string): Promise<UserDataExport>;
 }
@@ -49,6 +55,10 @@ async function handleExportUserDataUnsafe(req: Request, deps: HandlerDeps): Prom
   const userId = await deps.getUserId(req.headers.get("Authorization"));
   if (!userId) {
     return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+
+  if (await deps.isRateLimited(userId)) {
+    return jsonResponse({ error: "Too many requests. Try again later." }, 429);
   }
 
   const data = await deps.buildExport(userId);

@@ -31,8 +31,15 @@ void main() {
       expect(find.text('Inglés · A1'), findsNothing);
 
       // --- Onboarding: language (English default) -> level (A1 default) -> guest ---
-      await tester.tap(find.byType(Checkbox));
-      await tester.pump();
+      // pumpAndSettle (not a single pump) between the two checkbox taps: a
+      // bare pump() left the second tap racing the first checkbox's
+      // ripple/gesture-arena resolution on a real device, hanging the whole
+      // test indefinitely on CI's iOS Simulator (never reproduced on the
+      // host-only widget-test harness, whose fake clock has no such race).
+      await tester.tap(find.byType(Checkbox).at(0));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(Checkbox).at(1));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Empezar'));
       await tester.pumpAndSettle();
       expect(find.text('Elige tu idioma'), findsOneWidget);

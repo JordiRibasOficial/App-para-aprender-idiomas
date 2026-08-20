@@ -20,6 +20,12 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   SubscriptionPeriod _selectedPeriod = SubscriptionPeriod.annual;
   bool _purchasing = false;
   bool _restoring = false;
+  // Not pre-checked, same rationale as the onboarding terms checkbox: an
+  // explicit tick is the evidence of the "prior express consent" art.
+  // 103.m TRLGDCU / art. 16.m Directiva 2011/83 requires before a digital
+  // subscription can start immediately and the 14-day withdrawal right can
+  // be excluded — see the clause added to terms-of-service-draft.md § 4.
+  bool _withdrawalConsent = false;
 
   Future<void> _purchase(SubscriptionPlan plan) async {
     setState(() => _purchasing = true);
@@ -99,10 +105,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   selectedPeriod: _selectedPeriod,
                   purchasing: _purchasing,
                   restoring: _restoring,
+                  withdrawalConsent: _withdrawalConsent,
                   onSelect: (period) =>
                       setState(() => _selectedPeriod = period),
                   onPurchase: _purchase,
                   onRestore: _restore,
+                  onWithdrawalConsentChanged: (value) =>
+                      setState(() => _withdrawalConsent = value ?? false),
                 );
               },
             ),
@@ -116,18 +125,22 @@ class _PlansView extends StatelessWidget {
     required this.selectedPeriod,
     required this.purchasing,
     required this.restoring,
+    required this.withdrawalConsent,
     required this.onSelect,
     required this.onPurchase,
     required this.onRestore,
+    required this.onWithdrawalConsentChanged,
   });
 
   final List<SubscriptionPlan> plans;
   final SubscriptionPeriod selectedPeriod;
   final bool purchasing;
   final bool restoring;
+  final bool withdrawalConsent;
   final ValueChanged<SubscriptionPeriod> onSelect;
   final Future<void> Function(SubscriptionPlan plan) onPurchase;
   final Future<void> Function() onRestore;
+  final ValueChanged<bool?> onWithdrawalConsentChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -195,8 +208,28 @@ class _PlansView extends StatelessWidget {
             onTap: () => onSelect(SubscriptionPeriod.annual),
           ),
           const SizedBox(height: AppTheme.spaceLg),
+          // Explicit clickwrap, not just ToS text: art. 103.m TRLGDCU / art.
+          // 16.m Directiva 2011/83 requires the consumer's prior express
+          // consent to start a digital service immediately, plus their
+          // express acknowledgment of losing the 14-day withdrawal right —
+          // both conditions, satisfied by a single unchecked-by-default box
+          // the user must tick themselves before the button becomes active.
+          CheckboxListTile(
+            value: withdrawalConsent,
+            onChanged: onWithdrawalConsentChanged,
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            title: const Text(
+              'Entiendo que el acceso empieza de inmediato y renuncio a mi '
+              'derecho de desistimiento de 14 días para este contenido '
+              'digital.',
+            ),
+          ),
+          const SizedBox(height: AppTheme.spaceSm),
           FilledButton(
-            onPressed: purchasing ? null : () => onPurchase(selectedPlan),
+            onPressed: (purchasing || !withdrawalConsent)
+                ? null
+                : () => onPurchase(selectedPlan),
             child: purchasing
                 ? Semantics(
                     label: 'Procesando compra',

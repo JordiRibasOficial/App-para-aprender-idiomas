@@ -73,9 +73,11 @@ here (`content/`), and `handler.ts` serves one only after confirming the
 caller has an `active` row in `subscriptions` (unexpired, if `expires_at` is
 set). English stays bundled client-side — it's free, there's nothing to gate.
 
-Same fail-closed shape as `verify-purchase`: no auth → 401, not Premium →
-403 with no content in the body, DB failure → generic 500 (not the raw
-Postgres error — see `handler.ts`'s catch-all). `content_test.ts` separately
+Same fail-closed shape as `verify-purchase`: no auth → 401, more than 30
+requests from the same user in 10 minutes → 429 (see
+`get_course_content_requests`), not Premium → 403 with no content in the
+body, DB failure → generic 500 (not the raw Postgres error — see
+`handler.ts`'s catch-all). `content_test.ts` separately
 validates the 3 JSON files' own quality (5+ units, no duplicate exercise
 ids, `multipleChoice.correctAnswer` actually in `options`, etc.) — the
 server-side continuation of what used to be `content_repository_test.dart`
@@ -110,10 +112,14 @@ support/audit trail, not something meaningfully "about" the user beyond
 what the other fields already summarize. `[PENDIENTE: confirm this scoping
 decision with the data protection advisor.]`
 
-Same fail-closed shape as the other two functions: no auth → 401, a query
-failure → generic 500 (not the raw Postgres error). The mobile app's "Mis
-datos" screen (`presentation/data_export_screen.dart`) calls this and lets
-the user copy the resulting JSON to their clipboard.
+Same fail-closed shape as the other two functions: no auth → 401, more than
+10 requests from the same user in 10 minutes → 429 (see
+`export_user_data_requests` — deliberately its own table, not
+`verify_purchase_attempts`, so exporting isn't itself something the export
+has to report on), a query failure → generic 500 (not the raw Postgres
+error). The mobile app's "Mis datos" screen
+(`presentation/data_export_screen.dart`) calls this and lets the user copy
+the resulting JSON to their clipboard.
 
 ## Status
 
