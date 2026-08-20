@@ -91,9 +91,9 @@ Una vez creados y **activados** (no solo guardados como borrador), la app real (
 
 ## 6. Cuenta de AdMob y IDs de anuncio reales [HECHO]
 
-La app ya integra Google AdMob (banner discreto, solo para usuarios sin Premium activo, oculto en el instante en que se activa una suscripción). **Cuenta creada y los IDs reales ya están en el código** (publisher `ca-app-pub-6843680802048559`) — `ad_unit_ids.dart`, `AndroidManifest.xml` e `Info.plist` actualizados, `flutter analyze`/`flutter test` verificados en verde. Ya no usa los IDs de prueba de Google.
+La app ya integra Google AdMob (banner discreto, solo para usuarios sin Premium activo, oculto en el instante en que se activa una suscripción). **Cuenta creada y los IDs reales ya están en el código** (publisher `ca-app-pub-6843680802048559`) — `ad_unit_ids.dart`, `AndroidManifest.xml` e `Info.plist` actualizados, `flutter analyze`/`flutter test` verificados en verde.
 
-**No subas un build a producción con los IDs de prueba activos** — Google lo prohíbe explícitamente (política de "fraudulent clicks"/spam) y puede suspender la cuenta de AdMob. Ya no aplica: los reales están activos desde ahora.
+**Auditado: `ad_unit_ids.dart` cambia automáticamente entre IDs de prueba (`publisher 3940256099942544`, el mismo en todas las apps de ejemplo de Google) y los IDs reales según `kReleaseMode`** — solo un build de release (`flutter build ... --release`, lo único que sube a las tiendas) sirve los anuncios reales; cualquier `flutter run` de desarrollo local sirve siempre los de prueba. Esto evita generar impresiones/clics no genuinos desde dispositivos de desarrollador, que la política de "tráfico inválido" de Google prohíbe explícitamente y puede acabar en suspensión de la cuenta de AdMob — antes de esta auditoría, el código servía los IDs reales incondicionalmente, incluso en desarrollo.
 
 ## 7. Track de pruebas interno (recomendado antes de producción)
 
