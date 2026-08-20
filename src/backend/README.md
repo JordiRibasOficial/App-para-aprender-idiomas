@@ -144,38 +144,53 @@ this can't be undone.
 
 ## Status
 
-**Deployed and confirmed working end to end, minus store credentials.**
-Project ref `nfkhnrwyekqbjxwxmctu` (org "Jordi Ribas Oficial", region
-`eu-west-3`):
+**All four functions and every migration are deployed to the live project**,
+minus store credentials. Project ref `nfkhnrwyekqbjxwxmctu` (org "Jordi
+Ribas Oficial", region `eu-west-3`):
 
-- Migration applied (table, RLS, trigger — exercised against a real
-  Postgres, not just written blind).
-- `verify-purchase` live at
-  `https://nfkhnrwyekqbjxwxmctu.supabase.co/functions/v1/verify-purchase`
-  with `verify_jwt = true`.
+- All migrations applied via `supabase db push` (`subscriptions`,
+  `verify_purchase_attempts`, `get_course_content_requests`,
+  `export_user_data_requests`, `delete_user_data_requests`,
+  `purge_stale_request_logs()`) — exercised against a real Postgres, not
+  just written blind.
+- `verify-purchase`, `get-course-content`, `export-user-data`, and
+  `delete-user-data` all live via `supabase functions deploy`, each with
+  `verify_jwt = true`. Deployed from a local machine after `supabase link
+  --project-ref nfkhnrwyekqbjxwxmctu` — the CLI transport issue noted below
+  didn't reproduce there.
 - Anonymous sign-ins enabled on the project
   (`external_anonymous_users_enabled`, matches `config.toml`'s
   `auth.enable_anonymous_sign_ins = true`).
-- Full round-trip smoke-tested for real: anonymous sign-up against
-  `/auth/v1/signup` → real session JWT → `POST verify-purchase` with that
-  JWT → `503 "Purchase verification is not configured for platform
+- `verify-purchase` was smoke-tested end to end for real: anonymous sign-up
+  against `/auth/v1/signup` → real session JWT → `POST verify-purchase` with
+  that JWT → `503 "Purchase verification is not configured for platform
   android"`. That 503 is the *correct* answer today — it's the fail-closed
   path from handler.ts, proving auth, routing, and request validation all
   work; the only missing piece is Google/Apple credentials, which nobody
   but the project owner can provide (see `.env.example`). Once those are
   set, that same request starts returning real verification results.
+  `[PENDIENTE: run the same live smoke test against get-course-content,
+  export-user-data, and delete-user-data now that they're deployed.]`
+- `purge_stale_request_logs()` exists in the database but isn't scheduled
+  yet — that needs `pg_cron` enabled from the Supabase Dashboard, a
+  dashboard-only action (see `docs/business/sbom.md`... actually see the
+  "Data retention" note this migration's own comment points to). Until
+  scheduled, the four rate-limit tracking tables grow unbounded; call
+  `select purge_stale_request_logs();` manually from the SQL editor as a
+  stopgap if needed before that's set up.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
 
-One gap from this deploy: it went through direct Management API calls
-because the CLI's own network transport failed (`Transport error`, but
-`curl` to the same endpoints worked fine) — the Go CLI is fussier about
-something in this network path than curl is. `supabase link` was never run,
-so there's no local link state. If the CLI transport problem doesn't
-reproduce on your machine, `npx supabase link --project-ref
-nfkhnrwyekqbjxwxmctu` should just work and give you the normal CLI-driven
-workflow (`db push`, `functions deploy`, etc.) going forward.
+Historical note: the very first deploy (`verify-purchase` + its migration)
+went through direct Management API calls because the CLI's network
+transport failed inside this session's own sandboxed environment
+(`Transport error`, though `curl` to the same endpoints worked fine) — the
+Go CLI was fussier about something in that specific network path than curl
+was. Every later deploy (`db push` for the remaining migrations, and all
+three newer functions) went through the normal CLI (`supabase link` +
+`supabase db push` + `supabase functions deploy`) run from the project
+owner's own machine, where that transport issue didn't reproduce.
 
 ## Local setup
 
