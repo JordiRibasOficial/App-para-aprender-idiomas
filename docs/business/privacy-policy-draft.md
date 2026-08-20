@@ -23,6 +23,8 @@ La aplicación tiene un backend propio (Supabase), pero con un alcance deliberad
 
 Los logs técnicos del backend (Supabase) — incluidas las peticiones a los endpoints de verificación de compra y descarga de contenido — se conservan según la política de retención por defecto de Supabase para nuestro plan. `[PENDIENTE: confirmar el periodo exacto con Supabase y reflejarlo aquí antes de publicar.]`
 
+Aparte de esos logs de la plataforma, las tablas propias que usamos solo para limitar el abuso de estos endpoints (marca de tiempo de cada intento de verificación de compra, descarga de contenido, exportación o eliminación de datos) se purgan a los 7 días — ver `src/backend/README.md` sección "Data retention".
+
 ## 3. Qué NO hacemos
 
 - No vendemos datos personales a terceros.
@@ -45,7 +47,7 @@ Los logs técnicos del backend (Supabase) — incluidas las peticiones a los end
 
 ## 6. Derechos del usuario
 
-Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya tiene control total: desinstalar la app elimina todos los datos locales, incluidos el email opcional y la identidad anónima de sesión. Para acceder a los datos guardados en nuestro backend (sección 2) o exportarlos, puede usar la opción "Mis datos" dentro de la propia App (descarga inmediata, sin necesidad de escribir), o solicitarlo por email a world.webapps@gmail.com. Para solicitar su eliminación, puede escribirse a ese mismo email indicando la plataforma (Android/iOS) y, si se conoce, la fecha aproximada de la suscripción.
+Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya tiene control total: desinstalar la app elimina todos los datos locales, incluidos el email opcional y la identidad anónima de sesión. Para acceder a los datos guardados en nuestro backend (sección 2), exportarlos o **eliminarlos permanentemente**, puede usar la opción "Mis datos" dentro de la propia App — el botón "Eliminar mis datos" borra de inmediato, sin necesidad de escribir a nadie, la suscripción y los intentos de verificación de compra asociados a su identidad anónima; es irreversible. También puede solicitarlo por email a world.webapps@gmail.com indicando la plataforma (Android/iOS) y, si se conoce, la fecha aproximada de la suscripción.
 
 En caso de una brecha de seguridad que afecte a tus datos personales y suponga un riesgo para tus derechos, lo notificaremos a la Agencia Española de Protección de Datos en el plazo legal y, cuando el riesgo sea alto, también a ti directamente. Procedimiento interno en `docs/business/data-breach-response-plan.md` (documento interno, no público).
 
