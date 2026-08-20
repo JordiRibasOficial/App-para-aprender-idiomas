@@ -58,6 +58,11 @@ class LessonListScreen extends ConsumerWidget {
             tooltip: 'Mis datos',
             onPressed: () => context.push('/data-export'),
           ),
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Acerca de',
+            onPressed: () => context.push('/about'),
+          ),
         ],
       ),
       body: courseAsync.when(
