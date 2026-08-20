@@ -161,23 +161,34 @@ Ribas Oficial", region `eu-west-3`):
 - Anonymous sign-ins enabled on the project
   (`external_anonymous_users_enabled`, matches `config.toml`'s
   `auth.enable_anonymous_sign_ins = true`).
-- `verify-purchase` was smoke-tested end to end for real: anonymous sign-up
-  against `/auth/v1/signup` → real session JWT → `POST verify-purchase` with
-  that JWT → `503 "Purchase verification is not configured for platform
-  android"`. That 503 is the *correct* answer today — it's the fail-closed
-  path from handler.ts, proving auth, routing, and request validation all
-  work; the only missing piece is Google/Apple credentials, which nobody
-  but the project owner can provide (see `.env.example`). Once those are
-  set, that same request starts returning real verification results.
-  `[PENDIENTE: run the same live smoke test against get-course-content,
-  export-user-data, and delete-user-data now that they're deployed.]`
+- All four functions smoke-tested end to end for real against the live
+  project, via a real anonymous sign-up (`/auth/v1/signup`) → session JWT:
+  - `verify-purchase` → `503 "Purchase verification is not configured for
+    platform android"`. Correct fail-closed answer — the only missing piece
+    is Google/Apple credentials, which nobody but the project owner can
+    provide (see `.env.example`). Once those are set, the same request
+    starts returning real verification results.
+  - `get-course-content` → `403 "An active Premium subscription is
+    required"`. Correct — this test user never purchased anything.
+  - `export-user-data` → `200` with the caller's own (empty)
+    subscriptions/verificationAttempts arrays.
+  - `delete-user-data` → `200 {"deleted": true}`, then re-using the same
+    JWT against `export-user-data` immediately afterward returned `401` —
+    confirms the Auth-user deletion (and its cascade to every table
+    referencing it) actually took effect, not just a 200 with no real
+    effect.
+  - One real bug caught by this smoke test, now fixed: the three newer
+    functions were deployed *before* their migrations were pushed (a
+    deploy-ordering slip during the manual rollout), so `get-course-content`
+    and `export-user-data` both 500'd — their rate limiter tried to read/
+    write a table that didn't exist yet. Running `supabase db push` to
+    apply the four pending migrations resolved it; re-running the same
+    smoke test above confirmed the fix.
 - `purge_stale_request_logs()` exists in the database but isn't scheduled
   yet — that needs `pg_cron` enabled from the Supabase Dashboard, a
-  dashboard-only action (see `docs/business/sbom.md`... actually see the
-  "Data retention" note this migration's own comment points to). Until
-  scheduled, the four rate-limit tracking tables grow unbounded; call
-  `select purge_stale_request_logs();` manually from the SQL editor as a
-  stopgap if needed before that's set up.
+  dashboard-only action. Until scheduled, the four rate-limit tracking
+  tables grow unbounded; call `select purge_stale_request_logs();` manually
+  from the SQL editor as a stopgap if needed before that's set up.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
