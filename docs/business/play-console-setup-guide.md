@@ -54,6 +54,15 @@ Esto tiene que reflejar lo que el código hace de verdad — he revisado el repo
 
 Marca "Los usuarios pueden pedir que se borren sus datos" (borrar la app borra todo lo local; para los datos de verificación de compra guardados en el backend, ver la sección 6 de `privacy-policy-draft.md`). Ya **no** marques "No se comparten datos con terceros", "Sin anuncios" ni "Ningún dato se envía fuera del dispositivo" — ninguna de las tres es cierta con AdMob + el backend de verificación integrados.
 
+## Audiencia objetivo (Target audience) y Política de Familias
+
+Distinto de la sección "Data safety" de arriba: **Play Console → Ficha de Play Store → Contenido de la app → Audiencia objetivo y contenido** obliga a declarar explícitamente el grupo de edad al que se dirige la app, no solo qué datos recopila.
+
+- **Grupos de edad a marcar**: dado que el mínimo de edad ya fijado en el código y en el ToS/privacy policy es **16 años** (ver `terms-of-service-draft.md` sección 10), marca únicamente **"18 y mayores"** — no marques ningún grupo de 17 años o menos, ni siquiera "13-15" o "16-17", para que la declaración de Play Console sea coherente con esa política, aunque la casilla de autodeclaración de edad del onboarding no impida técnicamente que alguien mienta sobre su edad.
+- **No marques "Diseñada principalmente para niños" ni "Atractiva para niños"** — hacerlo activa la Política de Familias de Google Play, que **prohíbe la publicidad conductual/personalizada** (obligaría a AdMob a servir solo anuncios no personalizados, incompatible con el consentimiento UMP ya implementado que sí permite anuncios personalizados) y añade requisitos adicionales de diseño y de aprobación humana de contenido, ninguno de los cuales aplica aquí.
+- Esta declaración es **independiente y compatible** con la clasificación de contenido (IARC) de la sección de abajo — una app puede clasificarse "Para todos los públicos" en contenido y aun así declarar una audiencia objetivo adulta si así lo decide el desarrollador, que es exactamente este caso.
+- `[PENDIENTE: solo se puede completar desde la propia consola de Play — no hay API de Play Console disponible en este entorno para verificarlo o rellenarlo automáticamente, mismo caso que la protección de la rama en GitHub.]`
+
 ## 5. Productos de suscripción (lo más importante — que coincidan con el código)
 
 **Play Console → Monetizar → Productos → Suscripciones → Crear suscripción**

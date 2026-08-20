@@ -61,4 +61,4 @@ Cualquier cambio material se notificará dentro de la aplicación antes de que e
 
 ## 9. Contacto
 
-world.webapps@gmail.com
+world.webapps@gmail.com — mismo punto de contacto único (para autoridades públicas y para usuarios, conforme a los arts. 11/12 del Reglamento de Servicios Digitales) descrito en la sección 15 de los [Términos de servicio](https://jordiribasoficial.github.io/App-para-aprender-idiomas/terms.html).

@@ -79,6 +79,8 @@ Estos términos se rigen por la legislación española y de la Unión Europea. C
 
 Antes de iniciar cualquier acción legal, se invita al usuario a contactar primero a través de world.webapps@gmail.com para intentar resolver la disputa de forma amistosa. Este contacto previo es un paso voluntario y no vinculante: no es un requisito para poder acudir a los tribunales ni sustituye el derecho del usuario a hacerlo.
 
+Si el usuario actúa como consumidor residente en la Unión Europea y prefiere una vía de resolución de litigios en línea, puede acudir a la [plataforma de resolución de litigios en línea de la Comisión Europea](https://ec.europa.eu/consumers/odr/) (Reglamento (UE) n.º 524/2013), que conecta con organismos de resolución alternativa de litigios (ADR) acreditados. El uso de esta plataforma es opcional y no sustituye el derecho del usuario a acudir directamente a los tribunales conforme a la sección 12.
+
 ## 14. Términos adicionales para usuarios de Apple App Store
 
 `[PENDIENTE: confirmar redacción final con un asesor legal — estas cláusulas siguen los "Minimum Terms for Developer's End-User License Agreements" del Acuerdo de Licencia de Programa de Apple (Schedule 2), exigidos por Apple cuando el desarrollador usa un EULA propio en lugar del EULA estándar de Apple para que App Store Connect pueda enlazarlo.]`
@@ -95,6 +97,12 @@ Si el usuario ha descargado la App desde la Apple App Store, además de todo lo 
 - Apple y sus filiales son terceros beneficiarios de estos términos y, tras la aceptación por el usuario, tendrán derecho a hacerlos valer frente al usuario como terceros beneficiarios de los mismos.
 - El usuario declara que no se encuentra en un país sometido a embargo por el Gobierno de EE. UU. ni ha sido calificado por dicho Gobierno como país "que apoya el terrorismo", y que no figura en ninguna lista de partes prohibidas o restringidas del Gobierno de EE. UU.
 
-## 15. Contacto
+## 15. Punto de contacto
 
-world.webapps@gmail.com
+Conforme a los arts. 11 y 12 del Reglamento (UE) 2022/2065 (Reglamento de Servicios Digitales, DSA), designamos el siguiente punto de contacto único, accesible por medios electrónicos:
+
+- **Email:** world.webapps@gmail.com
+- **Idiomas en los que se atiende:** español e inglés.
+- **Para qué sirve:** tanto las autoridades públicas de los Estados miembros, la Comisión Europea y el Comité Europeo de Servicios Digitales (art. 11), como los propios usuarios de la App (art. 12), pueden dirigirse a este contacto directamente, incluido por medios electrónicos.
+
+No hemos designado un representante legal en la Unión Europea distinto de esta dirección de contacto. `[PENDIENTE: confirmar con el asesor legal si, dado el volumen de usuarios actual, existe obligación de designar un representante legal en la UE conforme al art. 13 DSA, al no estar establecidos en ella pero ofrecer servicios a usuarios de la UE.]`
