@@ -2,7 +2,7 @@
 
 > **BORRADOR. No publicar sin revisión de un abogado real.** Nombre y email ya rellenados según lo indicado por el usuario — la jurisdicción (sección 12) y el resto de puntos `[PENDIENTE]` siguen sin confirmar con un asesor real. La sección 7 (DMCA/LSSI) no debe activarse ni publicarse hasta que exista una función real de subida de contenido por el usuario; la sección 8 (normas de conducta), hasta que exista alguna función de interacción entre usuarios.
 
-**Última actualización: 19 de agosto de 2026**
+**Última actualización: 20 de agosto de 2026**
 
 ## 1. Aceptación de los términos
 
@@ -79,6 +79,22 @@ Estos términos se rigen por la legislación española y de la Unión Europea. C
 
 Antes de iniciar cualquier acción legal, se invita al usuario a contactar primero a través de world.webapps@gmail.com para intentar resolver la disputa de forma amistosa. Este contacto previo es un paso voluntario y no vinculante: no es un requisito para poder acudir a los tribunales ni sustituye el derecho del usuario a hacerlo.
 
-## 14. Contacto
+## 14. Términos adicionales para usuarios de Apple App Store
+
+`[PENDIENTE: confirmar redacción final con un asesor legal — estas cláusulas siguen los "Minimum Terms for Developer's End-User License Agreements" del Acuerdo de Licencia de Programa de Apple (Schedule 2), exigidos por Apple cuando el desarrollador usa un EULA propio en lugar del EULA estándar de Apple para que App Store Connect pueda enlazarlo.]`
+
+Si el usuario ha descargado la App desde la Apple App Store, además de todo lo anterior:
+
+- Estos términos constituyen un acuerdo entre el usuario y Webapps únicamente, no con Apple Inc. ni sus filiales ("Apple"). Apple no es parte de estos términos y no tiene ninguna responsabilidad respecto a la App ni a su contenido.
+- La licencia concedida se limita a un derecho no transferible de usar la App en dispositivos de marca Apple que el usuario posea o controle, conforme a las Normas de uso del App Store.
+- Apple no tiene obligación alguna de prestar mantenimiento ni soporte para la App.
+- En caso de que la App no cumpla con alguna garantía aplicable, el usuario puede notificarlo a Apple, quien reembolsará el precio de compra de la App, si lo hubiera; en la máxima medida permitida por la ley, Apple no tiene ninguna otra obligación de garantía respecto a la App.
+- Apple no es responsable de atender reclamaciones del usuario o de terceros relacionadas con la App, incluidas reclamaciones de responsabilidad por producto, incumplimiento de normativa legal o regulatoria aplicable, o reclamaciones bajo normativa de protección de consumidores.
+- En caso de reclamación de un tercero por infracción de derechos de propiedad intelectual relacionada con la App, Webapps —no Apple— es el único responsable de la investigación, defensa, resolución y liquidación de dicha reclamación.
+- El usuario debe cumplir con los términos de cualquier acuerdo con terceros que resulte aplicable al usar la App (p. ej., el contrato de datos móviles con su operador).
+- Apple y sus filiales son terceros beneficiarios de estos términos y, tras la aceptación por el usuario, tendrán derecho a hacerlos valer frente al usuario como terceros beneficiarios de los mismos.
+- El usuario declara que no se encuentra en un país sometido a embargo por el Gobierno de EE. UU. ni ha sido calificado por dicho Gobierno como país "que apoya el terrorismo", y que no figura en ninguna lista de partes prohibidas o restringidas del Gobierno de EE. UU.
+
+## 15. Contacto
 
 world.webapps@gmail.com
