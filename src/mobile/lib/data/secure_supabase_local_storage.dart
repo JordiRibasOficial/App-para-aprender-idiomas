@@ -14,7 +14,20 @@ abstract interface class KeyValueSecureStore {
 class _FlutterKeyValueSecureStore implements KeyValueSecureStore {
   const _FlutterKeyValueSecureStore();
 
-  static const _storage = FlutterSecureStorage();
+  // iOS default (KeychainAccessibility.unlocked) lets this item ride along
+  // in an encrypted iCloud/iTunes backup and come back on a *different*
+  // physical device — fine for most Keychain items, wrong for a standing
+  // credential like a refresh token. `unlocked_this_device` still requires
+  // the device to be unlocked to read it, but ties the item to this device,
+  // so a restored backup on another device can't resume the session.
+  // Android's EncryptedSharedPreferences doesn't need the same treatment:
+  // its key lives in the hardware-backed Android Keystore, which never
+  // migrates with a backup, so a restored file is unreadable regardless.
+  static const _storage = FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.unlocked_this_device,
+    ),
+  );
 
   @override
   Future<String?> read(String key) => _storage.read(key: key);
