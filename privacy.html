@@ -63,7 +63,8 @@
         identidad anónima anterior — nunca a un nombre o email. No tenemos acceso a datos de
         tarjetas ni de pago en ningún momento; eso lo gestionan Google/Apple directamente.
         También se registra la marca de tiempo de cada intento de verificación, únicamente
-        para limitar el abuso de este mecanismo.</p>
+        para limitar el abuso de este mecanismo — estos registros de control de abuso se
+        eliminan automáticamente a los 7 días.</p>
         <p><strong>Qué curso de pago se está descargando</strong>: al abrir un idioma de pago
         (portugués, francés o japonés), la app pide su contenido a nuestro backend, que
         comprueba que la identidad anónima tiene una suscripción activa antes de responder.
@@ -114,11 +115,13 @@
         tratamiento y portar sus datos. Dado que el progreso vive localmente, el usuario ya
         tiene control total: desinstalar la app elimina todos los datos locales, incluidos el
         email opcional y la identidad anónima de sesión. Para acceder a los datos guardados en
-        nuestro backend o exportarlos, puede usar la opción "Mis datos" dentro de la propia App
-        (descarga inmediata, sin necesidad de escribir), o solicitarlo por email a
-        <a href="mailto:world.webapps@gmail.com">world.webapps@gmail.com</a>. Para solicitar su
-        eliminación, puede escribirse a ese mismo email indicando la plataforma (Android/iOS) y,
-        si se conoce, la fecha aproximada de la suscripción.
+        nuestro backend, exportarlos o <strong>eliminarlos permanentemente</strong>, puede usar
+        la opción "Mis datos" dentro de la propia App — el botón "Eliminar mis datos" borra de
+        inmediato, sin necesidad de escribir a nadie, la suscripción y los intentos de
+        verificación de compra asociados a su identidad anónima; es irreversible. También puede
+        solicitarlo por email a
+        <a href="mailto:world.webapps@gmail.com">world.webapps@gmail.com</a> indicando la
+        plataforma (Android/iOS) y, si se conoce, la fecha aproximada de la suscripción.
       </p>
       <p>
         En caso de una brecha de seguridad que afecte a tus datos personales y suponga un
