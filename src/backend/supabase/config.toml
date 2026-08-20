@@ -445,3 +445,9 @@ enabled = true
 verify_jwt = true
 import_map = "./functions/export-user-data/deno.json"
 entrypoint = "./functions/export-user-data/index.ts"
+
+[functions.delete-user-data]
+enabled = true
+verify_jwt = true
+import_map = "./functions/delete-user-data/deno.json"
+entrypoint = "./functions/delete-user-data/index.ts"

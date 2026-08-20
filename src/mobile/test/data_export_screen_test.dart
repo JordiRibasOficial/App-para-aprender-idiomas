@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:app_para_aprender_idiomas/domain/repositories/user_data_deletion_repository.dart';
 import 'package:app_para_aprender_idiomas/domain/repositories/user_data_export_repository.dart';
 import 'package:app_para_aprender_idiomas/presentation/data_export_screen.dart';
+import 'package:app_para_aprender_idiomas/presentation/providers/user_data_deletion_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/user_data_export_providers.dart';
 
 class _FakeUserDataExportRepository implements UserDataExportRepository {
@@ -19,9 +21,30 @@ class _FakeUserDataExportRepository implements UserDataExportRepository {
   }
 }
 
-Widget _wrap(UserDataExportRepository repository) {
+class _FakeUserDataDeletionRepository implements UserDataDeletionRepository {
+  _FakeUserDataDeletionRepository({this.error});
+
+  final Object? error;
+  int callCount = 0;
+
+  @override
+  Future<void> deleteUserData() async {
+    callCount++;
+    if (error != null) throw error!;
+  }
+}
+
+Widget _wrap(
+  UserDataExportRepository repository, {
+  UserDataDeletionRepository? deletionRepository,
+}) {
   return ProviderScope(
-    overrides: [userDataExportRepositoryProvider.overrideWithValue(repository)],
+    overrides: [
+      userDataExportRepositoryProvider.overrideWithValue(repository),
+      userDataDeletionRepositoryProvider.overrideWithValue(
+        deletionRepository ?? _FakeUserDataDeletionRepository(),
+      ),
+    ],
     child: const MaterialApp(home: DataExportScreen()),
   );
 }
@@ -76,6 +99,73 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('No se pudo exportar'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('deletion asks for confirmation before calling the repository', (
+    tester,
+  ) async {
+    final deletionRepository = _FakeUserDataDeletionRepository();
+    await tester.pumpWidget(
+      _wrap(
+        _FakeUserDataExportRepository(result: {}),
+        deletionRepository: deletionRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Eliminar mis datos').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('¿Eliminar tus datos?'), findsOneWidget);
+    expect(deletionRepository.callCount, 0);
+
+    await tester.tap(find.text('Cancelar'));
+    await tester.pumpAndSettle();
+
+    expect(deletionRepository.callCount, 0);
+  });
+
+  testWidgets('confirming deletion calls the repository and shows success', (
+    tester,
+  ) async {
+    final deletionRepository = _FakeUserDataDeletionRepository();
+    await tester.pumpWidget(
+      _wrap(
+        _FakeUserDataExportRepository(result: {}),
+        deletionRepository: deletionRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Eliminar mis datos').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Eliminar'));
+    await tester.pumpAndSettle();
+
+    expect(deletionRepository.callCount, 1);
+    expect(find.text('Tus datos se han eliminado.'), findsOneWidget);
+  });
+
+  testWidgets('a failed deletion shows an inline error, not a crash', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        _FakeUserDataExportRepository(result: {}),
+        deletionRepository: _FakeUserDataDeletionRepository(
+          error: Exception('delete-user-data respondió 500'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Eliminar mis datos').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Eliminar'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('No se pudo eliminar'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

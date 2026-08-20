@@ -121,6 +121,27 @@ error). The mobile app's "Mis datos" screen
 (`presentation/data_export_screen.dart`) calls this and lets the user copy
 the resulting JSON to their clipboard.
 
+## delete-user-data
+
+RGPD art. 17 (right to erasure) — the mirror of export-user-data above.
+Deletes the caller's Supabase Auth user via the Admin API
+(`admin.auth.admin.deleteUser`), which cascades to every table with a
+`references auth.users (id) on delete cascade` FK — `subscriptions`,
+`verify_purchase_attempts`, and all four rate-limit tracking tables — in
+one transaction. No separate per-table deletes to keep in sync as new
+tables are added; any future table just needs the same cascade FK.
+
+Same fail-closed shape as the others: no auth → 401, more than 5 requests
+from the same user in 10 minutes → 429 (see `delete_user_data_requests`),
+a deletion failure → generic 500 (not the raw Admin API error).
+Irreversible and immediate: once it succeeds, the caller's anonymous
+identity no longer exists, so their existing Bearer token stops working —
+the mobile app signs out locally right after a successful call
+(`SupabaseUserDataDeletionRepository`) rather than waiting for a token
+failure to discover that. The "Eliminar mis datos" button lives on the same
+"Mis datos" screen as the export button, behind a confirmation dialog since
+this can't be undone.
+
 ## Status
 
 **Deployed and confirmed working end to end, minus store credentials.**
@@ -184,6 +205,7 @@ npx supabase secrets set --env-file supabase/functions/.env
 npx supabase functions deploy verify-purchase
 npx supabase functions deploy get-course-content
 npx supabase functions deploy export-user-data
+npx supabase functions deploy delete-user-data
 ```
 
 ## Running the tests
@@ -206,6 +228,11 @@ deno lint
 cd ../export-user-data
 deno test --allow-env handler_test.ts
 deno check index.ts handler.ts handler_test.ts types.ts
+deno lint
+
+cd ../delete-user-data
+deno test --allow-env handler_test.ts
+deno check index.ts handler.ts handler_test.ts
 deno lint
 ```
 
@@ -243,6 +270,39 @@ Authorization: Bearer <Supabase user JWT>
 ```
 
 No body. Response: `{ "userId", "exportedAt", "subscriptions": [...], "verificationAttempts": [...] }`.
+
+```
+POST /functions/v1/delete-user-data
+Authorization: Bearer <Supabase user JWT>
+```
+
+No body. Response: `{ "deleted": true }`. Irreversible — see "delete-user-data" above.
+
+## Data retention
+
+`verify_purchase_attempts`, `get_course_content_requests`,
+`export_user_data_requests`, and `delete_user_data_requests` exist purely
+to back each function's rate limiter — the longest window in use is 10
+minutes, so nothing reads a row older than that for any real purpose.
+`purge_stale_request_logs()` (added by migration
+`20260820140100_create_purge_stale_request_logs_function.sql`) deletes rows
+older than 7 days from all four, giving comfortable slack for debugging a
+rate-limit dispute without keeping the tables forever — RGPD data
+minimization (store only what the stated purpose needs).
+
+The migration only creates the function; it does not schedule it, because
+scheduling means enabling `pg_cron` — a per-project opt-in extension only
+turned on from **Dashboard → Database → Extensions**, not something a
+migration file can do. Once enabled, schedule it from the SQL Editor:
+
+```sql
+select cron.schedule('purge-stale-request-logs', '0 3 * * *', 'select public.purge_stale_request_logs();');
+```
+
+Until that's set up, run `select public.purge_stale_request_logs();` by
+hand from the SQL Editor occasionally — the tables aren't large enough yet
+for this to be urgent, but it's one Dashboard toggle away from being fully
+automatic.
 
 ## Backups
 

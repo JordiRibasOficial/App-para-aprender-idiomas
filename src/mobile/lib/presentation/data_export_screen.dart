@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'providers/user_data_deletion_providers.dart';
 import 'providers/user_data_export_providers.dart';
 import 'theme/app_theme.dart';
 
-/// RGPD art. 15/20: lets the user pull everything the backend holds about
-/// their own anonymous session identity, in one tap — see
-/// docs/business/records-of-processing-activities.md and the
-/// `export-user-data` Edge Function this calls.
+/// RGPD art. 15/20/17: lets the user pull, or permanently delete,
+/// everything the backend holds about their own anonymous session identity
+/// — see docs/business/records-of-processing-activities.md and the
+/// `export-user-data`/`delete-user-data` Edge Functions this calls.
 class DataExportScreen extends ConsumerStatefulWidget {
   const DataExportScreen({super.key});
 
@@ -22,6 +23,10 @@ class _DataExportScreenState extends ConsumerState<DataExportScreen> {
   bool _loading = false;
   String? _error;
   String? _exportedJson;
+
+  bool _deleting = false;
+  String? _deleteError;
+  bool _deleted = false;
 
   Future<void> _export() async {
     setState(() {
@@ -40,6 +45,57 @@ class _DataExportScreenState extends ConsumerState<DataExportScreen> {
       setState(() => _error = e.toString());
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _confirmAndDelete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('¿Eliminar tus datos?'),
+        content: const Text(
+          'Esto borra permanentemente tu suscripción y tus intentos de '
+          'verificación de compra guardados en nuestro backend. No se '
+          'puede deshacer. Tu progreso de lecciones en este dispositivo '
+          'no se ve afectado.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).colorScheme.error,
+              foregroundColor: Theme.of(dialogContext).colorScheme.onError,
+            ),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() {
+      _deleting = true;
+      _deleteError = null;
+    });
+
+    try {
+      final repository = ref.read(userDataDeletionRepositoryProvider);
+      await repository.deleteUserData();
+      if (!mounted) return;
+      setState(() {
+        _deleted = true;
+        _exportedJson = null;
+      });
+    } on Exception catch (e) {
+      if (!mounted) return;
+      setState(() => _deleteError = e.toString());
+    } finally {
+      if (mounted) setState(() => _deleting = false);
     }
   }
 
@@ -89,6 +145,48 @@ class _DataExportScreenState extends ConsumerState<DataExportScreen> {
                 'No se pudo exportar: $_error',
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
+            ],
+            const SizedBox(height: AppTheme.spaceLg),
+            const Divider(),
+            const SizedBox(height: AppTheme.spaceLg),
+            Text(
+              'Borrado de datos',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: AppTheme.spaceSm),
+            const Text(
+              'Borra permanentemente el estado de tu suscripción y tus '
+              'intentos de verificación de compra guardados en nuestro '
+              'backend. Esta acción no se puede deshacer.',
+            ),
+            const SizedBox(height: AppTheme.spaceMd),
+            OutlinedButton(
+              onPressed: (_deleting || _deleted) ? null : _confirmAndDelete,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
+                side: BorderSide(color: Theme.of(context).colorScheme.error),
+              ),
+              child: _deleting
+                  ? Semantics(
+                      label: 'Eliminando datos',
+                      child: const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  : const Text('Eliminar mis datos'),
+            ),
+            if (_deleteError != null) ...[
+              const SizedBox(height: AppTheme.spaceMd),
+              Text(
+                'No se pudo eliminar: $_deleteError',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            ],
+            if (_deleted) ...[
+              const SizedBox(height: AppTheme.spaceMd),
+              const Text('Tus datos se han eliminado.'),
             ],
             if (_exportedJson != null) ...[
               const SizedBox(height: AppTheme.spaceMd),

@@ -16,7 +16,7 @@
 - **Categorías de datos:** identidad anónima de sesión (UUID sin nombre/email), plataforma (Android/iOS), producto adquirido, estado de la suscripción, fecha de expiración, token de compra (verificado, no almacenado en claro tras la verificación — ver `src/backend/README.md`).
 - **Destinatarios / encargados del tratamiento:** Supabase (alojamiento y base de datos — encargado, DPA incorporado automáticamente en sus Términos de Servicio, ver sección "Encargados" más abajo); Google Play Billing / Apple App Store (verificación de la compra en sí — actúan como responsables independientes de esa parte, no como encargados nuestros).
 - **Transferencias internacionales:** ninguna — Supabase aloja este proyecto en AWS región `eu-west-3` (París, dentro del EEE; confirmado en `src/backend/README.md` § Status). No aplican Cláusulas Contractuales Tipo porque no hay transferencia fuera del EEE.
-- **Plazo de conservación:** mientras la suscripción esté activa o pueda ser objeto de disputa/reembolso; sin fecha de purga automática definida hoy. `[PENDIENTE: definir plazo de purga para suscripciones expiradas hace mucho tiempo.]`
+- **Plazo de conservación:** la fila de `subscriptions` en sí — mientras la suscripción esté activa o pueda ser objeto de disputa/reembolso; sin fecha de purga automática definida hoy. `[PENDIENTE: definir plazo de purga para suscripciones expiradas hace mucho tiempo.]` El log de intentos de verificación (`verify_purchase_attempts`, usado solo para el rate limiting) sí tiene purga automática a los 7 días — ver `purge_stale_request_logs()` en `src/backend/README.md` sección "Data retention". El usuario también puede borrar ambos de inmediato desde "Mis datos" → "Eliminar mis datos" en la App (ver actividad 2).
 - **Medidas de seguridad:** RLS en Supabase (cada fila solo accesible por su propio dueño vía el backend), cifrado en reposo AES-256 (verificado, ver `src/backend/README.md`), TLS en tránsito, rate limiting sobre el endpoint de verificación.
 
 ## 2. Identidad anónima de sesión
@@ -27,7 +27,7 @@
 - **Categorías de datos:** identificador anónimo (UUID de sesión Supabase Auth, sin PII).
 - **Destinatarios / encargados:** Supabase.
 - **Transferencias internacionales:** igual que actividad 1.
-- **Plazo de conservación:** vinculado al ciclo de vida de la actividad 1; se elimina si el usuario solicita el borrado de sus datos de verificación de compra (ver `privacy-policy-draft.md` sección 6).
+- **Plazo de conservación:** vinculado al ciclo de vida de la actividad 1; se elimina si el usuario solicita el borrado de sus datos de verificación de compra — de forma inmediata y autoservicio desde "Mis datos" → "Eliminar mis datos" en la App (art. 17 RGPD, derecho de supresión; ver `delete-user-data` en `src/backend/README.md` y `privacy-policy-draft.md` sección 6), o por email.
 - **Medidas de seguridad:** igual que actividad 1.
 
 ## 3. Entrega de contenido de pago (idioma de estudio)
