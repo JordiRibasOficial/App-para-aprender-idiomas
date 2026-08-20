@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 import { createGetUserId } from "../_shared/auth.ts";
+import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleGetCourseContent } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { PremiumLanguage } from "./types.ts";
@@ -28,6 +29,16 @@ const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
 
+// Generous: this only serves static bundled JSON to an already-Premium
+// user, so the legitimate use case (browsing between the 3 Premium
+// languages, retries after a flaky network) is cheap and frequent — the
+// limit exists to stop scripted hammering, not normal use.
+const isRateLimited = createRateLimiter(admin, {
+  table: "get_course_content_requests",
+  maxAttempts: 30,
+  windowMs: 10 * 60 * 1000,
+});
+
 async function hasActivePremium(userId: string): Promise<boolean> {
   const { count, error } = await admin
     .from("subscriptions")
@@ -47,6 +58,7 @@ const courseContent: Record<PremiumLanguage, unknown> = {
 
 const deps: HandlerDeps = {
   getUserId,
+  isRateLimited,
   hasActivePremium,
   courseContent,
 };

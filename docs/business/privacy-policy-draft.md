@@ -51,7 +51,7 @@ En caso de una brecha de seguridad que afecte a tus datos personales y suponga u
 
 ## 7. Menores de edad
 
-La aplicación no está dirigida específicamente a menores de 13 años (o la edad mínima aplicable según la jurisdicción). `[PENDIENTE: definir política de edad mínima real con el asesor legal, especialmente si se plantea un público infantil en el futuro — cambiaría sustancialmente los requisitos, p. ej. COPPA en EE.UU.]`
+La App no está dirigida a menores de 16 años. Este umbral es deliberadamente más alto que el mínimo legal de cualquier jurisdicción relevante (14 años en España según la LOPDGDD, 13 años según el RGPD del Reino Unido o la COPPA en EE. UU.), para no tener que aplicar un umbral distinto según el país. Durante el registro se pide al usuario que confirme, mediante una casilla específica, que cumple esta edad — una autodeclaración, no una verificación documental. No recopilamos intencionadamente datos de menores de 16 años; si tenemos constancia de que un usuario no cumple este mínimo, eliminaremos su cuenta y los datos asociados. `[PENDIENTE: confirmar con el asesor legal si esta autodeclaración es suficiente o si conviene reforzarla en el futuro — ver también terms-of-service-draft.md sección 10.]`
 
 ## 8. Cambios en esta política
 

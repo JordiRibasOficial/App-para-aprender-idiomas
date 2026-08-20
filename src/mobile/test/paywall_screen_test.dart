@@ -83,11 +83,39 @@ void main() {
   );
 
   testWidgets(
+    'the Suscribirse button stays disabled until the withdrawal-right '
+    'checkbox is checked',
+    (tester) async {
+      await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
+      await tester.pumpAndSettle();
+
+      final button = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
+      );
+      expect(button.onPressed, isNull);
+
+      await tester.ensureVisible(find.byType(CheckboxListTile));
+      await tester.tap(find.byType(CheckboxListTile));
+      await tester.pump();
+
+      final buttonAfterConsent = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
+      );
+      expect(buttonAfterConsent.onPressed, isNotNull);
+    },
+  );
+
+  testWidgets(
     'purchasing a plan updates the screen to the active-subscription view',
     (tester) async {
       await tester.pumpWidget(buildPaywall(MockSubscriptionRepository()));
       await tester.pumpAndSettle();
 
+      await tester.tap(find.byType(CheckboxListTile));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(
+        find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
+      );
       await tester.tap(
         find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
       );
@@ -108,6 +136,11 @@ void main() {
       await tester.pumpWidget(buildPaywall(repository));
       await tester.pumpAndSettle();
 
+      await tester.tap(find.byType(CheckboxListTile));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(
+        find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
+      );
       await tester.tap(
         find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
       );

@@ -58,7 +58,12 @@ class _AlreadyPremiumSubscriptionRepository implements SubscriptionRepository {
 /// interaction wasn't worth it for a widget test that isn't exercising
 /// anything language-specific in the first place.
 Future<void> _acceptTermsAndStart(WidgetTester tester) async {
-  await tester.tap(find.byType(Checkbox));
+  // Two checkboxes now (terms + minimum-age self-declaration) — tap both,
+  // not `find.byType(Checkbox)` alone, which would throw on more than one
+  // match.
+  await tester.tap(find.byType(Checkbox).at(0));
+  await tester.pump();
+  await tester.tap(find.byType(Checkbox).at(1));
   await tester.pump();
   await tester.tap(find.text('Empezar'));
   await tester.pumpAndSettle();
@@ -111,51 +116,62 @@ void main() {
     expect(find.text('Inglés · A1'), findsNothing);
   });
 
-  testWidgets('"Empezar" stays disabled until the terms checkbox is ticked', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          progressRepositoryProvider.overrideWithValue(
-            InMemoryProgressRepository(),
-          ),
-          onboardingRepositoryProvider.overrideWithValue(
-            InMemoryOnboardingRepository(),
-          ),
-          termsAcceptanceRepositoryProvider.overrideWithValue(
-            InMemoryTermsAcceptanceRepository(),
-          ),
-          subscriptionRepositoryProvider.overrideWithValue(
-            MockSubscriptionRepository(),
-          ),
-        ],
-        child: const MyApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
+  testWidgets(
+    '"Empezar" stays disabled until both the terms and age checkboxes are ticked',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            progressRepositoryProvider.overrideWithValue(
+              InMemoryProgressRepository(),
+            ),
+            onboardingRepositoryProvider.overrideWithValue(
+              InMemoryOnboardingRepository(),
+            ),
+            termsAcceptanceRepositoryProvider.overrideWithValue(
+              InMemoryTermsAcceptanceRepository(),
+            ),
+            subscriptionRepositoryProvider.overrideWithValue(
+              MockSubscriptionRepository(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    expect(
-      tester
-          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
-          .onPressed,
-      isNull,
-    );
+      expect(
+        tester
+            .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
+            .onPressed,
+        isNull,
+      );
 
-    await tester.tap(find.byType(Checkbox));
-    await tester.pump();
+      await tester.tap(find.byType(Checkbox).at(0)); // terms only
+      await tester.pump();
 
-    expect(
-      tester
-          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
-          .onPressed,
-      isNotNull,
-    );
+      expect(
+        tester
+            .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
+            .onPressed,
+        isNull,
+      );
 
-    // Still on the welcome screen — ticking the box alone must not
-    // navigate on its own.
-    expect(find.text('App para Aprender Idiomas'), findsOneWidget);
-  });
+      await tester.tap(find.byType(Checkbox).at(1)); // age too
+      await tester.pump();
+
+      expect(
+        tester
+            .widget<FilledButton>(find.widgetWithText(FilledButton, 'Empezar'))
+            .onPressed,
+        isNotNull,
+      );
+
+      // Still on the welcome screen — ticking both boxes alone must not
+      // navigate on its own.
+      expect(find.text('App para Aprender Idiomas'), findsOneWidget);
+    },
+  );
 
   testWidgets(
     'completing onboarding as a guest reaches the lesson list and persists the choice',

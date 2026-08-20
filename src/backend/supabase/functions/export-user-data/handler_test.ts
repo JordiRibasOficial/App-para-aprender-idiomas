@@ -24,6 +24,7 @@ function buildDeps(overrides: Partial<HandlerDeps> = {}): HandlerDeps {
   return {
     getUserId: (authHeader) =>
       Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    isRateLimited: () => Promise.resolve(false),
     buildExport: () => Promise.resolve(FAKE_EXPORT),
     ...overrides,
   };
@@ -39,6 +40,35 @@ Deno.test("rejects requests without a valid auth token", async () => {
   const response = await handleExportUserData(request(null), buildDeps());
   assertEquals(response.status, 401);
 });
+
+Deno.test("rejects a rate-limited caller with 429, without building an export", async () => {
+  let buildExportCalled = false;
+  const deps = buildDeps({
+    isRateLimited: () => Promise.resolve(true),
+    buildExport: () => {
+      buildExportCalled = true;
+      return Promise.resolve(FAKE_EXPORT);
+    },
+  });
+  const response = await handleExportUserData(request(), deps);
+
+  assertEquals(response.status, 429);
+  assertEquals(buildExportCalled, false);
+});
+
+Deno.test(
+  "a rate-limit check failure surfaces as a generic 500, not the raw Postgres error",
+  async () => {
+    const deps = buildDeps({
+      isRateLimited: () => Promise.reject(new Error("Rate limit check failed: connection refused")),
+    });
+    const response = await handleExportUserData(request(), deps);
+    const body = await response.json();
+
+    assertEquals(response.status, 500);
+    assertEquals(body, { error: "Internal server error" });
+  },
+);
 
 Deno.test("returns the caller's own export for a valid caller", async () => {
   const response = await handleExportUserData(request(), buildDeps());

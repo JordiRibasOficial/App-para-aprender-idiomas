@@ -58,7 +58,10 @@ Future<void> pumpFreshApp(
 /// guest, landing on the lesson list. Same tap pattern proven stable in
 /// app_test.dart.
 Future<void> completeOnboardingAsGuest(WidgetTester tester) async {
-  await tester.tap(find.byType(Checkbox));
+  // Two checkboxes (terms + minimum-age self-declaration) — tap both.
+  await tester.tap(find.byType(Checkbox).at(0));
+  await tester.pump();
+  await tester.tap(find.byType(Checkbox).at(1));
   await tester.pump();
   await tester.tap(find.text('Empezar'));
   await tester.pumpAndSettle();

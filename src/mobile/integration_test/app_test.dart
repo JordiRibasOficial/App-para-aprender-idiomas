@@ -31,7 +31,9 @@ void main() {
       expect(find.text('Inglés · A1'), findsNothing);
 
       // --- Onboarding: language (English default) -> level (A1 default) -> guest ---
-      await tester.tap(find.byType(Checkbox));
+      await tester.tap(find.byType(Checkbox).at(0));
+      await tester.pump();
+      await tester.tap(find.byType(Checkbox).at(1));
       await tester.pump();
       await tester.tap(find.text('Empezar'));
       await tester.pumpAndSettle();

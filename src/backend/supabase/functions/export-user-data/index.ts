@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 import { createGetUserId } from "../_shared/auth.ts";
+import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleExportUserData } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { UserDataExport } from "./types.ts";
@@ -18,6 +19,16 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
+
+// Lower than the other two functions: there's no legitimate reason for a
+// user to re-export their own data many times in a short window, and each
+// call does two table reads — this still comfortably covers "exported,
+// then retried after a network hiccup."
+const isRateLimited = createRateLimiter(admin, {
+  table: "export_user_data_requests",
+  maxAttempts: 10,
+  windowMs: 10 * 60 * 1000,
+});
 
 async function buildExport(userId: string): Promise<UserDataExport> {
   const [subscriptionsResult, attemptsResult] = await Promise.all([
@@ -54,6 +65,7 @@ async function buildExport(userId: string): Promise<UserDataExport> {
 
 const deps: HandlerDeps = {
   getUserId,
+  isRateLimited,
   buildExport,
 };
 

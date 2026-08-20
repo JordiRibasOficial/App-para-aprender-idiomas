@@ -20,6 +20,15 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   // nothing meaningful to pre-check even on a re-visit within the same
   // onboarding pass.
   bool _accepted = false;
+  // Separate from _accepted on purpose: this is a factual declaration
+  // ("I am at least this old"), not agreement to a contract — kept as its
+  // own checkbox so it stands as distinct evidence of that specific fact,
+  // not blended into contract acceptance. See terms-of-service-draft.md
+  // § 10 for why 16, not the app's actual jurisdiction-by-jurisdiction
+  // minimum (LOPDGDD sets 14 in Spain, UK GDPR sets 13): one number above
+  // every relevant threshold avoids per-country logic this app has no way
+  // to apply anyway, since age here is self-declared, not verified.
+  bool _ageConfirmed = false;
 
   Future<void> _start() async {
     await ref.read(termsAcceptanceProvider.notifier).accept();
@@ -109,9 +118,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                   ],
                 ),
               ),
+              CheckboxListTile(
+                value: _ageConfirmed,
+                onChanged: (value) =>
+                    setState(() => _ageConfirmed = value ?? false),
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Confirmo que tengo 16 años o más.'),
+              ),
               const SizedBox(height: AppTheme.spaceSm),
               FilledButton(
-                onPressed: _accepted ? _start : null,
+                onPressed: (_accepted && _ageConfirmed) ? _start : null,
                 child: const Text('Empezar'),
               ),
             ],
