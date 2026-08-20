@@ -1,0 +1,3263 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:aa31e55e-2e06-40e4-8a22-12a5994f4210",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-20T16:29:24Z",
+    "component": {
+      "type": "application",
+      "name": "app-para-aprender-idiomas",
+      "version": "0.1.0"
+    },
+    "tools": [
+      {
+        "vendor": "internal",
+        "name": "tools/sbom/generate_sbom.py",
+        "version": "1.0"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/_fe_analyzer_shared@99.0.0",
+      "name": "_fe_analyzer_shared",
+      "version": "99.0.0",
+      "purl": "pkg:pub/_fe_analyzer_shared@99.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a49d6cf99e8d8e7a8e93668d09ced0bbdb954d0b4fccc2f5f9241c6b87fad95c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/analyzer@12.1.0",
+      "name": "analyzer",
+      "version": "12.1.0",
+      "purl": "pkg:pub/analyzer@12.1.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "663efa951fb8a45e06f491223a604c93820598f20e6a99c25617a1576065e8b7"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/app_links@7.2.1",
+      "name": "app_links",
+      "version": "7.2.1",
+      "purl": "pkg:pub/app_links@7.2.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f8db46d2ea9ff6f3a37191a7fd5b7813da1253ace8c32c1b9eadace41d1188ea"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/app_links_linux@1.0.3",
+      "name": "app_links_linux",
+      "version": "1.0.3",
+      "purl": "pkg:pub/app_links_linux@1.0.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f5f7173a78609f3dfd4c2ff2c95bd559ab43c80a87dc6a095921d96c05688c81"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/app_links_platform_interface@2.0.4",
+      "name": "app_links_platform_interface",
+      "version": "2.0.4",
+      "purl": "pkg:pub/app_links_platform_interface@2.0.4",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7546f09a6e93f4a2df2fe2bd40a5c6c64310ac461b036d82b43033be7a59f809"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/app_links_web@1.0.4",
+      "name": "app_links_web",
+      "version": "1.0.4",
+      "purl": "pkg:pub/app_links_web@1.0.4",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "af060ed76183f9e2b87510a9480e56a5352b6c249778d07bd2c95fc35632a555"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/app_tracking_transparency@2.0.7",
+      "name": "app_tracking_transparency",
+      "version": "2.0.7",
+      "purl": "pkg:pub/app_tracking_transparency@2.0.7",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3a52669c0645ffd7efe9a460047616de3e3f2128338f9ec7cdb681628d36238e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/archive@4.0.9",
+      "name": "archive",
+      "version": "4.0.9",
+      "purl": "pkg:pub/archive@4.0.9",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a96e8b390886ee8abb49b7bd3ac8df6f451c621619f52a26e815fdcf568959ff"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/args@2.7.0",
+      "name": "args",
+      "version": "2.7.0",
+      "purl": "pkg:pub/args@2.7.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d0481093c50b1da8910eb0bb301626d4d8eb7284aa739614d2b394ee09e3ea04"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/async@2.13.1",
+      "name": "async",
+      "version": "2.13.1",
+      "purl": "pkg:pub/async@2.13.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e2eb0491ba5ddb6177742d2da23904574082139b07c1e33b8503b9f46f3e1a37"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/boolean_selector@2.1.2",
+      "name": "boolean_selector",
+      "version": "2.1.2",
+      "purl": "pkg:pub/boolean_selector@2.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8aab1771e1243a5063b8b0ff68042d67334e3feab9e95b9490f9a6ebf73b42ea"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/characters@1.4.1",
+      "name": "characters",
+      "version": "1.4.1",
+      "purl": "pkg:pub/characters@1.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/checked_yaml@2.0.4",
+      "name": "checked_yaml",
+      "version": "2.0.4",
+      "purl": "pkg:pub/checked_yaml@2.0.4",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "959525d3162f249993882720d52b7e0c833978df229be20702b33d48d91de70f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/cli_config@0.2.0",
+      "name": "cli_config",
+      "version": "0.2.0",
+      "purl": "pkg:pub/cli_config@0.2.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ac20a183a07002b700f0c25e61b7ee46b23c309d76ab7b7640a028f18e4d99ec"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/cli_util@0.4.2",
+      "name": "cli_util",
+      "version": "0.4.2",
+      "purl": "pkg:pub/cli_util@0.4.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ff6785f7e9e3c38ac98b2fb035701789de90154024a75b6cb926445e83197d1c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/clock@1.1.2",
+      "name": "clock",
+      "version": "1.1.2",
+      "purl": "pkg:pub/clock@1.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fddb70d9b5277016c77a80201021d40a2247104d9f4aa7bab7157b7e3f05b84b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/code_assets@1.2.1",
+      "name": "code_assets",
+      "version": "1.2.1",
+      "purl": "pkg:pub/code_assets@1.2.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bf394f466ba9205f1812a0433b392d6af280f155f56651eda7c18cc32ed493b8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/collection@1.19.1",
+      "name": "collection",
+      "version": "1.19.1",
+      "purl": "pkg:pub/collection@1.19.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2f5709ae4d3d59dd8f7cd309b4e023046b57d8a6c82130785d2b0e5868084e76"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/convert@3.1.2",
+      "name": "convert",
+      "version": "3.1.2",
+      "purl": "pkg:pub/convert@3.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b30acd5944035672bc15c6b7a8b47d773e41e2f17de064350988c5d02adb1c68"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/coverage@1.15.1",
+      "name": "coverage",
+      "version": "1.15.1",
+      "purl": "pkg:pub/coverage@1.15.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "956a3de0725ca232ad353565a8290d3357592bf4250f6f298a185e2d949c5d3d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/crypto@3.0.7",
+      "name": "crypto",
+      "version": "3.0.7",
+      "purl": "pkg:pub/crypto@3.0.7",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/cupertino_icons@1.0.9",
+      "name": "cupertino_icons",
+      "version": "1.0.9",
+      "purl": "pkg:pub/cupertino_icons@1.0.9",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "41e005c33bd814be4d3096aff55b1908d419fde52ca656c8c47719ec745873cd"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/dart_jsonwebtoken@3.4.1",
+      "name": "dart_jsonwebtoken",
+      "version": "3.4.1",
+      "purl": "pkg:pub/dart_jsonwebtoken@3.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ad84e60181696513d04d5f2078e0bbc20365b911f46f647797317414bdc88fbe"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/fake_async@1.3.3",
+      "name": "fake_async",
+      "version": "1.3.3",
+      "purl": "pkg:pub/fake_async@1.3.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5368f224a74523e8d2e7399ea1638b37aecfca824a3cc4dfdf77bf1fa905ac44"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/ffi@2.2.0",
+      "name": "ffi",
+      "version": "2.2.0",
+      "purl": "pkg:pub/ffi@2.2.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/ffi_leak_tracker@0.1.2",
+      "name": "ffi_leak_tracker",
+      "version": "0.1.2",
+      "purl": "pkg:pub/ffi_leak_tracker@0.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4093d4ef9ca06ffe2786e73bfb25e22aa92112b9bb4ec941f11e3e6b61489a97"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/file@7.0.1",
+      "name": "file",
+      "version": "7.0.1",
+      "purl": "pkg:pub/file@7.0.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a3b4f84adafef897088c160faf7dfffb7696046cb13ae90b508c2cbc95d3b8d4"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/fixnum@1.1.1",
+      "name": "fixnum",
+      "version": "1.1.1",
+      "purl": "pkg:pub/fixnum@1.1.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b6dc7065e46c974bc7c5f143080a6764ec7a4be6da1285ececdc37be96de53be"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter@0.0.0",
+      "name": "flutter",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_driver@0.0.0",
+      "name": "flutter_driver",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter_driver@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_launcher_icons@0.14.4",
+      "name": "flutter_launcher_icons",
+      "version": "0.14.4",
+      "purl": "pkg:pub/flutter_launcher_icons@0.14.4",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "10f13781741a2e3972126fae08393d3c4e01fa4cd7473326b94b72cf594195e7"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_lints@6.0.0",
+      "name": "flutter_lints",
+      "version": "6.0.0",
+      "purl": "pkg:pub/flutter_lints@6.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3105dc8492f6183fb076ccf1f351ac3d60564bff92e20bfc4af9cc1651f4e7e1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_riverpod@3.4.2",
+      "name": "flutter_riverpod",
+      "version": "3.4.2",
+      "purl": "pkg:pub/flutter_riverpod@3.4.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "56e81e662e6e54e59b231da57e90ac0d06ac67d8e3f2273c129a37ae6282b40c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_secure_storage@10.3.1",
+      "name": "flutter_secure_storage",
+      "version": "10.3.1",
+      "purl": "pkg:pub/flutter_secure_storage@10.3.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7686b1d6a29985dcbb808c59518226e603e3bfa7c0ddfd1a0d00e4cda77c868e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_secure_storage_darwin@0.3.2",
+      "name": "flutter_secure_storage_darwin",
+      "version": "0.3.2",
+      "purl": "pkg:pub/flutter_secure_storage_darwin@0.3.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "82329fa5cdf343773b1b6897dea959105a29f092454259edff92f9f6637e8149"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_secure_storage_linux@3.0.2",
+      "name": "flutter_secure_storage_linux",
+      "version": "3.0.2",
+      "purl": "pkg:pub/flutter_secure_storage_linux@3.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "76fa9c841b3b1619fc5b5bc36efc7d158fa2356f223b6caeb1d0c80a54168546"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_secure_storage_platform_interface@2.0.3",
+      "name": "flutter_secure_storage_platform_interface",
+      "version": "2.0.3",
+      "purl": "pkg:pub/flutter_secure_storage_platform_interface@2.0.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "788060052712555182aba55ecb5f8b6e5cb9cfe8f776c83249a61fe3ce877db4"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_secure_storage_web@2.1.1",
+      "name": "flutter_secure_storage_web",
+      "version": "2.1.1",
+      "purl": "pkg:pub/flutter_secure_storage_web@2.1.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "073a62b3aeb866ab4ce795f960413948e51e5a42a9b0c8333b6daf5bb3208a1c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_secure_storage_windows@4.2.2",
+      "name": "flutter_secure_storage_windows",
+      "version": "4.2.2",
+      "purl": "pkg:pub/flutter_secure_storage_windows@4.2.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "471951813a97006d899db4948acc654a4f28c440083ea08178935ce20b173ec1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_test@0.0.0",
+      "name": "flutter_test",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter_test@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/flutter_web_plugins@0.0.0",
+      "name": "flutter_web_plugins",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter_web_plugins@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/frontend_server_client@4.0.0",
+      "name": "frontend_server_client",
+      "version": "4.0.0",
+      "purl": "pkg:pub/frontend_server_client@4.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f64a0333a82f30b0cca061bc3d143813a486dc086b574bfb233b7c1372427694"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/fuchsia_remote_debug_protocol@0.0.0",
+      "name": "fuchsia_remote_debug_protocol",
+      "version": "0.0.0",
+      "purl": "pkg:pub/fuchsia_remote_debug_protocol@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/functions_client@2.7.1",
+      "name": "functions_client",
+      "version": "2.7.1",
+      "purl": "pkg:pub/functions_client@2.7.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "931e822688d2e97867b2300e2fdbb08c9db73f8653fc83efc7a259d2e0cca769"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/glob@2.1.3",
+      "name": "glob",
+      "version": "2.1.3",
+      "purl": "pkg:pub/glob@2.1.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c3f1ee72c96f8f78935e18aa8cecced9ab132419e8625dc187e1c2408efc20de"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/go_router@17.5.0",
+      "name": "go_router",
+      "version": "17.5.0",
+      "purl": "pkg:pub/go_router@17.5.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d7a3576cb312649eaa51f2356450aed686085fb58fcdebda5b359aa951eef7ea"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/google_mobile_ads@9.1.0",
+      "name": "google_mobile_ads",
+      "version": "9.1.0",
+      "purl": "pkg:pub/google_mobile_ads@9.1.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8094e1ace8b0da33fe79027ca6959763c96a28855025cb7c8ec60838e1d56ed8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/gotrue@2.27.2",
+      "name": "gotrue",
+      "version": "2.27.2",
+      "purl": "pkg:pub/gotrue@2.27.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "cd73a6de4198baca71341177bed233673d7965aca2a0257ab5561feb2abdaf59"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/gtk@2.2.0",
+      "name": "gtk",
+      "version": "2.2.0",
+      "purl": "pkg:pub/gtk@2.2.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4ff85b2a16724029dd9e5bbb5a94b6918f9973f74ba571c949d2002801879cf5"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/hooks@2.0.2",
+      "name": "hooks",
+      "version": "2.0.2",
+      "purl": "pkg:pub/hooks@2.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9a62a50b50b769a737bc0a8ff381f333529df3ab746b2f6b02e83760231455ba"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/http@1.6.0",
+      "name": "http",
+      "version": "1.6.0",
+      "purl": "pkg:pub/http@1.6.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/http_multi_server@3.2.2",
+      "name": "http_multi_server",
+      "version": "3.2.2",
+      "purl": "pkg:pub/http_multi_server@3.2.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "aa6199f908078bb1c5efb8d8638d4ae191aac11b311132c3ef48ce352fb52ef8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/http_parser@4.1.2",
+      "name": "http_parser",
+      "version": "4.1.2",
+      "purl": "pkg:pub/http_parser@4.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/image@4.9.1",
+      "name": "image",
+      "version": "4.9.1",
+      "purl": "pkg:pub/image@4.9.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6300175e00616bbc832e2fc91bfa4d776af5402c81c7151bee6905bb08473c52"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/in_app_purchase@3.3.0",
+      "name": "in_app_purchase",
+      "version": "3.3.0",
+      "purl": "pkg:pub/in_app_purchase@3.3.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0e9510b80b0074e89ab0a8e0fc901439b779dc9ae575ab8d419253c6e1627716"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/in_app_purchase_android@0.5.2",
+      "name": "in_app_purchase_android",
+      "version": "0.5.2",
+      "purl": "pkg:pub/in_app_purchase_android@0.5.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c04e2cad0470fc868cb0ea06477648f003220b1b6612909db83528ca83ac0905"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/in_app_purchase_platform_interface@1.4.1",
+      "name": "in_app_purchase_platform_interface",
+      "version": "1.4.1",
+      "purl": "pkg:pub/in_app_purchase_platform_interface@1.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0b0076cac8ce4fa7048f01e76af8b123aeb6a7c4e0dea2a5206d6664454f3e36"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/in_app_purchase_storekit@0.4.11+1",
+      "name": "in_app_purchase_storekit",
+      "version": "0.4.11+1",
+      "purl": "pkg:pub/in_app_purchase_storekit@0.4.11+1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9602e249a0e30351f047d5715957f27709ed7b42f631fba8941dcad51489932a"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/integration_test@0.0.0",
+      "name": "integration_test",
+      "version": "0.0.0",
+      "purl": "pkg:pub/integration_test@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/intl@0.20.3",
+      "name": "intl",
+      "version": "0.20.3",
+      "purl": "pkg:pub/intl@0.20.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1ca20c894b1717686a2319b8548763d812bc0aabdac580420a44c5178c57a867"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/io@1.0.5",
+      "name": "io",
+      "version": "1.0.5",
+      "purl": "pkg:pub/io@1.0.5",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "dfd5a80599cf0165756e3181807ed3e77daf6dd4137caaad72d0b7931597650b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/jni@1.0.3",
+      "name": "jni",
+      "version": "1.0.3",
+      "purl": "pkg:pub/jni@1.0.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f038e58b4dc2c9037f50e233175086337e0b305e356d28211bf55f21c504cbd3"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/jni_flutter@1.0.2",
+      "name": "jni_flutter",
+      "version": "1.0.2",
+      "purl": "pkg:pub/jni_flutter@1.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7b717011ea40d04fd47c2731d3d1d36eb99eba3435c2753d62489e8c3c9991d5"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/jni_util@1.0.0",
+      "name": "jni_util",
+      "version": "1.0.0",
+      "purl": "pkg:pub/jni_util@1.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1ba86da04a5f2bf18fde2edb235587e70c5b0fc5bd4ba955f46b00942c3fc35f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/json_annotation@4.12.0",
+      "name": "json_annotation",
+      "version": "4.12.0",
+      "purl": "pkg:pub/json_annotation@4.12.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2a743920d81b7910627f68ee2c9ac1fc0bfee32b9fc3403587d7c6791ca12f80"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/leak_tracker@11.0.2",
+      "name": "leak_tracker",
+      "version": "11.0.2",
+      "purl": "pkg:pub/leak_tracker@11.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "33e2e26bdd85a0112ec15400c8cbffea70d0f9c3407491f672a2fad47915e2de"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/leak_tracker_flutter_testing@3.0.10",
+      "name": "leak_tracker_flutter_testing",
+      "version": "3.0.10",
+      "purl": "pkg:pub/leak_tracker_flutter_testing@3.0.10",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1dbc140bb5a23c75ea9c4811222756104fbcd1a27173f0c34ca01e16bea473c1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/leak_tracker_testing@3.0.2",
+      "name": "leak_tracker_testing",
+      "version": "3.0.2",
+      "purl": "pkg:pub/leak_tracker_testing@3.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8d5a2d49f4a66b49744b23b018848400d23e54caf9463f4eb20df3eb8acb2eb1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/lints@6.1.0",
+      "name": "lints",
+      "version": "6.1.0",
+      "purl": "pkg:pub/lints@6.1.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "12f842a479589fea194fe5c5a3095abc7be0c1f2ddfa9a0e76aed1dbd26a87df"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/listen@1.0.1",
+      "name": "listen",
+      "version": "1.0.1",
+      "purl": "pkg:pub/listen@1.0.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "47501a08016a43fcad79252439d723f50f14f88fa7bfd8a177e0a417e5c9e1f2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/logging@1.3.0",
+      "name": "logging",
+      "version": "1.3.0",
+      "purl": "pkg:pub/logging@1.3.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c8245ada5f1717ed44271ed1c26b8ce85ca3228fd2ffdb75468ab01979309d61"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/matcher@0.12.19",
+      "name": "matcher",
+      "version": "0.12.19",
+      "purl": "pkg:pub/matcher@0.12.19",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/material_color_utilities@0.13.0",
+      "name": "material_color_utilities",
+      "version": "0.13.0",
+      "purl": "pkg:pub/material_color_utilities@0.13.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/meta@1.18.0",
+      "name": "meta",
+      "version": "1.18.0",
+      "purl": "pkg:pub/meta@1.18.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/mime@2.0.0",
+      "name": "mime",
+      "version": "2.0.0",
+      "purl": "pkg:pub/mime@2.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/native_toolchain_c@0.19.2",
+      "name": "native_toolchain_c",
+      "version": "0.19.2",
+      "purl": "pkg:pub/native_toolchain_c@0.19.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f9c168717100ae6d9fee9ffb0be379bf1f8b26b0f6bcbd4fdddcd931993a6a72"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/node_preamble@2.0.2",
+      "name": "node_preamble",
+      "version": "2.0.2",
+      "purl": "pkg:pub/node_preamble@2.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6e7eac89047ab8a8d26cf16127b5ed26de65209847630400f9aefd7cd5c730db"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/objective_c@9.5.0",
+      "name": "objective_c",
+      "version": "9.5.0",
+      "purl": "pkg:pub/objective_c@9.5.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b7fb95a6d9a4f009edd63dc5ac69f07420b23a16161c6dd8660290b59c602e8e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/package_config@2.2.0",
+      "name": "package_config",
+      "version": "2.2.0",
+      "purl": "pkg:pub/package_config@2.2.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f096c55ebb7deb7e384101542bfba8c52696c1b56fca2eb62827989ef2353bbc"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/passkeys_platform_interface@2.9.0",
+      "name": "passkeys_platform_interface",
+      "version": "2.9.0",
+      "purl": "pkg:pub/passkeys_platform_interface@2.9.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e810520c7b79dca629fdc266958564eedd77dc85a955f5e94430dfccb92eef68"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path@1.9.1",
+      "name": "path",
+      "version": "1.9.1",
+      "purl": "pkg:pub/path@1.9.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "75cca69d1490965be98c73ceaea117e8a04dd21217b37b292c9ddbec0d955bc5"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path_provider@2.1.6",
+      "name": "path_provider",
+      "version": "2.1.6",
+      "purl": "pkg:pub/path_provider@2.1.6",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a7f4874f987173da295a61c181b8ee71dab59b332a486b391babf26a1b884825"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path_provider_android@2.3.1",
+      "name": "path_provider_android",
+      "version": "2.3.1",
+      "purl": "pkg:pub/path_provider_android@2.3.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "69cbd515a62b94d32a7944f086b2f82b4ac40a1d45bebfc00813a430ab2dabcd"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path_provider_foundation@2.6.0",
+      "name": "path_provider_foundation",
+      "version": "2.6.0",
+      "purl": "pkg:pub/path_provider_foundation@2.6.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2a376b7d6392d80cd3705782d2caa734ca4727776db0b6ec36ef3f1855197699"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path_provider_linux@2.2.2",
+      "name": "path_provider_linux",
+      "version": "2.2.2",
+      "purl": "pkg:pub/path_provider_linux@2.2.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "58c2005f147315b11e9b4a7bc889cd5203e250cba8e3f012dae259b4972b5c16"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path_provider_platform_interface@2.1.3",
+      "name": "path_provider_platform_interface",
+      "version": "2.1.3",
+      "purl": "pkg:pub/path_provider_platform_interface@2.1.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "484838772624c3a4b94f1e44a3e19897fee738f2d5c4ce448443b0417f7c9dda"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/path_provider_windows@2.3.0",
+      "name": "path_provider_windows",
+      "version": "2.3.0",
+      "purl": "pkg:pub/path_provider_windows@2.3.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bd6f00dbd873bfb70d0761682da2b3a2c2fccc2b9e84c495821639601d81afe7"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/petitparser@7.0.2",
+      "name": "petitparser",
+      "version": "7.0.2",
+      "purl": "pkg:pub/petitparser@7.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "91bd59303e9f769f108f8df05e371341b15d59e995e6806aefab827b58336675"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/platform@3.1.6",
+      "name": "platform",
+      "version": "3.1.6",
+      "purl": "pkg:pub/platform@3.1.6",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5d6b1b0036a5f331ebc77c850ebc8506cbc1e9416c27e59b439f917a902a4984"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/plugin_platform_interface@2.1.8",
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
+      "purl": "pkg:pub/plugin_platform_interface@2.1.8",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/pointycastle@4.0.0",
+      "name": "pointycastle",
+      "version": "4.0.0",
+      "purl": "pkg:pub/pointycastle@4.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/pool@1.5.2",
+      "name": "pool",
+      "version": "1.5.2",
+      "purl": "pkg:pub/pool@1.5.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "978783255c543aa3586a1b3c21f6e9d720eb315376a915872c61ef8b5c20177d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/posix@6.5.2",
+      "name": "posix",
+      "version": "6.5.2",
+      "purl": "pkg:pub/posix@6.5.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/postgrest@2.9.1",
+      "name": "postgrest",
+      "version": "2.9.1",
+      "purl": "pkg:pub/postgrest@2.9.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b7f957273ba6a1c26cefa987ac524f4138e9ab7542fbb9e6abdfddacb9895a21"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/process@5.0.5",
+      "name": "process",
+      "version": "5.0.5",
+      "purl": "pkg:pub/process@5.0.5",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c6248e4526673988586e8c00bb22a49210c258dc91df5227d5da9748ecf79744"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/pub_semver@2.2.0",
+      "name": "pub_semver",
+      "version": "2.2.0",
+      "purl": "pkg:pub/pub_semver@2.2.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5bfcf68ca79ef689f8990d1160781b4bad40a3bd5e5218ad4076ddb7f4081585"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/realtime_client@2.13.0",
+      "name": "realtime_client",
+      "version": "2.13.0",
+      "purl": "pkg:pub/realtime_client@2.13.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ff731ce21fd775e0d7accfb1eaccdcf47b687610720822ba8b9fd8f5bccb2bd9"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/record_use@0.6.0",
+      "name": "record_use",
+      "version": "0.6.0",
+      "purl": "pkg:pub/record_use@0.6.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2551bd8eecfe95d14ae75f6021ad0248be5c27f138c2ec12fcb52b500b3ba1ed"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/riverpod@3.4.2",
+      "name": "riverpod",
+      "version": "3.4.2",
+      "purl": "pkg:pub/riverpod@3.4.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "84351b3472a447f7b89f961f95c73287009d58c59d8cc1267425d995f78e50f1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences@2.5.5",
+      "name": "shared_preferences",
+      "version": "2.5.5",
+      "purl": "pkg:pub/shared_preferences@2.5.5",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c3025c5534b01739267eb7d76959bbc25a6d10f6988e1c2a3036940133dd10bf"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences_android@2.4.27",
+      "name": "shared_preferences_android",
+      "version": "2.4.27",
+      "purl": "pkg:pub/shared_preferences_android@2.4.27",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0634e64bd719f89c012f392938e173521f535d3ecaf66558fa94a056d22b5cc7"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences_foundation@2.5.6",
+      "name": "shared_preferences_foundation",
+      "version": "2.5.6",
+      "purl": "pkg:pub/shared_preferences_foundation@2.5.6",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4e7eaffc2b17ba398759f1151415869a34771ba11ebbccd1b0145472a619a64f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences_linux@2.4.1",
+      "name": "shared_preferences_linux",
+      "version": "2.4.1",
+      "purl": "pkg:pub/shared_preferences_linux@2.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "580abfd40f415611503cae30adf626e6656dfb2f0cee8f465ece7b6defb40f2f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences_platform_interface@2.4.2",
+      "name": "shared_preferences_platform_interface",
+      "version": "2.4.2",
+      "purl": "pkg:pub/shared_preferences_platform_interface@2.4.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "649dc798a33931919ea356c4305c2d1f81619ea6e92244070b520187b5140ef9"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences_web@2.4.3",
+      "name": "shared_preferences_web",
+      "version": "2.4.3",
+      "purl": "pkg:pub/shared_preferences_web@2.4.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c49bd060261c9a3f0ff445892695d6212ff603ef3115edbb448509d407600019"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shared_preferences_windows@2.4.1",
+      "name": "shared_preferences_windows",
+      "version": "2.4.1",
+      "purl": "pkg:pub/shared_preferences_windows@2.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "94ef0f72b2d71bc3e700e025db3710911bd51a71cefb65cc609dd0d9a982e3c1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shelf@1.4.2",
+      "name": "shelf",
+      "version": "1.4.2",
+      "purl": "pkg:pub/shelf@1.4.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e7dd780a7ffb623c57850b33f43309312fc863fb6aa3d276a754bb299839ef12"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shelf_packages_handler@3.0.2",
+      "name": "shelf_packages_handler",
+      "version": "3.0.2",
+      "purl": "pkg:pub/shelf_packages_handler@3.0.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "89f967eca29607c933ba9571d838be31d67f53f6e4ee15147d5dc2934fee1b1e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shelf_static@1.1.3",
+      "name": "shelf_static",
+      "version": "1.1.3",
+      "purl": "pkg:pub/shelf_static@1.1.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c87c3875f91262785dade62d135760c2c69cb217ac759485334c5857ad89f6e3"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/shelf_web_socket@3.0.0",
+      "name": "shelf_web_socket",
+      "version": "3.0.0",
+      "purl": "pkg:pub/shelf_web_socket@3.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3632775c8e90d6c9712f883e633716432a27758216dfb61bd86a8321c0580925"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sky_engine@0.0.0",
+      "name": "sky_engine",
+      "version": "0.0.0",
+      "purl": "pkg:pub/sky_engine@0.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/source_map_stack_trace@2.1.2",
+      "name": "source_map_stack_trace",
+      "version": "2.1.2",
+      "purl": "pkg:pub/source_map_stack_trace@2.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c0713a43e323c3302c2abe2a1cc89aa057a387101ebd280371d6a6c9fa68516b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/source_maps@0.10.13",
+      "name": "source_maps",
+      "version": "0.10.13",
+      "purl": "pkg:pub/source_maps@0.10.13",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "190222579a448b03896e0ca6eca5998fa810fda630c1d65e2f78b3f638f54812"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/source_span@1.10.2",
+      "name": "source_span",
+      "version": "1.10.2",
+      "purl": "pkg:pub/source_span@1.10.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "56a02f1f4cd1a2d96303c0144c93bd6d909eea6bee6bf5a0e0b685edbd4c47ab"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqflite@2.4.3",
+      "name": "sqflite",
+      "version": "2.4.3",
+      "purl": "pkg:pub/sqflite@2.4.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "58a799e6ac17dd32fbab93813d39ed835a75ccc0f8f85b8955fe318c6712b082"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqflite_android@2.4.3",
+      "name": "sqflite_android",
+      "version": "2.4.3",
+      "purl": "pkg:pub/sqflite_android@2.4.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d0548f9d7422a2dae99ec6f8b0a3074463b132d216fa5ba0d230eeefc901983b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqflite_common@2.5.11",
+      "name": "sqflite_common",
+      "version": "2.5.11",
+      "purl": "pkg:pub/sqflite_common@2.5.11",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5bf6a55c166e73bf651ba7ec3ed486e577620e3dc8f3a9c6a258a8031b624590"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqflite_common_ffi@2.4.2+1",
+      "name": "sqflite_common_ffi",
+      "version": "2.4.2+1",
+      "purl": "pkg:pub/sqflite_common_ffi@2.4.2+1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d5564f1308cafbf064be498f2beb1e993e742985a7cca9e2e228d6cbccd84a05"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqflite_darwin@2.4.3+1",
+      "name": "sqflite_darwin",
+      "version": "2.4.3+1",
+      "purl": "pkg:pub/sqflite_darwin@2.4.3+1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c86ca18b8f666bbf903924687fe21cc16fc385d086005067e26619ca530bef9f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqflite_platform_interface@2.4.1",
+      "name": "sqflite_platform_interface",
+      "version": "2.4.1",
+      "purl": "pkg:pub/sqflite_platform_interface@2.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f84939f84350d92d04416f8bc4dc52d3896aec7716cc9e80cf0146342139dc50"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sqlite3@3.5.1",
+      "name": "sqlite3",
+      "version": "3.5.1",
+      "purl": "pkg:pub/sqlite3@3.5.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "64b2c63c8232dd20d14b34105a81ebfd74320442e8451f836179ec89986aa478"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/stack_trace@1.12.1",
+      "name": "stack_trace",
+      "version": "1.12.1",
+      "purl": "pkg:pub/stack_trace@1.12.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8b27215b45d22309b5cddda1aa2b19bdfec9df0e765f2de506401c071d38d1b1"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/state_notifier@1.0.0",
+      "name": "state_notifier",
+      "version": "1.0.0",
+      "purl": "pkg:pub/state_notifier@1.0.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b8677376aa54f2d7c58280d5a007f9e8774f1968d1fb1c096adcb4792fba29bb"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/storage_client@2.8.0",
+      "name": "storage_client",
+      "version": "2.8.0",
+      "purl": "pkg:pub/storage_client@2.8.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b16aaaadcef812fda31fca056f50fb3485afe64f94e5d537d30f485ed55dec5e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/stream_channel@2.1.4",
+      "name": "stream_channel",
+      "version": "2.1.4",
+      "purl": "pkg:pub/stream_channel@2.1.4",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "969e04c80b8bcdf826f8f16579c7b14d780458bd97f56d107d3950fdbeef059d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/string_scanner@1.4.1",
+      "name": "string_scanner",
+      "version": "1.4.1",
+      "purl": "pkg:pub/string_scanner@1.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "921cd31725b72fe181906c6a94d987c78e3b98c2e205b397ea399d4054872b43"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/supabase@2.16.1",
+      "name": "supabase",
+      "version": "2.16.1",
+      "purl": "pkg:pub/supabase@2.16.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0645becf76f49d2633d8ec9bfd78ab98dce42de6899da8fa1f069c2c836d5d23"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/supabase_common@0.1.2",
+      "name": "supabase_common",
+      "version": "0.1.2",
+      "purl": "pkg:pub/supabase_common@0.1.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a7961a44953cf8d9da049381fc3377516348255042fbb12b9d4f8540816f2fe9"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/supabase_flutter@2.17.2",
+      "name": "supabase_flutter",
+      "version": "2.17.2",
+      "purl": "pkg:pub/supabase_flutter@2.17.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "26eb3d3b71bcc5651551e64d6b131ba929ea261998570bbcc90356b1b42fd532"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/sync_http@0.3.1",
+      "name": "sync_http",
+      "version": "0.3.1",
+      "purl": "pkg:pub/sync_http@0.3.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7f0cd72eca000d2e026bcd6f990b81d0ca06022ef4e32fb257b30d3d1014a961"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/synchronized@3.4.1+2",
+      "name": "synchronized",
+      "version": "3.4.1+2",
+      "purl": "pkg:pub/synchronized@3.4.1+2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3a7b5d17422dd0f8d5c6c14feaa5a1c65638b9455f871a96f08437562c046931"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/term_glyph@1.2.2",
+      "name": "term_glyph",
+      "version": "1.2.2",
+      "purl": "pkg:pub/term_glyph@1.2.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7f554798625ea768a7518313e58f83891c7f5024f88e46e7182a4558850a4b8e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/test@1.31.0",
+      "name": "test",
+      "version": "1.31.0",
+      "purl": "pkg:pub/test@1.31.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8d9ceddbab833f180fbefed08afa76d7c03513dfdba87ffcec2718b02bbcbf20"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/test_api@0.7.11",
+      "name": "test_api",
+      "version": "0.7.11",
+      "purl": "pkg:pub/test_api@0.7.11",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/test_core@0.6.17",
+      "name": "test_core",
+      "version": "0.6.17",
+      "purl": "pkg:pub/test_core@0.6.17",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1991d4cfe85d5043241acac92962c3977c8d2f2add1ee73130c7b286417d1d34"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/typed_data@1.4.0",
+      "name": "typed_data",
+      "version": "1.4.0",
+      "purl": "pkg:pub/typed_data@1.4.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher@6.3.2",
+      "name": "url_launcher",
+      "version": "6.3.2",
+      "purl": "pkg:pub/url_launcher@6.3.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_android@6.3.32",
+      "name": "url_launcher_android",
+      "version": "6.3.32",
+      "purl": "pkg:pub/url_launcher_android@6.3.32",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b413d49b73867ac08dd2f9890efd3cc11f2a0e577618d50843440a1fb3776c32"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_ios@6.4.1",
+      "name": "url_launcher_ios",
+      "version": "6.4.1",
+      "purl": "pkg:pub/url_launcher_ios@6.4.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "580fe5dfb51671ae38191d316e027f6b76272b026370708c2d898799750a02b0"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_linux@3.2.2",
+      "name": "url_launcher_linux",
+      "version": "3.2.2",
+      "purl": "pkg:pub/url_launcher_linux@3.2.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d5e14138b3bc193a0f63c10a53c94b91d399df0512b1f29b94a043db7482384a"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_macos@3.2.5",
+      "name": "url_launcher_macos",
+      "version": "3.2.5",
+      "purl": "pkg:pub/url_launcher_macos@3.2.5",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "368adf46f71ad3c21b8f06614adb38346f193f3a59ba8fe9a2fd74133070ba18"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_platform_interface@2.3.2",
+      "name": "url_launcher_platform_interface",
+      "version": "2.3.2",
+      "purl": "pkg:pub/url_launcher_platform_interface@2.3.2",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "552f8a1e663569be95a8190206a38187b531910283c3e982193e4f2733f01029"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_web@2.4.3",
+      "name": "url_launcher_web",
+      "version": "2.4.3",
+      "purl": "pkg:pub/url_launcher_web@2.4.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "85c81589622fbc87c1c683aaea164d3604a7777495a79d91e39ffcdec39ddb34"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/url_launcher_windows@3.1.5",
+      "name": "url_launcher_windows",
+      "version": "3.1.5",
+      "purl": "pkg:pub/url_launcher_windows@3.1.5",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "712c70ab1b99744ff066053cbe3e80c73332b38d46e5e945c98689b2e66fc15f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/uuid@4.6.0",
+      "name": "uuid",
+      "version": "4.6.0",
+      "purl": "pkg:pub/uuid@4.6.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9b129329f58692f6e6578329498a8fe9fbe98f090beb764ffbb8ee2eadd01dcd"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/vector_math@2.2.0",
+      "name": "vector_math",
+      "version": "2.2.0",
+      "purl": "pkg:pub/vector_math@2.2.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/vm_service@15.3.0",
+      "name": "vm_service",
+      "version": "15.3.0",
+      "purl": "pkg:pub/vm_service@15.3.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5f37239c4851efcef929cea7824e76df7f2f0970aef85d66bbc430afa40e72f0"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/watcher@1.2.1",
+      "name": "watcher",
+      "version": "1.2.1",
+      "purl": "pkg:pub/watcher@1.2.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1398c9f081a753f9226febe8900fce8f7d0a67163334e1c94a2438339d79d635"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/web@1.1.1",
+      "name": "web",
+      "version": "1.1.1",
+      "purl": "pkg:pub/web@1.1.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/web_socket@1.0.1",
+      "name": "web_socket",
+      "version": "1.0.1",
+      "purl": "pkg:pub/web_socket@1.0.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/web_socket_channel@3.0.3",
+      "name": "web_socket_channel",
+      "version": "3.0.3",
+      "purl": "pkg:pub/web_socket_channel@3.0.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d645757fb0f4773d602444000a8131ff5d48c9e47adfe9772652dd1a4f2d45c8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/webdriver@3.1.0",
+      "name": "webdriver",
+      "version": "3.1.0",
+      "purl": "pkg:pub/webdriver@3.1.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2f3a14ca026957870cfd9c635b83507e0e51d8091568e90129fbf805aba7cade"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/webkit_inspection_protocol@1.2.1",
+      "name": "webkit_inspection_protocol",
+      "version": "1.2.1",
+      "purl": "pkg:pub/webkit_inspection_protocol@1.2.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "87d3f2333bb240704cd3f1c6b5b7acd8a10e7f0bc28c28dcf14e782014f4a572"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/webview_flutter@4.14.1",
+      "name": "webview_flutter",
+      "version": "4.14.1",
+      "purl": "pkg:pub/webview_flutter@4.14.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d53e1ccf5516f25017e3c9d44c39034db352d20fa34fe200674270242c2c5111"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/webview_flutter_android@4.14.0",
+      "name": "webview_flutter_android",
+      "version": "4.14.0",
+      "purl": "pkg:pub/webview_flutter_android@4.14.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b98656fa4461f8cc05c48a778b4d4883e60ec63e1778348f363f9bb9a477745d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/webview_flutter_platform_interface@2.15.1",
+      "name": "webview_flutter_platform_interface",
+      "version": "2.15.1",
+      "purl": "pkg:pub/webview_flutter_platform_interface@2.15.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1221c1b12f5278791042f2ec2841743784cf25c5a644e23d6680e5d718824f04"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/webview_flutter_wkwebview@3.26.0",
+      "name": "webview_flutter_wkwebview",
+      "version": "3.26.0",
+      "purl": "pkg:pub/webview_flutter_wkwebview@3.26.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c879dd64b87c452aa84381b244d5469da57ba7e8cca6884c7b1e0d406372c12d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/win32@6.4.0",
+      "name": "win32",
+      "version": "6.4.0",
+      "purl": "pkg:pub/win32@6.4.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a0b93865d5644f11cf6a8c3f6db909f1ec168958b5805f6cc684adea957cd63d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/xdg_directories@1.1.0",
+      "name": "xdg_directories",
+      "version": "1.1.0",
+      "purl": "pkg:pub/xdg_directories@1.1.0",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7a3f37b05d989967cdddcbb571f1ea834867ae2faa29725fd085180e0883aa15"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/xml@7.0.1",
+      "name": "xml",
+      "version": "7.0.1",
+      "purl": "pkg:pub/xml@7.0.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "67f0aff7be013d107995e9b75bf4e7f2c3ef2dfdb2c8e68024bba0a7fd5756a4"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/yaml@3.1.3",
+      "name": "yaml",
+      "version": "3.1.3",
+      "purl": "pkg:pub/yaml@3.1.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pub/yet_another_json_isolate@2.1.1",
+      "name": "yet_another_json_isolate",
+      "version": "2.1.1",
+      "purl": "pkg:pub/yet_another_json_isolate@2.1.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "mobile"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eaa26beb5990b25a49d942374fd5a0c5aa67a837e03b14b4c26134aaa1ed01a9"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/auth-js@2.112.3",
+      "name": "@supabase/auth-js",
+      "version": "2.112.3",
+      "purl": "pkg:npm/@supabase/auth-js@2.112.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/functions-js@2.112.3",
+      "name": "@supabase/functions-js",
+      "version": "2.112.3",
+      "purl": "pkg:npm/@supabase/functions-js@2.112.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/phoenix@0.4.5",
+      "name": "@supabase/phoenix",
+      "version": "0.4.5",
+      "purl": "pkg:npm/@supabase/phoenix@0.4.5",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/postgrest-js@2.112.3",
+      "name": "@supabase/postgrest-js",
+      "version": "2.112.3",
+      "purl": "pkg:npm/@supabase/postgrest-js@2.112.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/realtime-js@2.112.3",
+      "name": "@supabase/realtime-js",
+      "version": "2.112.3",
+      "purl": "pkg:npm/@supabase/realtime-js@2.112.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/storage-js@2.112.3",
+      "name": "@supabase/storage-js",
+      "version": "2.112.3",
+      "purl": "pkg:npm/@supabase/storage-js@2.112.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@supabase/supabase-js@2.112.3",
+      "name": "@supabase/supabase-js",
+      "version": "2.112.3",
+      "purl": "pkg:npm/@supabase/supabase-js@2.112.3",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/iceberg-js@0.8.1",
+      "name": "iceberg-js",
+      "version": "0.8.1",
+      "purl": "pkg:npm/iceberg-js@0.8.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/tslib@2.8.1",
+      "name": "tslib",
+      "version": "2.8.1",
+      "purl": "pkg:npm/tslib@2.8.1",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/zod@3.25.76",
+      "name": "zod",
+      "version": "3.25.76",
+      "purl": "pkg:npm/zod@3.25.76",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:jsr/@std/assert@1.0.19",
+      "name": "@std/assert",
+      "version": "1.0.19",
+      "purl": "pkg:jsr/@std/assert@1.0.19",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:jsr/@std/internal@1.0.14",
+      "name": "@std/internal",
+      "version": "1.0.14",
+      "purl": "pkg:jsr/@std/internal@1.0.14",
+      "properties": [
+        {
+          "name": "app:component-group",
+          "value": "backend"
+        },
+        {
+          "name": "app:used-by-functions",
+          "value": "verify-purchase,get-course-content,export-user-data"
+        }
+      ]
+    }
+  ]
+}
