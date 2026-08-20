@@ -59,10 +59,13 @@ Future<void> pumpFreshApp(
 /// app_test.dart.
 Future<void> completeOnboardingAsGuest(WidgetTester tester) async {
   // Two checkboxes (terms + minimum-age self-declaration) — tap both.
+  // pumpAndSettle (not a single pump) between them: see app_test.dart's
+  // comment on the same pattern — a bare pump() hung this on a real
+  // device/simulator.
   await tester.tap(find.byType(Checkbox).at(0));
-  await tester.pump();
+  await tester.pumpAndSettle();
   await tester.tap(find.byType(Checkbox).at(1));
-  await tester.pump();
+  await tester.pumpAndSettle();
   await tester.tap(find.text('Empezar'));
   await tester.pumpAndSettle();
 
