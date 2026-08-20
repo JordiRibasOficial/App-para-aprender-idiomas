@@ -203,6 +203,78 @@ three newer functions) went through the normal CLI (`supabase link` +
 `supabase db push` + `supabase functions deploy`) run from the project
 owner's own machine, where that transport issue didn't reproduce.
 
+## Store credentials setup
+
+`verify-purchase` needs Google/Apple credentials as Supabase project secrets
+before it can do real verification (until then it correctly answers `503`
+for both platforms — see "Status" above). Setting a secret takes effect on
+the next function invocation; no redeploy needed.
+
+**Do not paste real credential values into a chat session or commit them to
+this repo** — a service-account JSON and a `.p8` private key are standing
+credentials, not one-time tokens. Run the commands below yourself, from a
+terminal you control.
+
+### Android (Google Play) — `verify-purchase` reads `GOOGLE_SERVICE_ACCOUNT_JSON` + `GOOGLE_PLAY_PACKAGE_NAME`
+
+If you already have a Google Cloud service account with Play Console API
+access (Play Console → Users and permissions → API access), set both
+secrets directly:
+
+```bash
+npx supabase secrets set --project-ref nfkhnrwyekqbjxwxmctu \
+  GOOGLE_SERVICE_ACCOUNT_JSON="$(cat /path/to/service-account.json)" \
+  GOOGLE_PLAY_PACKAGE_NAME=com.worldwebapps.app.aprenderidioma
+```
+
+If you don't have that service account yet:
+1. Play Console → **Users and permissions** → **Invite new users** (or use
+   an existing one) → grant **Google Play Android Developer API** access.
+2. Google Cloud Console (same project linked to Play Console) → **IAM &
+   Admin → Service Accounts** → create one → **Keys** → **Add key → JSON**.
+   Downloads the file `GOOGLE_SERVICE_ACCOUNT_JSON` needs.
+3. Back in Play Console → **API access**, link that service account and
+   grant it at least "View app information" + "View financial data"
+   permissions (needed to query subscription status).
+
+### iOS (App Store) — `verify-purchase` reads `APPLE_KEY_ID`, `APPLE_ISSUER_ID`, `APPLE_PRIVATE_KEY`, `APPLE_BUNDLE_ID`
+
+1. [App Store Connect](https://appstoreconnect.apple.com) → **Users and
+   Access** → **Integrations** tab → **In-App Purchase** key type (this is
+   a different key type than the general App Store Connect API key — it
+   must specifically be an In-App Purchase key to call the Server API
+   `verify-purchase` uses).
+2. Generate the key. Note the **Key ID** and **Issuer ID** shown on that
+   page — those become `APPLE_KEY_ID` and `APPLE_ISSUER_ID`.
+3. Download the `.p8` file **immediately** — App Store Connect only lets
+   you download it once. Its contents (including the `BEGIN/END PRIVATE
+   KEY` lines) become `APPLE_PRIVATE_KEY`.
+4. `APPLE_BUNDLE_ID` is the app's `CFBundleIdentifier` — currently
+   `com.worldwebapps.app.aprenderidioma` (set via `PRODUCT_BUNDLE_IDENTIFIER`
+   in `src/mobile/ios/Runner.xcodeproj/project.pbxproj`).
+
+Once you have those four values plus the downloaded `.p8` file:
+
+```bash
+npx supabase secrets set --project-ref nfkhnrwyekqbjxwxmctu \
+  APPLE_KEY_ID=<key id> \
+  APPLE_ISSUER_ID=<issuer id> \
+  APPLE_PRIVATE_KEY="$(cat /path/to/AuthKey_XXXXXXXXXX.p8)" \
+  APPLE_BUNDLE_ID=<bundle id> \
+  APPLE_ENVIRONMENT=sandbox
+```
+
+Flip `APPLE_ENVIRONMENT` to `production` once the app is actually live on
+the App Store — sandbox receipts are rejected by the production endpoint
+and vice versa.
+
+Verify secrets took effect with the live smoke test in "Status" above:
+`verify-purchase` should stop returning `503` for whichever platform(s) now
+have credentials (it will still need a real purchase token to return
+anything other than a 4xx/502 from Google's/Apple's own APIs — that's
+expected, since no test double exists for their production verification
+endpoints).
+
 ## Local setup
 
 ```bash
