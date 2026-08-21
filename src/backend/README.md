@@ -163,11 +163,17 @@ Ribas Oficial", region `eu-west-3`):
   `auth.enable_anonymous_sign_ins = true`).
 - All four functions smoke-tested end to end for real against the live
   project, via a real anonymous sign-up (`/auth/v1/signup`) → session JWT:
-  - `verify-purchase` → `503 "Purchase verification is not configured for
-    platform android"`. Correct fail-closed answer — the only missing piece
-    is Google/Apple credentials, which nobody but the project owner can
-    provide (see `.env.example`). Once those are set, the same request
-    starts returning real verification results.
+  - `verify-purchase` (android) → initially `503 "Purchase verification is
+    not configured for platform android"` — correct fail-closed answer
+    before any store credentials existed. **Update:** Google Play
+    credentials (`GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME`)
+    are now set (see "Store credentials setup" below) — re-running the same
+    smoke test with a real product id and a made-up purchase token now
+    returns `502 "Verification request to the store failed"`, confirming
+    the function boots, the platform is configured, and it's making a real
+    call to the Google Play Developer API that correctly rejects a token
+    Google doesn't recognize. Apple/iOS credentials are still unset, so
+    `platform: "ios"` still returns `503`.
   - `get-course-content` → `403 "An active Premium subscription is
     required"`. Correct — this test user never purchased anything.
   - `export-user-data` → `200` with the caller's own (empty)
@@ -491,9 +497,20 @@ own account on that service, which nobody but you can create).
 
 ## Next step
 
-Just credentials. Set `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME`
-and/or `APPLE_KEY_ID` / `APPLE_ISSUER_ID` / `APPLE_PRIVATE_KEY` /
-`APPLE_BUNDLE_ID` (see `.env.example`) via `npx supabase secrets set` once
-you have them from Play Console / App Store Connect, then a real purchase
-in the app will exercise the whole path — client, anonymous auth, edge
+Google Play credentials are set (see "Store credentials setup" above) and
+confirmed live via a real Google Play Developer API call. Just Apple/iOS
+left: set `APPLE_KEY_ID` / `APPLE_ISSUER_ID` / `APPLE_PRIVATE_KEY` /
+`APPLE_BUNDLE_ID` via `npx supabase secrets set` once you have them from App
+Store Connect. Once that's done, a real purchase in the app on either
+platform will exercise the whole path — client, anonymous auth, edge
 function, store verification, entitlement — for real.
+
+One thing worth knowing if you ever regenerate the Google secret by hand
+from PowerShell: `Get-Content -Raw file.json | ConvertFrom-Json |
+ConvertTo-Json -Compress` is the reliable way to get a single-line, valid
+JSON string into a `.env` value — a raw copy/paste corrupted the JSON once
+during setup and made the whole function crash at boot (`JSON.parse` throws
+inside `buildVerifiers()`, which Supabase surfaces as a generic
+`WORKER_ERROR`, not a helpful message). If `verify-purchase` ever returns
+that error for every platform at once, suspect the secret's JSON validity
+first.
