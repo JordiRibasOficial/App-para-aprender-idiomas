@@ -28,14 +28,17 @@ despliegue que se encontró y se corrigió durante ese smoke test.
 
 🔲 **Credenciales de verificación de compras** (PR #39,
 `src/backend/README.md` sección "Store credentials setup"):
-- Google Play: tienes el JSON de la cuenta de servicio listo — el comando
-  exacto `supabase secrets set` está en esa sección, ejecútalo tú desde tu
-  propio terminal (no lo pegues en un chat).
+- ✅ Google Play: `GOOGLE_SERVICE_ACCOUNT_JSON`/`GOOGLE_PLAY_PACKAGE_NAME`
+  configurados y confirmados en producción — un smoke test real con un
+  token inventado ahora devuelve `502` (la función llama de verdad a la API
+  de Google Play, que rechaza el token falso), no ya el `503` de "no
+  configurado".
 - Apple App Store: pendiente de generar la In-App Purchase key en App Store
   Connect → Users and Access → Integrations. Pasos detallados en la misma
   sección del README.
-- Hasta que ambas estén configuradas, `verify-purchase` sigue respondiendo
-  `503` de forma segura (fail-closed) — no bloquea el resto del lanzamiento.
+- Hasta que iOS también esté configurado, `verify-purchase` sigue
+  respondiendo `503` de forma segura (fail-closed) solo para esa
+  plataforma — no bloquea el resto del lanzamiento.
 
 🔲 **Purga programada de logs de rate-limiting** (`pg_cron`): la función SQL
 y el comando de programación (`select cron.schedule(...)`) ya están escritos
@@ -153,12 +156,12 @@ de respuesta a incidentes no tiene datos reales que consumir en producción.
 
 | # | Acción | Dónde está documentado |
 |---|--------|-------------------------|
-| 1 | Configurar `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME` como secretos de Supabase | `src/backend/README.md` § Store credentials setup |
+| 1 | ~~Configurar `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME` como secretos de Supabase~~ — ✅ hecho, confirmado con una llamada real a la API de Google Play | `src/backend/README.md` § Store credentials setup |
 | 2 | Generar y configurar la In-App Purchase key de Apple (`APPLE_KEY_ID`, `APPLE_ISSUER_ID`, `APPLE_PRIVATE_KEY`, `APPLE_BUNDLE_ID`) | ídem |
 | 3 | Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito | `src/backend/README.md` § Data retention |
 | 4 | Elegir proveedor de crash reporting e implementarlo | `docs/business/crash-reporting-review.md` |
 | 5 | Configurar SMTP de producción para el email de confirmación en soporte duradero | `docs/business/terms-of-service-draft.md` § 4 |
 
-Ninguno de estos cinco puntos bloquea el lanzamiento por sí solo — cada uno
-falla de forma segura (fail-closed o documentado como riesgo bajo) mientras
-no se resuelva.
+Ninguno de los cuatro puntos restantes bloquea el lanzamiento por sí solo —
+cada uno falla de forma segura (fail-closed o documentado como riesgo bajo)
+mientras no se resuelva.
