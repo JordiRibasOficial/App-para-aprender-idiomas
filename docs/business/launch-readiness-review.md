@@ -40,13 +40,11 @@ despliegue que se encontró y se corrigió durante ese smoke test.
   respondiendo `503` de forma segura (fail-closed) solo para esa
   plataforma — no bloquea el resto del lanzamiento.
 
-🔲 **Purga programada de logs de rate-limiting** (`pg_cron`): la función SQL
-y el comando de programación (`select cron.schedule(...)`) ya están escritos
-en `src/backend/README.md` sección "Data retention". Falta un único clic en
-el Dashboard de Supabase (Database → Extensions → habilitar `pg_cron`), que
-solo tú puedes dar. Sin él, las tablas de rate-limit crecen sin límite pero
-no hay ningún otro impacto funcional; hay un purgado manual documentado como
-solución provisional.
+✅ **Purga programada de logs de rate-limiting** (`pg_cron`): habilitado y
+programado — confirmado con `select * from cron.job;` (`jobid 1`, schedule
+`0 3 * * *`, `active = true`). Las cuatro tablas de rate-limit se purgan
+automáticamente cada día a las 03:00; ver `src/backend/README.md` sección
+"Data retention".
 
 ## Seguridad backend
 
@@ -158,10 +156,10 @@ de respuesta a incidentes no tiene datos reales que consumir en producción.
 |---|--------|-------------------------|
 | 1 | ~~Configurar `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME` como secretos de Supabase~~ — ✅ hecho, confirmado con una llamada real a la API de Google Play | `src/backend/README.md` § Store credentials setup |
 | 2 | Generar y configurar la In-App Purchase key de Apple (`APPLE_KEY_ID`, `APPLE_ISSUER_ID`, `APPLE_PRIVATE_KEY`, `APPLE_BUNDLE_ID`) | ídem |
-| 3 | Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito | `src/backend/README.md` § Data retention |
+| 3 | ~~Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito~~ — ✅ hecho, job activo confirmado con `select * from cron.job;` | `src/backend/README.md` § Data retention |
 | 4 | Elegir proveedor de crash reporting e implementarlo | `docs/business/crash-reporting-review.md` |
 | 5 | Configurar SMTP de producción para el email de confirmación en soporte duradero | `docs/business/terms-of-service-draft.md` § 4 |
 
-Ninguno de los cuatro puntos restantes bloquea el lanzamiento por sí solo —
+Ninguno de los dos puntos restantes bloquea el lanzamiento por sí solo —
 cada uno falla de forma segura (fail-closed o documentado como riesgo bajo)
 mientras no se resuelva.
