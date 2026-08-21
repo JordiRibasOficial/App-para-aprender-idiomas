@@ -190,11 +190,12 @@ Ribas Oficial", region `eu-west-3`):
     write a table that didn't exist yet. Running `supabase db push` to
     apply the four pending migrations resolved it; re-running the same
     smoke test above confirmed the fix.
-- `purge_stale_request_logs()` exists in the database but isn't scheduled
-  yet — that needs `pg_cron` enabled from the Supabase Dashboard, a
-  dashboard-only action. Until scheduled, the four rate-limit tracking
-  tables grow unbounded; call `select purge_stale_request_logs();` manually
-  from the SQL editor as a stopgap if needed before that's set up.
+- `pg_cron` is enabled and `purge_stale_request_logs()` is scheduled
+  (`select cron.schedule('purge-stale-request-logs', '0 3 * * *', 'select
+  public.purge_stale_request_logs();')`) — confirmed via `select * from
+  cron.job;` in the SQL Editor: `jobid 1`, schedule `0 3 * * *`, `active =
+  true`. The four rate-limit tracking tables now get purged of rows older
+  than 7 days automatically, every day at 03:00.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
@@ -394,19 +395,19 @@ older than 7 days from all four, giving comfortable slack for debugging a
 rate-limit dispute without keeping the tables forever — RGPD data
 minimization (store only what the stated purpose needs).
 
-The migration only creates the function; it does not schedule it, because
-scheduling means enabling `pg_cron` — a per-project opt-in extension only
-turned on from **Dashboard → Database → Extensions**, not something a
-migration file can do. Once enabled, schedule it from the SQL Editor:
+The migration only creates the function; scheduling it required enabling
+`pg_cron` — a per-project opt-in extension only turned on from **Dashboard
+→ Database → Extensions**, not something a migration file can do — and then
+running this once from the SQL Editor:
 
 ```sql
 select cron.schedule('purge-stale-request-logs', '0 3 * * *', 'select public.purge_stale_request_logs();');
 ```
 
-Until that's set up, run `select public.purge_stale_request_logs();` by
-hand from the SQL Editor occasionally — the tables aren't large enough yet
-for this to be urgent, but it's one Dashboard toggle away from being fully
-automatic.
+**Done.** `pg_cron` is enabled and the job is active — confirmed via
+`select * from cron.job;` (`jobid 1`, schedule `0 3 * * *`, `active =
+true`). The four rate-limit tables now purge automatically every day at
+03:00; no more manual `select public.purge_stale_request_logs();` needed.
 
 ## Backups
 
