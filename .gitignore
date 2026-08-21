@@ -16,6 +16,13 @@ graphify-out/
 # dotenv files
 .env
 
+# Store/API credential files (see src/backend/README.md § Store credentials
+# setup) — these must never be committed, wherever they happen to be dropped
+Google_Service_Account.json
+*service-account*.json
+*service_account*.json
+AuthKey_*.p8
+
 # User-specific files
 *.rsuser
 *.suo
