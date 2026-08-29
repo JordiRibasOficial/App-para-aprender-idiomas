@@ -1,15 +1,18 @@
 import 'package:flutter/foundation.dart';
 
-/// Single funnel for uncaught errors (see main.dart's `runZonedGuarded` /
-/// `FlutterError.onError` / `PlatformDispatcher.instance.onError` wiring).
+/// Single funnel for every uncaught error's *local* visibility (see
+/// main.dart's `runZonedGuarded` / `FlutterError.onError` /
+/// `PlatformDispatcher.instance.onError` wiring) — always logs locally,
+/// visible via `flutter logs` / `adb logcat` / Xcode console.
 ///
-/// No remote crash reporter (Sentry, Crashlytics, ...) is wired up yet —
-/// this only logs locally, visible via `flutter logs` / `adb logcat` /
-/// Xcode console during development, and covered by the OS-level crash
-/// reports Play Console / App Store Connect already collect for anything
-/// that escapes to a native crash. Swap the body of this function for a
-/// real reporter's call once one is configured; every call site (this is
-/// the only one) stays the same.
+/// In release builds, the same errors also reach Sentry, but not through a
+/// call in here: main.dart's `SentryFlutter.init` installs Sentry's own
+/// FlutterError.onError/PlatformDispatcher.instance.onError handlers first,
+/// and the wiring around this function's call sites chains through them
+/// rather than replacing them — so Sentry already captures every error via
+/// that chain by the time reportError() runs. Calling Sentry again from
+/// here would double-report. See sentry_config.dart for the DSN and
+/// docs/business/crash-reporting-review.md for why Sentry was chosen.
 void reportError(Object error, StackTrace? stack) {
   debugPrint('Uncaught error: $error');
   if (stack != null) debugPrint(stack.toString());

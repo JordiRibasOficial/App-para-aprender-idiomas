@@ -92,7 +92,7 @@ Apple exige esto en el cuestionario "App Privacy" de App Store Connect, en categ
 | Datos de uso | Datos de publicidad | Sí, si el usuario acepta el prompt de ATT (ver abajo) | **Sí, si acepta el prompt de App Tracking Transparency (ATT)** | Google AdMob. Marca "Datos usados para rastrearte" en el cuestionario de Apple para esta fila. |
 | Contacto | Email | **No se declara** | No | Se guarda cifrado solo en el dispositivo (`flutter_secure_storage`); nunca se transmite — no cumple la definición de "recopilado" de Apple. `[PENDIENTE: confirmar este criterio con el asesor antes de enviar el cuestionario real.]` |
 | — | Progreso de aprendizaje | No se declara | No | Mismo motivo: solo local, nunca se transmite. |
-| Diagnóstico | Ninguno | — | — | No hay SDK de crash reporting ni analítica de terceros integrado. |
+| Diagnóstico | Datos de fallos (crash) | Sí, vinculado a un ID de instalación anónimo generado por el SDK, no a tu identidad de usuario | No | Sentry (`sentry_flutter`), solo en builds de producción — ver `docs/business/crash-reporting-review.md`. Captura la excepción, el stack trace y contexto técnico del dispositivo/SO cuando la app falla; no captura contenido de pantalla ni el email guardado localmente. |
 
 **[RESUELTO]** El prompt de **App Tracking Transparency (ATT)** ya está implementado: `AttTrackingManager` (`src/mobile/lib/data/ads/att_tracking_manager.dart`), llamado desde `adsInitializedProvider` justo después del consentimiento UMP/GDPR y antes de `MobileAds.instance.initialize()`, más la clave `NSUserTrackingUsageDescription` en `Info.plist`. Se optó por la opción de mantener el mismo modelo de ingresos que Android (pedir tracking) en vez de restringir iOS a anuncios no personalizados.
 
