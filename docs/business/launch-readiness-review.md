@@ -141,14 +141,13 @@ automatizados (#37).
 aplica en el estado actual del producto (#30). ✅ Guía de seguros y marca
 registrada (#21). ✅ Plan de respuesta a brechas de datos y política de
 divulgación de vulnerabilidades (#18). ✅ Runbook de backup/restore
-(#20). ✅ Revisión de proveedores de crash reporting — comparativa
-Sentry/Firebase Crashlytics/self-hosted con recomendación (Sentry, capa
-gratuita), documentada en `crash-reporting-review.md` (#35).
-
-🔲 **Elegir e implementar un proveedor de crash reporting**: decisión de
-cuenta/coste/residencia de datos que solo tú puedes tomar. Hasta entonces,
-`error_reporting.dart` sigue siendo un `debugPrint`-only scaffold — el plan
-de respuesta a incidentes no tiene datos reales que consumir en producción.
+(#20). ✅ **Crash reporting implementado**: Sentry (`sentry_flutter`),
+región UE, solo en builds de producción, integrado sin duplicar captura
+(los manejadores de `FlutterError.onError`/`PlatformDispatcher.instance.onError`
+encadenan con los de Sentry en vez de sustituirlos), con el DSN real del
+proyecto `webapps-jk/flutter-kb` ya configurado — ver
+`crash-reporting-review.md`. Etiquetas de privacidad de Apple/Play
+actualizadas para declarar el nuevo SDK.
 
 ## Checklist de acciones pendientes del propietario
 
@@ -157,9 +156,9 @@ de respuesta a incidentes no tiene datos reales que consumir en producción.
 | 1 | ~~Configurar `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME` como secretos de Supabase~~ — ✅ hecho, confirmado con una llamada real a la API de Google Play | `src/backend/README.md` § Store credentials setup |
 | 2 | Generar y configurar la In-App Purchase key de Apple (`APPLE_KEY_ID`, `APPLE_ISSUER_ID`, `APPLE_PRIVATE_KEY`, `APPLE_BUNDLE_ID`) | ídem |
 | 3 | ~~Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito~~ — ✅ hecho, job activo confirmado con `select * from cron.job;` | `src/backend/README.md` § Data retention |
-| 4 | Elegir proveedor de crash reporting e implementarlo | `docs/business/crash-reporting-review.md` |
+| 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry), DSN real configurado en `sentry_config.dart` | `docs/business/crash-reporting-review.md` |
 | 5 | Configurar SMTP de producción para el email de confirmación en soporte duradero | `docs/business/terms-of-service-draft.md` § 4 |
 
-Ninguno de los dos puntos restantes bloquea el lanzamiento por sí solo —
+Ninguno de los puntos restantes bloquea el lanzamiento por sí solo —
 cada uno falla de forma segura (fail-closed o documentado como riesgo bajo)
 mientras no se resuelva.

@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data/secure_supabase_local_storage.dart';
+import 'data/sentry_config.dart';
 import 'data/supabase_config.dart';
 import 'error_reporting.dart';
 import 'presentation/providers/ads_providers.dart';
@@ -26,12 +28,33 @@ void main() {
 Future<void> _main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Only in release builds — see error_reporting.dart's doc comment on why
+  // debug/profile/test runs stay local-only. Deliberately does NOT pass
+  // `appRunner:`: this call's own default integrations
+  // (FlutterErrorIntegration/OnErrorIntegration) install their own
+  // FlutterError.onError/PlatformDispatcher.instance.onError handlers,
+  // each of which captures to Sentry and then calls whatever handler was
+  // previously set — so as long as the code below *chains through* the
+  // previous handler instead of replacing it outright (which it already
+  // does for FlutterError.onError, and now also does for
+  // PlatformDispatcher.instance.onError), every error still reaches Sentry
+  // via that chain, with reportError() staying purely the local-log funnel
+  // it always was — no need to fight or strip Sentry's own integrations.
+  if (kReleaseMode) {
+    await SentryFlutter.init((options) {
+      options.dsn = SentryConfig.dsn;
+      options.tracesSampleRate = 0; // error/crash reporting only, no APM
+    });
+  }
+
   final previousOnError = FlutterError.onError;
   FlutterError.onError = (details) {
     previousOnError?.call(details);
     reportError(details.exception, details.stack);
   };
+  final previousPlatformOnError = PlatformDispatcher.instance.onError;
   PlatformDispatcher.instance.onError = (error, stack) {
+    previousPlatformOnError?.call(error, stack);
     reportError(error, stack);
     return true;
   };

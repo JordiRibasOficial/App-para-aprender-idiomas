@@ -1,37 +1,32 @@
 # Monitorización de errores/crashes en producción
 
-## Estado actual
+## Estado actual — [HECHO]
 
-`src/mobile/lib/error_reporting.dart` ya centraliza **todo** error no capturado de la app (excepciones de widgets vía `FlutterError.onError`, errores async vía `PlatformDispatcher.instance.onError`, y cualquier cosa que escape de la zona raíz vía `runZonedGuarded` en `main.dart`) en un único punto de entrada, `reportError()`. Hoy esa función solo hace `debugPrint` — visible en desarrollo (`flutter logs`/`adb logcat`/consola de Xcode), pero **nada llega a ningún sitio una vez la app está en manos de un usuario real**.
+Sentry está integrado y en funcionamiento en `main` (proyecto Sentry `webapps-jk/flutter-kb`, región UE):
 
-Esto no es un descuido: el propio comentario del archivo ya lo deja dicho — "swap the body of this function for a real reporter's call once one is configured; every call site (this is the only one) stays the same." El enganche estaba deliberadamente preparado para conectar un proveedor real más adelante, sin tocar el resto de la app.
+- `src/mobile/lib/data/sentry_config.dart` — el DSN del proyecto (no es secreto, ver el propio comentario del archivo: un DSN solo permite *enviar* eventos, no leer datos existentes).
+- `src/mobile/lib/main.dart` — `SentryFlutter.init()` se ejecuta **solo en release** (`kReleaseMode`), antes de instalar los propios manejadores de `FlutterError.onError`/`PlatformDispatcher.instance.onError`. Esos manejadores encadenan con los que instala Sentry (`FlutterErrorIntegration`/`OnErrorIntegration`) en vez de sustituirlos, así que cada error llega a Sentry una sola vez a través de esa cadena — no hace falta ni es posible retirar esas integraciones (no forman parte de la API pública del paquete).
+- `src/mobile/lib/error_reporting.dart` — sigue siendo el único funnel para el log local (`debugPrint`, visible con `flutter logs`/`adb logcat`/consola de Xcode); no llama a Sentry directamente, porque ya lo captura la cadena de arriba — llamarlo también desde aquí duplicaría cada evento.
+- Builds de debug/profile (incluido `flutter test`, donde `kReleaseMode` siempre es `false`) nunca inicializan Sentry — el desarrollo local y los tests no contaminan el dashboard de producción.
 
-**Lo que sí existe hoy sin ningún SDK adicional:** Play Console (Android vitals) y App Store Connect ya recogen automáticamente los crashes nativos que tiran el proceso entero — pero no las excepciones de Dart que la app captura y sobrevive (una `Exception` no manejada dentro de un `try/catch` ausente, por ejemplo), que es exactamente lo que este funnel existe para cubrir.
+El DSN real del proyecto ya está en `sentry_config.dart` — no queda nada pendiente aquí.
+
+**Lo que ya existía sin ningún SDK adicional (sigue siendo cierto, complementario a Sentry):** Play Console (Android vitals) y App Store Connect ya recogen automáticamente los crashes nativos que tiran el proceso entero.
 
 ## Por qué importa para el checklist
 
 El plan de respuesta a incidentes (`data-breach-response-plan.md`) asume que hay una forma de *enterarse* de que algo va mal en producción. Sin un canal real de errores, un fallo de seguridad que se manifieste como una excepción (p. ej. un error al verificar una compra, un fallo al aplicar el rate limiting) podría pasar completamente desapercibido hasta que un usuario se queje — el plan de respuesta nunca llegaría a activarse porque nadie sabría que hay algo que responder.
 
-## Por qué no lo he implementado directamente
+## Decisión tomada: Sentry
 
-A diferencia de otros huecos cerrados en esta sesión, esto no es solo "escribir código que falta": añadir un SDK de terceros implica una decisión de proveedor, coste y alcance de datos que te corresponde a ti, no a mí:
+Evaluadas tres opciones (Sentry, Firebase Crashlytics, self-hosted Sentry OSS/GlitchTip) por coste, dónde vive el dato, y encaje con el resto del stack. Se eligió **Sentry, plan gratuito, región UE**, por dos motivos concretos: (a) SDK Flutter de primera clase (`sentry_flutter`), sin necesidad de arrastrar todo el ecosistema Firebase solo para esto; (b) permite fijar la región de almacenamiento en la UE, coherente con la decisión ya tomada de mantener Supabase en `eu-west-3`.
 
-- Cambia el footprint de dependencias de la app (nueva librería nativa en Android/iOS).
-- Cambia la etiqueta de privacidad ya declarada ("Diagnóstico: Ninguno — no hay SDK de crash reporting ni analítica de terceros integrado" en `store-listing.md` y el cuestionario "Data safety" de Play Console) — habría que actualizar ambas.
-- Necesita credenciales/cuenta que solo tú puedes crear (mismo caso que AdMob, Play Integrity o las credenciales de verificación de compra).
+La cuenta y el proyecto (`webapps-jk/flutter-kb`) los creó el propio propietario — eso era la única parte que no podía hacer yo (necesita una cuenta/credenciales que solo el dueño del proyecto puede crear, igual que AdMob o las credenciales de verificación de compra). Con el proyecto creado, la integración en código quedó implementada — ver "Estado actual" arriba.
 
-## Opciones
+## Actualizaciones de las etiquetas de privacidad (pendiente de completar)
 
-| Proveedor | Coste | Dónde vive el dato | Notas |
-|---|---|---|---|
-| **Sentry** | Plan gratuito con límite mensual de eventos, de pago a partir de ahí | Configurable (SaaS de Sentry, EE. UU./UE según plan, o self-hosted) | SDK Flutter oficial (`sentry_flutter`), agnóstico de tienda — funciona igual en Android e iOS. Permite elegir región de almacenamiento en los planes de pago, relevante para mantener el dato en la UE. |
-| **Firebase Crashlytics** | Gratuito | Google Cloud (EE. UU. por defecto) | Ya viene integrado si en algún momento se añade Firebase por otro motivo (p. ej. Analytics) — gratis, pero atado al ecosistema Google y a EE. UU. como región por defecto. |
-| **Self-hosted (Sentry OSS, GlitchTip)** | Coste de infraestructura propio | El que tú elijas (podría ser la misma región `eu-west-3` que ya usa Supabase) | Máximo control sobre dónde vive el dato, pero es infraestructura adicional que mantener — no encaja con el perfil actual de "sin servidor propio, todo en Supabase managed". |
+Añadir Sentry cambia la fila "Diagnóstico" que antes decía "Ninguno — no hay SDK de crash reporting ni analítica de terceros integrado":
 
-## Recomendación
-
-**Sentry, plan gratuito para empezar**, por dos motivos concretos: (a) tiene SDK Flutter de primera clase (`sentry_flutter`), sin necesidad de arrastrar todo el ecosistema Firebase solo para esto; (b) los planes de pago (si algún día hace falta más volumen) permiten fijar la región de almacenamiento en la UE, coherente con la decisión ya tomada de mantener Supabase en `eu-west-3`.
-
-## Siguiente paso
-
-Decide el proveedor (o confirma Sentry) y crea la cuenta — en cuanto exista un DSN/clave de proyecto, la integración en código es mínima: añadir el paquete, inicializarlo en `main.dart` antes de `runApp`, y sustituir el cuerpo de `reportError()` por la llamada real (`Sentry.captureException(error, stackTrace: stack)` o equivalente). También habrá que actualizar la fila "Diagnóstico" de la tabla de `store-listing.md` y el cuestionario de Play Console/App Store Connect para declarar el nuevo SDK.
+- `store-listing.md` (App Privacy de Apple) — actualizada: fila "Diagnóstico" ahora declara Sentry.
+- `play-console-setup-guide.md` (Data safety de Play Console) — actualizada: la fila que decía "No hay ningún SDK de analítica integrado" ahora menciona Sentry.
+- **Pendiente real, no de código:** cuando envíes el cuestionario real en App Store Connect / Play Console (no solo estos documentos internos), marca la categoría de diagnóstico/crash correspondiente con Sentry como proveedor.

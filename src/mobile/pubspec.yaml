@@ -47,6 +47,7 @@ dependencies:
   app_tracking_transparency: ^2.0.7
   flutter_secure_storage: ^10.3.1
   supabase_flutter: ^2.17.2
+  sentry_flutter: ^9.0.0
 
 dev_dependencies:
   flutter_test:
