@@ -31,6 +31,7 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
     required String platform,
     required String productId,
     required String purchaseToken,
+    String? email,
   }) async {
     final accessToken = await ensureAnonymousSession(_client);
 
@@ -43,6 +44,7 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
           'platform': platform,
           'productId': productId,
           'purchaseToken': purchaseToken,
+          'email': ?email,
         },
       );
     } on FunctionException catch (e) {

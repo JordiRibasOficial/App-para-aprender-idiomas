@@ -18,6 +18,13 @@ export const VerifyPurchaseInputSchema = z.object({
   // google_play.ts/apple.ts) — this is store-issued but still untrusted
   // input arriving over the wire.
   purchaseToken: z.string().min(1).max(4096),
+  // Optional — only present if the user gave an email during onboarding
+  // (see OnboardingState.email in the mobile app; guest users send none).
+  // Used once, in this same request, to send the durable-medium purchase
+  // confirmation TRLGDCU arts. 98.7/99.2 require (see handler.ts) — never
+  // persisted. This is the one place in the whole backend that receives an
+  // email address; every other table only ever sees the anonymous user id.
+  email: z.string().email().max(320).optional(),
 });
 
 export type Platform = z.infer<typeof VerifyPurchaseInputSchema>["platform"];

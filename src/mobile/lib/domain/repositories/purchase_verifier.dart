@@ -8,6 +8,10 @@ abstract interface class PurchaseVerifier {
     required String platform,
     required String productId,
     required String purchaseToken,
+    // Sent once, only if the user gave one during onboarding — used to
+    // send the TRLGDCU purchase-confirmation email, never persisted
+    // server-side. See src/backend/supabase/functions/verify-purchase/types.ts.
+    String? email,
   });
 }
 
