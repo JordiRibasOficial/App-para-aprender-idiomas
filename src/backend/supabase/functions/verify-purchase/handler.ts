@@ -14,6 +14,16 @@ export interface HandlerDeps {
   /** One verifier per platform. A missing entry means that platform isn't configured yet. */
   verifiers: Partial<Record<Platform, PurchaseVerifier>>;
   upsertSubscription(row: SubscriptionUpsert): Promise<void>;
+  /**
+   * Sends the TRLGDCU durable-medium purchase confirmation (see the call
+   * site below). Best-effort by design — see there for why a rejection
+   * here must never fail the request.
+   */
+  sendConfirmationEmail(input: {
+    to: string;
+    productId: "monthly_sub" | "annual_sub";
+    platform: Platform;
+  }): Promise<void>;
 }
 
 /**
@@ -109,6 +119,25 @@ async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Prom
     expiresAt: result.expiresAt,
     rawResponse: result.raw,
   });
+
+  // Best-effort, deliberately outside the try/catch chain that turns
+  // failures into error responses above: the entitlement is already
+  // granted by this point (the upsert above succeeded), and a confirmation
+  // email that fails to send must never undo that or turn an otherwise
+  // successful purchase into an error response. See
+  // docs/business/terms-of-service-draft.md §4 for the legal requirement
+  // this fulfills, and _shared/email.ts for why it's a plain HTTP call.
+  if (input.email && status === "active") {
+    try {
+      await deps.sendConfirmationEmail({
+        to: input.email,
+        productId: input.productId,
+        platform: input.platform,
+      });
+    } catch (error) {
+      console.error("verify-purchase: confirmation email failed", error);
+    }
+  }
 
   return jsonResponse({ status, expiresAt: result.expiresAt }, 200);
 }

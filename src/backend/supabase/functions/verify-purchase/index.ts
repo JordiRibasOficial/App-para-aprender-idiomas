@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 import { createGetUserId } from "../_shared/auth.ts";
+import { sendPurchaseConfirmationEmail } from "../_shared/email.ts";
 import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleVerifyPurchase } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
@@ -84,6 +85,7 @@ const deps: HandlerDeps = {
   isRateLimited,
   verifiers: buildVerifiers(),
   upsertSubscription,
+  sendConfirmationEmail: sendPurchaseConfirmationEmail,
 };
 
 Deno.serve((req) => handleVerifyPurchase(req, deps));

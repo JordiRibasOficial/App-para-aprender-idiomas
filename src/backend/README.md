@@ -196,6 +196,14 @@ Ribas Oficial", region `eu-west-3`):
   cron.job;` in the SQL Editor: `jobid 1`, schedule `0 3 * * *`, `active =
   true`. The four rate-limit tracking tables now get purged of rows older
   than 7 days automatically, every day at 03:00.
+- `verify-purchase` now also sends a TRLGDCU purchase-confirmation email
+  (see "Purchase confirmation email setup" below) — **not yet deployed or
+  configured**: needs both a fresh `supabase functions deploy
+  verify-purchase` to ship this code and `RESEND_API_KEY`/
+  `RESEND_FROM_EMAIL` set before it does anything. Until both, this is a
+  silent no-op — `input.email` is accepted by the schema but
+  `sendConfirmationEmail` isn't wired to anything live yet, so no request
+  fails and nothing is sent.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
@@ -281,6 +289,59 @@ have credentials (it will still need a real purchase token to return
 anything other than a 4xx/502 from Google's/Apple's own APIs — that's
 expected, since no test double exists for their production verification
 endpoints).
+
+## Purchase confirmation email setup
+
+`verify-purchase` sends a purchase-confirmation email — required by TRLGDCU
+arts. 98.7/99.2, see `docs/business/terms-of-service-draft.md` §4 for the
+legal reasoning — whenever a purchase verifies as active *and* the client
+sent an email (only present if the user gave one during onboarding; guest
+users send none, and simply don't get this email). It's sent via
+`_shared/email.ts`, best-effort: a failed send is logged
+(`supabase functions logs verify-purchase`) but never fails the request or
+undoes the entitlement grant already made — see that file and
+`verify-purchase/handler.ts`'s call site for why.
+
+### Why Resend
+
+Evaluated against Amazon SES, Postmark, and SendGrid for this specific
+need — one low-volume transactional email, sent from a Deno Edge Function,
+with a preference for EU data residency (consistent with Supabase in
+`eu-west-3` and Sentry's EU region):
+
+| Provider | Fit |
+|---|---|
+| **Resend** | Plain REST API — no SMTP library needed inside a Deno Edge Function. EU region available. Free tier (3,000 emails/month) is far more than this needs. The provider most commonly paired with Supabase Edge Functions in their own examples. |
+| Amazon SES | Cheapest at scale, but starts in a "sandbox" that only sends to pre-verified addresses until you request production access — unnecessary friction for one transactional email. |
+| Postmark | Excellent deliverability, but no free tier — pays from day one for near-zero volume. |
+| SendGrid | Mature, but a heavier setup and a stricter historical free tier than Resend. |
+
+### Setup
+
+1. Create a [Resend](https://resend.com) account.
+2. **You need a domain you control DNS for** — Resend rejects sends from
+   an unverified domain, and this project's current public site
+   (`jordiribasoficial.github.io/...`, GitHub Pages) doesn't give you DNS
+   control. Buy a domain (any registrar, ~10-15€/year) if you don't have
+   one yet — you'll want one for a professional contact address regardless
+   of Resend.
+3. In Resend: **Domains → Add Domain** → add the SPF/DKIM DNS records it
+   gives you at your registrar → wait for verification (usually minutes,
+   can take longer depending on DNS propagation).
+4. **API Keys → Create API Key** → copy it (shown once).
+5. Set both secrets:
+
+```bash
+npx supabase secrets set --project-ref nfkhnrwyekqbjxwxmctu \
+  RESEND_API_KEY=<api key> \
+  RESEND_FROM_EMAIL=confirmaciones@tu-dominio.example
+```
+
+`RESEND_FROM_EMAIL` must be an address on the domain you just verified —
+Resend rejects sends from any other domain. Until both secrets are set,
+`sendPurchaseConfirmationEmail` throws immediately (caught by
+`handler.ts`'s best-effort wrapper, so `verify-purchase` itself keeps
+working normally) — see `_shared/email.ts`.
 
 ## Local setup
 
@@ -488,23 +549,32 @@ looks like someone probing for a way to fake Premium, not normal usage —
 condition on). This is Dashboard configuration, not code — nothing here
 can turn it on for you.
 
-**Crash reporting for the mobile app**: none is wired up yet. `main.dart`
-now has global handlers (`FlutterError.onError`,
-`PlatformDispatcher.instance.onError`, `runZonedGuarded`) funneling every
-uncaught error through `lib/error_reporting.dart`'s `reportError` — today
-that just logs locally, but it's the single place a Sentry/Crashlytics
-call would go once one of those is set up (needs a DSN/project from your
-own account on that service, which nobody but you can create).
+**Crash reporting for the mobile app**: wired up — Sentry, release builds
+only. `main.dart`'s global handlers (`FlutterError.onError`,
+`PlatformDispatcher.instance.onError`, `runZonedGuarded`) chain through
+Sentry's own integrations rather than replacing them, so every error
+reaches Sentry once; `lib/error_reporting.dart`'s `reportError` stays the
+local-log funnel it always was. See
+`docs/business/crash-reporting-review.md` for the vendor decision and
+`src/mobile/lib/data/sentry_config.dart` for the DSN. This backend has no
+equivalent yet — its own failures are still `console.error`-only (see
+above), not sent anywhere automatically.
 
 ## Next step
 
 Google Play credentials are set (see "Store credentials setup" above) and
-confirmed live via a real Google Play Developer API call. Just Apple/iOS
-left: set `APPLE_KEY_ID` / `APPLE_ISSUER_ID` / `APPLE_PRIVATE_KEY` /
-`APPLE_BUNDLE_ID` via `npx supabase secrets set` once you have them from App
-Store Connect. Once that's done, a real purchase in the app on either
-platform will exercise the whole path — client, anonymous auth, edge
-function, store verification, entitlement — for real.
+confirmed live via a real Google Play Developer API call. Two things left:
+
+1. Apple/iOS: set `APPLE_KEY_ID` / `APPLE_ISSUER_ID` / `APPLE_PRIVATE_KEY` /
+   `APPLE_BUNDLE_ID` via `npx supabase secrets set` once you have them from
+   App Store Connect.
+2. `RESEND_API_KEY` / `RESEND_FROM_EMAIL` (see "Purchase confirmation
+   email setup" above) — needs a domain you control DNS for, which this
+   project doesn't have yet.
+
+Once those are done, a real purchase in the app on either platform will
+exercise the whole path — client, anonymous auth, edge function, store
+verification, entitlement, confirmation email — for real.
 
 One thing worth knowing if you ever regenerate the Google secret by hand
 from PowerShell: `Get-Content -Raw file.json | ConvertFrom-Json |

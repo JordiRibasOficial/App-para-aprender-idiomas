@@ -22,8 +22,10 @@ class FakeVerifier implements PurchaseVerifier {
 function buildDeps(overrides: Partial<HandlerDeps> = {}): {
   deps: HandlerDeps;
   upserts: SubscriptionUpsert[];
+  confirmationEmails: { to: string; productId: string; platform: string }[];
 } {
   const upserts: SubscriptionUpsert[] = [];
+  const confirmationEmails: { to: string; productId: string; platform: string }[] = [];
   const deps: HandlerDeps = {
     getUserId: (authHeader) => Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
     isRateLimited: () => Promise.resolve(false),
@@ -32,9 +34,13 @@ function buildDeps(overrides: Partial<HandlerDeps> = {}): {
       upserts.push(row);
       return Promise.resolve();
     },
+    sendConfirmationEmail: (input) => {
+      confirmationEmails.push(input);
+      return Promise.resolve();
+    },
     ...overrides,
   };
-  return { deps, upserts };
+  return { deps, upserts, confirmationEmails };
 }
 
 function request(body: unknown, authHeader: string | null = "Bearer valid-token"): Request {
@@ -189,6 +195,79 @@ Deno.test("an expired purchase is persisted as expired, not active", async () =>
   assertEquals(body.status, "expired");
   assertEquals(upserts[0].status, "expired");
 });
+
+Deno.test("an active purchase with an email sends the confirmation email", async () => {
+  const { deps, confirmationEmails } = buildDeps();
+  const response = await handleVerifyPurchase(
+    request({
+      platform: "android",
+      productId: "annual_sub",
+      purchaseToken: "tok",
+      email: "user@example.com",
+    }),
+    deps,
+  );
+
+  assertEquals(response.status, 200);
+  assertEquals(confirmationEmails.length, 1);
+  assertEquals(confirmationEmails[0], {
+    to: "user@example.com",
+    productId: "annual_sub",
+    platform: "android",
+  });
+});
+
+Deno.test("no email in the request means no confirmation email is sent", async () => {
+  const { deps, confirmationEmails } = buildDeps();
+  const response = await handleVerifyPurchase(
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+    deps,
+  );
+
+  assertEquals(response.status, 200);
+  assertEquals(confirmationEmails.length, 0);
+});
+
+Deno.test("an expired purchase with an email does not send a confirmation email", async () => {
+  const { deps, confirmationEmails } = buildDeps({
+    verifiers: { android: new FakeVerifier({ isActive: false, expiresAt: null }) },
+  });
+  const response = await handleVerifyPurchase(
+    request({
+      platform: "android",
+      productId: "annual_sub",
+      purchaseToken: "tok",
+      email: "user@example.com",
+    }),
+    deps,
+  );
+
+  assertEquals(response.status, 200);
+  assertEquals(confirmationEmails.length, 0);
+});
+
+Deno.test(
+  "a confirmation email failure still returns 200 with the entitlement already granted",
+  async () => {
+    const { deps, upserts } = buildDeps({
+      sendConfirmationEmail: () => Promise.reject(new Error("Resend send failed: 401")),
+    });
+    const response = await handleVerifyPurchase(
+      request({
+        platform: "android",
+        productId: "annual_sub",
+        purchaseToken: "tok",
+        email: "user@example.com",
+      }),
+      deps,
+    );
+    const body = await response.json();
+
+    assertEquals(response.status, 200);
+    assertEquals(body.status, "active");
+    assertEquals(upserts.length, 1);
+  },
+);
 
 Deno.test("rejects a GET request", async () => {
   const { deps } = buildDeps();

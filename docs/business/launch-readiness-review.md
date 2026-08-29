@@ -79,12 +79,19 @@ términos, portabilidad de datos RGPD (#29). ✅ Derecho de supresión (#32).
 efectivamente empaquetado en el build de iOS, verificado con un build real
 en CI (#33).
 
-🔲 **Confirmación en soporte duradero** (TRLGDCU arts. 98.7/99.2,
-documentado en `terms-of-service-draft.md` sección 4): el texto legal ya
-reconoce que el recibo de la tienda no basta por sí solo; falta configurar
-un servidor SMTP de producción para poder enviar el email de confirmación
-real. Sin SMTP, esto queda como gap legal de bajo riesgo mientras el
-volumen de usuarios sea bajo, pero conviene resolverlo antes de escalar.
+✅ **Confirmación en soporte duradero** (TRLGDCU arts. 98.7/99.2): `verify-purchase`
+envía ahora ese correo (vía Resend) tras cada alta con email disponible,
+complementando el recibo de la tienda con el resto del contenido del
+art. 97.1 — ver `src/backend/README.md` § "Purchase confirmation email
+setup" y `terms-of-service-draft.md` sección 4. El email solo se transmite
+al backend en el momento de la compra, nunca se persiste — las tres
+declaraciones de privacidad (`privacy-policy-draft.md`, `store-listing.md`,
+`play-console-setup-guide.md`) están actualizadas para reflejarlo.
+
+🔲 **Configurar Resend** (dominio propio + `RESEND_API_KEY`/`RESEND_FROM_EMAIL`):
+el código ya está desplegable, pero sin esto el envío es un no-op silencioso
+— no falla nada, simplemente no se manda el correo. No bloquea el
+lanzamiento: el resto del flujo de compra funciona igual.
 
 ## Legal — Términos, privacidad, DSA
 
@@ -157,7 +164,7 @@ actualizadas para declarar el nuevo SDK.
 | 2 | Generar y configurar la In-App Purchase key de Apple (`APPLE_KEY_ID`, `APPLE_ISSUER_ID`, `APPLE_PRIVATE_KEY`, `APPLE_BUNDLE_ID`) | ídem |
 | 3 | ~~Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito~~ — ✅ hecho, job activo confirmado con `select * from cron.job;` | `src/backend/README.md` § Data retention |
 | 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry), DSN real configurado en `sentry_config.dart` | `docs/business/crash-reporting-review.md` |
-| 5 | Configurar SMTP de producción para el email de confirmación en soporte duradero | `docs/business/terms-of-service-draft.md` § 4 |
+| 5 | ~~Implementar el envío del email de confirmación en soporte duradero~~ — ✅ hecho (Resend), pendiente solo de comprar un dominio propio y configurar `RESEND_API_KEY`/`RESEND_FROM_EMAIL` | `src/backend/README.md` § Purchase confirmation email setup |
 
 Ninguno de los puntos restantes bloquea el lanzamiento por sí solo —
 cada uno falla de forma segura (fail-closed o documentado como riesgo bajo)
