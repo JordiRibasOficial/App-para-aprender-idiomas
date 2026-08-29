@@ -41,16 +41,20 @@
         La aplicación tiene un backend propio (Supabase), pero con un alcance
         deliberadamente reducido: solo verifica compras de suscripción contra Google Play /
         Apple, y sirve el contenido de los cursos de pago a quien tiene una suscripción
-        activa. No gestiona cuentas de usuario ni recoge email. Los datos que se recogen son:
+        activa. No gestiona cuentas de usuario. Los datos que se recogen son:
       </p>
       <div class="card">
         <p><strong>Progreso de aprendizaje</strong> (lecciones completadas, puntuación, racha):
         almacenado localmente en el dispositivo, no se envía a ningún servidor nuestro.</p>
         <p><strong>Email (opcional)</strong>: si el usuario elige "Continuar con email" en el
         registro inicial, se guarda localmente en el dispositivo, cifrado (Keychain en iOS,
-        almacenamiento cifrado en Android). No se usa para crear una cuenta real ni se envía a
-        ningún servidor en esta versión — se pedirá de nuevo, de forma más completa y con
-        backend real, cuando exista un sistema de cuentas.</p>
+        almacenamiento cifrado en Android), y no se usa para crear una cuenta real — se pedirá
+        de nuevo, de forma más completa y con backend real, cuando exista un sistema de
+        cuentas. Si el usuario lo dio y completa una compra, se envía una única vez a nuestro
+        backend junto con esa compra, para poder enviar el correo de confirmación que exige la
+        normativa española de consumo (art. 98.7 TRLGDCU) — se usa solo para ese envío puntual,
+        a través de Resend (nuestro proveedor de email transaccional), y no se guarda en
+        ninguna tabla ni base de datos propia.</p>
         <p><strong>Identidad anónima de sesión</strong>: para verificar una compra o descargar
         un curso de pago, la app crea automáticamente una identidad anónima en nuestro backend
         — un identificador técnico sin nombre, email ni ningún dato personal asociado, que solo
@@ -89,9 +93,11 @@
       <h2>4. Base legal del tratamiento (RGPD)</h2>
       <ul>
         <li>Progreso local: no sale del dispositivo, por lo que no constituye un tratamiento por nuestra parte en el sentido del RGPD más allá de facilitar el almacenamiento local.</li>
-        <li>Email opcional: consentimiento explícito del usuario al elegir proporcionar su email.</li>
+        <li>Email opcional guardado localmente: consentimiento explícito del usuario al elegir proporcionarlo.</li>
+        <li>Email transmitido puntualmente para el correo de confirmación de compra: cumplimiento de una obligación legal (art. 6.1.c RGPD).</li>
         <li>Identidad anónima de sesión y datos de verificación de compra: ejecución del contrato de suscripción, necesario para prestar el servicio de pago.</li>
         <li>Publicidad: consentimiento del usuario (recogido vía el formulario UMP de Google para usuarios en la UE/Reino Unido) o interés legítimo donde el RGPD lo permita, según la región.</li>
+        <li>Datos de diagnóstico/fallos (Sentry): interés legítimo (art. 6.1.f RGPD) — mantener la app funcionando de forma segura y detectar errores en producción.</li>
       </ul>
 
       <h2>5. Servicios de terceros</h2>
@@ -105,8 +111,16 @@
         <strong>Google AdMob</strong> muestra anuncios a usuarios sin suscripción Premium
         activa, sujeto a la
         <a href="https://policies.google.com/privacy">política de privacidad de Google</a>.
-        Esta sección se actualizará si en el futuro se añade analítica o un sistema de
-        cuentas real.
+        <strong>Sentry</strong> (monitorización de errores, región UE) recibe automáticamente
+        detalles técnicos de fallos de la app solo en la versión de producción — nunca el
+        email ni ningún otro dato personal introducido por el usuario — sujeto a la
+        <a href="https://sentry.io/privacy/">política de privacidad de Sentry</a>.
+        <strong>Resend</strong> (envío del correo de confirmación de compra) recibe la
+        dirección de email del usuario únicamente cuando completa una compra y solo para
+        enviar ese correo puntual — sujeto a la
+        <a href="https://resend.com/legal/privacy-policy">política de privacidad de Resend</a>.
+        Esta sección se actualizará si en el futuro se añade analítica de comportamiento o un
+        sistema de cuentas real.
       </p>
 
       <h2>6. Derechos del usuario</h2>
