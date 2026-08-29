@@ -9,7 +9,7 @@ Sentry está integrado y en funcionamiento en `main` (proyecto Sentry `webapps-j
 - `src/mobile/lib/error_reporting.dart` — sigue siendo el único funnel para el log local (`debugPrint`, visible con `flutter logs`/`adb logcat`/consola de Xcode); no llama a Sentry directamente, porque ya lo captura la cadena de arriba — llamarlo también desde aquí duplicaría cada evento.
 - Builds de debug/profile (incluido `flutter test`, donde `kReleaseMode` siempre es `false`) nunca inicializan Sentry — el desarrollo local y los tests no contaminan el dashboard de producción.
 
-**Pendiente:** el DSN en `sentry_config.dart` es un placeholder (`REPLACE_ME`) hasta que se sustituya por el valor real del proyecto (Sentry → Settings → Client Keys). Mientras tanto la app funciona con normalidad — `SentryFlutter.init()` simplemente no logra autenticar y no se envía nada, sin afectar al resto de la app.
+El DSN real del proyecto ya está en `sentry_config.dart` — no queda nada pendiente aquí.
 
 **Lo que ya existía sin ningún SDK adicional (sigue siendo cierto, complementario a Sentry):** Play Console (Android vitals) y App Store Connect ya recogen automáticamente los crashes nativos que tiran el proceso entero.
 

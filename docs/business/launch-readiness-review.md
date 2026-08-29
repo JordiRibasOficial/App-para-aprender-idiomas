@@ -144,14 +144,10 @@ divulgación de vulnerabilidades (#18). ✅ Runbook de backup/restore
 (#20). ✅ **Crash reporting implementado**: Sentry (`sentry_flutter`),
 región UE, solo en builds de producción, integrado sin duplicar captura
 (los manejadores de `FlutterError.onError`/`PlatformDispatcher.instance.onError`
-encadenan con los de Sentry en vez de sustituirlos) — ver
+encadenan con los de Sentry en vez de sustituirlos), con el DSN real del
+proyecto `webapps-jk/flutter-kb` ya configurado — ver
 `crash-reporting-review.md`. Etiquetas de privacidad de Apple/Play
 actualizadas para declarar el nuevo SDK.
-
-🔲 **Sustituir el DSN placeholder por el real**: `sentry_config.dart` tiene
-`REPLACE_ME` hasta que se pegue el valor real desde Sentry → Settings →
-Client Keys del proyecto `webapps-jk/flutter-kb`. Sin esto, la app funciona
-con normalidad pero no llega ningún evento a Sentry.
 
 ## Checklist de acciones pendientes del propietario
 
@@ -160,7 +156,7 @@ con normalidad pero no llega ningún evento a Sentry.
 | 1 | ~~Configurar `GOOGLE_SERVICE_ACCOUNT_JSON` / `GOOGLE_PLAY_PACKAGE_NAME` como secretos de Supabase~~ — ✅ hecho, confirmado con una llamada real a la API de Google Play | `src/backend/README.md` § Store credentials setup |
 | 2 | Generar y configurar la In-App Purchase key de Apple (`APPLE_KEY_ID`, `APPLE_ISSUER_ID`, `APPLE_PRIVATE_KEY`, `APPLE_BUNDLE_ID`) | ídem |
 | 3 | ~~Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito~~ — ✅ hecho, job activo confirmado con `select * from cron.job;` | `src/backend/README.md` § Data retention |
-| 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry); solo falta pegar el DSN real en `sentry_config.dart` (placeholder `REPLACE_ME` de momento) | `docs/business/crash-reporting-review.md` |
+| 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry), DSN real configurado en `sentry_config.dart` | `docs/business/crash-reporting-review.md` |
 | 5 | Configurar SMTP de producción para el email de confirmación en soporte duradero | `docs/business/terms-of-service-draft.md` § 4 |
 
 Ninguno de los puntos restantes bloquea el lanzamiento por sí solo —
