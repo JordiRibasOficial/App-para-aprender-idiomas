@@ -49,6 +49,19 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
             ),
+            // TEMPORARY — remove once the Sentry dashboard confirms an event
+            // from a real release build. Flutter's gesture dispatch catches
+            // a synchronous throw from onPressed and routes it through
+            // FlutterError.onError, exercising the exact chain main.dart
+            // wires up (see its doc comment): Sentry's own integration
+            // captures it, then main.dart's handler runs reportError() for
+            // the local debugPrint. Only meaningful in a release build —
+            // debug/profile skip SentryFlutter.init entirely (kReleaseMode).
+            const SizedBox(height: AppTheme.spaceLg),
+            ElevatedButton(
+              onPressed: () => throw StateError('This is test exception'),
+              child: const Text('Verify Sentry Setup'),
+            ),
           ],
         ),
       ),
