@@ -54,7 +54,8 @@ Future<void> pumpFreshApp(
   await tester.pumpAndSettle();
 }
 
-/// Walks Welcome -> language (English default) -> level (A1 default) ->
+/// Walks Welcome -> language (English default, which skips straight past
+/// the level screen since A1 is the only level and already the default) ->
 /// guest, landing on the lesson list. Same tap pattern proven stable in
 /// app_test.dart.
 Future<void> completeOnboardingAsGuest(WidgetTester tester) async {
@@ -67,9 +68,6 @@ Future<void> completeOnboardingAsGuest(WidgetTester tester) async {
   await tester.tap(find.byType(Checkbox).at(1));
   await tester.pumpAndSettle();
   await tester.tap(find.text('Empezar'));
-  await tester.pumpAndSettle();
-
-  await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
   await tester.pumpAndSettle();
 
   await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
