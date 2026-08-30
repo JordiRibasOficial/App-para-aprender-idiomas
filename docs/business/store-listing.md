@@ -86,11 +86,11 @@ Apple exige esto en el cuestionario "App Privacy" de App Store Connect, en categ
 
 | Categoría Apple | Dato | ¿Vinculado a tu identidad? | ¿Se usa para rastreo (tracking)? | Detalle |
 |---|---|---|---|---|
-| Identificadores | ID de usuario (identidad anónima de sesión) | Sí, vinculado (aunque no a nombre/email) | No | Igual que en Play: creado en nuestro backend al comprar/restaurar suscripción o descargar un curso de pago. |
-| Compras | Historial de compras | Sí, vinculado | No | Verificación de compra contra la API de Apple, guardada con estado y fecha de expiración junto al ID anónimo de arriba. |
+| Identificadores | ID de usuario (cuenta real) | Sí, vinculado | No | Comprar/restaurar una suscripción, y descargar un curso de pago, requieren tener una cuenta real (Supabase Auth) — la app la pide antes, nunca después de cobrar. Ese ID de cuenta (no un identificador anónimo) es lo que vincula esas operaciones al usuario en nuestro backend. |
+| Compras | Historial de compras | Sí, vinculado | No | Verificación de compra contra la API de Apple, guardada con estado y fecha de expiración junto a la cuenta de arriba. |
 | Otros datos | Idioma de estudio (solo Premium) | Sí, vinculado | No | `get-course-content` revela a nuestro backend qué idioma está estudiando el usuario al abrir un curso de pago. |
 | Datos de uso | Datos de publicidad | Sí, si el usuario acepta el prompt de ATT (ver abajo) | **Sí, si acepta el prompt de App Tracking Transparency (ATT)** | Google AdMob. Marca "Datos usados para rastrearte" en el cuestionario de Apple para esta fila. |
-| Contacto | Email | Sí, vinculado (solo si el usuario completa una compra) | No | Se guarda cifrado en el dispositivo (`flutter_secure_storage`). Se transmite una única vez, junto con una compra, para enviar el correo de confirmación que exige el art. 98.7 TRLGDCU (Resend) — no se persiste en nuestro backend. Antes de esa primera compra, cumple la definición de "no recopilado" de Apple; a partir de ella, sí se recopila puntualmente. |
+| Contacto | Email | Sí, vinculado (solo si el usuario tiene una cuenta) | No | Se guarda cifrado en el dispositivo (`flutter_secure_storage`). Al completar una compra, se transmite una única vez junto con esa compra, para enviar el correo de confirmación que exige el art. 98.7 TRLGDCU (Resend) — no se persiste en nuestro backend. Antes de crear la cuenta, cumple la definición de "no recopilado" de Apple. |
 | — | Progreso de aprendizaje | No se declara | No | Mismo motivo: solo local, nunca se transmite. |
 | Diagnóstico | Datos de fallos (crash) | Sí, vinculado a un ID de instalación anónimo generado por el SDK, no a tu identidad de usuario | No | Sentry (`sentry_flutter`), solo en builds de producción — ver `docs/business/crash-reporting-review.md`. Captura la excepción, el stack trace y contexto técnico del dispositivo/SO cuando la app falla; no captura contenido de pantalla ni el email guardado localmente. |
 

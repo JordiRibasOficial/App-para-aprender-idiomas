@@ -2,11 +2,15 @@ import { assertEquals } from "@std/assert";
 
 import { handleDeleteUserData } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
+import type { Caller } from "../_shared/auth.ts";
+
+const REAL_CALLER: Caller = { id: "user-1", email: "user@example.com" };
+const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
 
 function buildDeps(overrides: Partial<HandlerDeps> = {}): HandlerDeps {
   return {
-    getUserId: (authHeader) =>
-      Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    getCaller: (authHeader) =>
+      Promise.resolve(authHeader === "Bearer valid-token" ? REAL_CALLER : null),
     isRateLimited: () => Promise.resolve(false),
     deleteUser: () => Promise.resolve(),
     ...overrides,
@@ -22,6 +26,12 @@ function request(authHeader: string | null = "Bearer valid-token"): Request {
 Deno.test("rejects requests without a valid auth token", async () => {
   const response = await handleDeleteUserData(request(null), buildDeps());
   assertEquals(response.status, 401);
+});
+
+Deno.test("rejects an anonymous caller — no account to delete", async () => {
+  const deps = buildDeps({ getCaller: () => Promise.resolve(ANONYMOUS_CALLER) });
+  const response = await handleDeleteUserData(request(), deps);
+  assertEquals(response.status, 403);
 });
 
 Deno.test("rejects a rate-limited caller with 429, without deleting anything", async () => {

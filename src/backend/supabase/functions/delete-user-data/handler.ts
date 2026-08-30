@@ -1,8 +1,9 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
+import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
-  /** Resolves the caller's user id from the request's Authorization header, or null if unauthenticated. */
-  getUserId(authHeader: string | null): Promise<string | null>;
+  /** Resolves the caller's own id and account email, or null if unauthenticated. */
+  getCaller(authHeader: string | null): Promise<Caller | null>;
   /**
    * Records this call as a request for `userId` and reports whether
    * they've exceeded the allowed rate — true means reject with 429. Called
@@ -42,10 +43,9 @@ export async function handleDeleteUserData(req: Request, deps: HandlerDeps): Pro
  * auth token (see index.ts).
  *
  * This is destructive and irreversible: once deleteUser succeeds, the
- * caller's anonymous Supabase identity no longer exists, so any Bearer
- * token minted for it stops working immediately (the mobile client signs
- * out locally right after this call succeeds — see
- * SupabaseUserDataDeletionRepository).
+ * caller's account no longer exists, so any Bearer token minted for it
+ * stops working immediately (the mobile client signs out locally right
+ * after this call succeeds — see SupabaseUserDataDeletionRepository).
  */
 async function handleDeleteUserDataUnsafe(req: Request, deps: HandlerDeps): Promise<Response> {
   if (req.method === "OPTIONS") {
@@ -56,10 +56,17 @@ async function handleDeleteUserDataUnsafe(req: Request, deps: HandlerDeps): Prom
     return jsonResponse({ error: "Method not allowed" }, 405);
   }
 
-  const userId = await deps.getUserId(req.headers.get("Authorization"));
-  if (!userId) {
+  const caller = await deps.getCaller(req.headers.get("Authorization"));
+  if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
+  if (!caller.email) {
+    return jsonResponse(
+      { error: "A real account is required to delete account data." },
+      403,
+    );
+  }
+  const userId = caller.id;
 
   if (await deps.isRateLimited(userId)) {
     return jsonResponse({ error: "Too many requests. Try again later." }, 429);

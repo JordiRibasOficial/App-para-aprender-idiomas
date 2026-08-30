@@ -4,22 +4,69 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'account/require_account.dart';
+import 'providers/account_providers.dart';
 import 'providers/user_data_deletion_providers.dart';
 import 'providers/user_data_export_providers.dart';
 import 'theme/app_theme.dart';
 
 /// RGPD art. 15/20/17: lets the user pull, or permanently delete,
-/// everything the backend holds about their own anonymous session identity
-/// — see docs/business/records-of-processing-activities.md and the
-/// `export-user-data`/`delete-user-data` Edge Functions this calls.
-class DataExportScreen extends ConsumerStatefulWidget {
+/// everything the backend holds about their own account — see
+/// docs/business/records-of-processing-activities.md and the
+/// `export-user-data`/`delete-user-data` Edge Functions this calls. Both
+/// require a real account (see requireAccountAccessToken) — a guest with no
+/// account has nothing on the backend to export or delete, so this screen
+/// offers to create one first instead of showing an empty/broken UI.
+class DataExportScreen extends ConsumerWidget {
   const DataExportScreen({super.key});
 
   @override
-  ConsumerState<DataExportScreen> createState() => _DataExportScreenState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = ref.watch(accountSessionProvider).value;
+    if (account == null) {
+      return const _NoAccountView();
+    }
+    return const _DataExportView();
+  }
 }
 
-class _DataExportScreenState extends ConsumerState<DataExportScreen> {
+class _NoAccountView extends ConsumerWidget {
+  const _NoAccountView();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Mis datos')),
+      body: Padding(
+        padding: const EdgeInsets.all(AppTheme.spaceLg),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Necesitas una cuenta para ver o eliminar tus datos — como '
+              'invitado no guardamos nada sobre ti en el backend.',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppTheme.spaceLg),
+            FilledButton(
+              onPressed: () => requireAccount(context, ref),
+              child: const Text('Crear cuenta'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DataExportView extends ConsumerStatefulWidget {
+  const _DataExportView();
+
+  @override
+  ConsumerState<_DataExportView> createState() => _DataExportViewState();
+}
+
+class _DataExportViewState extends ConsumerState<_DataExportView> {
   bool _loading = false;
   String? _error;
   String? _exportedJson;
@@ -120,10 +167,10 @@ class _DataExportScreenState extends ConsumerState<DataExportScreen> {
           children: [
             const Text(
               'Descarga una copia de los datos que guardamos sobre tu '
-              'identidad anónima en nuestro backend: estado de tu '
-              'suscripción e intentos de verificación de compra. El '
-              'progreso de tus lecciones vive solo en este dispositivo y '
-              'no forma parte de esta exportación.',
+              'cuenta en nuestro backend: estado de tu suscripción e '
+              'intentos de verificación de compra. El progreso de tus '
+              'lecciones vive solo en este dispositivo y no forma parte de '
+              'esta exportación.',
             ),
             const SizedBox(height: AppTheme.spaceMd),
             FilledButton(

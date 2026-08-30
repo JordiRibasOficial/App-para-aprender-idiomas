@@ -1,7 +1,7 @@
-// Neither constructor field below can use an initializing formal
-// (`this._field`): that would force the external named parameter to be the
-// private name itself (`_field`), which callers in other files can't
-// reference — see the comment on the constructor.
+// Can't use an initializing formal (`this._verifier`): that would force the
+// external named parameter to be the private name itself (`_verifier`),
+// which callers in other files can't reference — see the comment on the
+// constructor.
 // ignore_for_file: prefer_initializing_formals
 
 import 'dart:async';
@@ -45,24 +45,13 @@ class InAppPurchaseSubscriptionRepository implements SubscriptionRepository {
   // Not `required this._verifier`: that would make the external parameter
   // name the private `_verifier`, which callers in other files can't
   // reference. `verifier` stays the public constructor parameter name.
-  InAppPurchaseSubscriptionRepository({
-    required PurchaseVerifier verifier,
-    // Called once per purchase, right before verifying — not stored
-    // ahead of time — so it always reflects the current onboarding state
-    // rather than a value captured at construction time. Defaults to "no
-    // email" so tests and callers that don't care about the confirmation
-    // email don't need to supply one.
-    Future<String?> Function() getConfirmationEmail = _noEmail,
-  }) : _verifier = verifier,
-       _getConfirmationEmail = getConfirmationEmail {
+  InAppPurchaseSubscriptionRepository({required PurchaseVerifier verifier})
+    : _verifier = verifier {
     _purchaseSubscription = _iap.purchaseStream.listen(_onPurchaseUpdate);
   }
 
-  static Future<String?> _noEmail() async => null;
-
   final InAppPurchase _iap = InAppPurchase.instance;
   final PurchaseVerifier _verifier;
-  final Future<String?> Function() _getConfirmationEmail;
   late final StreamSubscription<List<PurchaseDetails>> _purchaseSubscription;
   final _entitlementController = StreamController<Entitlement>.broadcast();
   final _purchaseErrorController = StreamController<String>.broadcast();
@@ -158,7 +147,6 @@ class InAppPurchaseSubscriptionRepository implements SubscriptionRepository {
         platform: Platform.isIOS ? 'ios' : 'android',
         productId: purchase.productID,
         purchaseToken: storeTransactionId,
-        email: await _getConfirmationEmail(),
       );
       if (result.isActive) {
         _entitlementController.add(

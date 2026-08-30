@@ -16,10 +16,11 @@ class UserDataExportException implements Exception {
 }
 
 /// Same pattern as [SupabasePremiumCourseFetcher]: calls the
-/// `export-user-data` Edge Function with the caller's own anonymous
-/// session token, so the backend can scope the query to exactly this
-/// caller (see the function's own doc comment for why there's no input —
-/// there is nothing to specify, the caller only ever gets their own data).
+/// `export-user-data` Edge Function with the caller's own account session
+/// token, so the backend can scope the query to exactly this caller (see
+/// the function's own doc comment for why there's no input — there is
+/// nothing to specify, the caller only ever gets their own data). Requires
+/// a real account — see [requireAccountAccessToken].
 class SupabaseUserDataExportRepository implements UserDataExportRepository {
   const SupabaseUserDataExportRepository(this._client);
 
@@ -27,7 +28,7 @@ class SupabaseUserDataExportRepository implements UserDataExportRepository {
 
   @override
   Future<Map<String, dynamic>> exportUserData() async {
-    final accessToken = await ensureAnonymousSession(_client);
+    final accessToken = await requireAccountAccessToken(_client);
 
     final FunctionResponse response;
     try {

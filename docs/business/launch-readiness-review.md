@@ -80,11 +80,13 @@ efectivamente empaquetado en el build de iOS, verificado con un build real
 en CI (#33).
 
 ✅ **Confirmación en soporte duradero** (TRLGDCU arts. 98.7/99.2): `verify-purchase`
-envía ahora ese correo (vía Resend) tras cada alta con email disponible,
+envía ahora ese correo (vía Resend) tras cada alta de suscripción,
 complementando el recibo de la tienda con el resto del contenido del
 art. 97.1 — ver `src/backend/README.md` § "Purchase confirmation email
-setup" y `terms-of-service-draft.md` sección 4. El email solo se transmite
-al backend en el momento de la compra, nunca se persiste — las tres
+setup" y `terms-of-service-draft.md` sección 4. Comprar requiere una
+cuenta real (ver más abajo), así que el email de la cuenta siempre está
+disponible — ya no existe el caso de invitado sin email. El email solo se
+transmite al backend en el momento de la compra, nunca se persiste — las
 declaraciones de privacidad (`privacy-policy-draft.md`, `store-listing.md`,
 `play-console-setup-guide.md`) están actualizadas para reflejarlo.
 
@@ -105,6 +107,25 @@ borra automáticamente si el usuario elimina su cuenta desde "Mis datos"
 actualizados. 🔲 Pendiente solo el despliegue (`supabase db push` +
 `supabase functions deploy save-marketing-contact`) — ver
 `src/backend/README.md`.
+
+✅ **Cuentas obligatorias para pagos y datos personales**: comprar/restaurar
+una suscripción, abrir un idioma de pago, y usar "Mis datos" (exportar o
+eliminar) ahora requieren una cuenta real — antes se apoyaban en una
+identidad anónima de Supabase creada sobre la marcha. La app pide crear
+cuenta (`requireAccount()`, en `PaywallScreen` y `DataExportScreen`) antes
+de intentar cualquiera de estas cosas, nunca después de cobrar; la primera
+lección y el contenido gratuito siguen sin tocar cuentas ni backend en
+absoluto. Las cuatro Edge Functions (`verify-purchase`,
+`get-course-content`, `export-user-data`, `delete-user-data`) rechazan con
+`403` a cualquier llamante sin cuenta real (`getCaller().email == null`).
+El correo de confirmación de compra ahora se envía siempre al email de la
+cuenta, nunca a un campo suelto del cliente. Como la app no tiene usuarios
+reales todavía, fue un cambio disruptivo limpio, sin migración ni backfill
+de identidades anónimas existentes. `privacy-policy-draft.md` y
+`terms-of-service-draft.md` (y sus espejos en gh-pages),
+`play-console-setup-guide.md` y `store-listing.md` están actualizados.
+🔲 Pendiente solo el despliegue (`supabase functions deploy` de las cuatro
+funciones) — ver `src/backend/README.md` § Status.
 
 🔲 **Google/Apple/Facebook Sign-In**: planeados, no implementados —
 `AuthChoiceScreen` los muestra como "Próximamente". Cada uno necesita

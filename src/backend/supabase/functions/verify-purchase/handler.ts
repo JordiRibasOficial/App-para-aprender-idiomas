@@ -1,10 +1,11 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
 import { VerifyPurchaseInputSchema } from "./types.ts";
 import type { Platform, PurchaseVerifier, SubscriptionUpsert } from "./types.ts";
+import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
-  /** Resolves the caller's user id from the request's Authorization header, or null if unauthenticated. */
-  getUserId(authHeader: string | null): Promise<string | null>;
+  /** Resolves the caller's own id and account email, or null if unauthenticated. */
+  getCaller(authHeader: string | null): Promise<Caller | null>;
   /**
    * Records this call as a verification attempt for `userId` and reports
    * whether they've exceeded the allowed rate — true means reject with 429.
@@ -63,10 +64,17 @@ async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Prom
     return jsonResponse({ error: "Method not allowed" }, 405);
   }
 
-  const userId = await deps.getUserId(req.headers.get("Authorization"));
-  if (!userId) {
+  const caller = await deps.getCaller(req.headers.get("Authorization"));
+  if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
+  if (!caller.email) {
+    return jsonResponse(
+      { error: "A real account is required to purchase or restore a subscription." },
+      403,
+    );
+  }
+  const userId = caller.id;
 
   if (await deps.isRateLimited(userId)) {
     return jsonResponse(
@@ -127,10 +135,16 @@ async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Prom
   // successful purchase into an error response. See
   // docs/business/terms-of-service-draft.md §4 for the legal requirement
   // this fulfills, and _shared/email.ts for why it's a plain HTTP call.
-  if (input.email && status === "active") {
+  //
+  // Uses caller.email (the account's own, verified server-side by
+  // getCaller), not a client-supplied address — the caller is guaranteed
+  // to have a real account by this point (checked above), so there's no
+  // longer a legitimate case for "send this purchase confirmation to a
+  // different address than my own account's."
+  if (status === "active") {
     try {
       await deps.sendConfirmationEmail({
-        to: input.email,
+        to: caller.email,
         productId: input.productId,
         platform: input.platform,
       });

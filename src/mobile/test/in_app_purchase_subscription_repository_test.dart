@@ -29,28 +29,18 @@ class FakePurchaseVerifier implements PurchaseVerifier {
     isActive: true,
   );
   Object? error;
-  final calls =
-      <
-        ({
-          String platform,
-          String productId,
-          String purchaseToken,
-          String? email,
-        })
-      >[];
+  final calls = <({String platform, String productId, String purchaseToken})>[];
 
   @override
   Future<PurchaseVerificationResult> verify({
     required String platform,
     required String productId,
     required String purchaseToken,
-    String? email,
   }) async {
     calls.add((
       platform: platform,
       productId: productId,
       purchaseToken: purchaseToken,
-      email: email,
     ));
     if (error != null) throw error!;
     return result;
@@ -191,43 +181,6 @@ void main() {
       );
       expect(fakeVerifier.calls.single.purchaseToken, 'server-token');
       expect(fakeVerifier.calls.single.platform, 'android');
-      // No getConfirmationEmail callback was supplied to this repository —
-      // the default must be "no email", not a crash.
-      expect(fakeVerifier.calls.single.email, isNull);
-    },
-  );
-
-  test(
-    'passes the email from getConfirmationEmail through to the verifier',
-    () async {
-      // A dedicated verifier, not the shared fakeVerifier from setUp: both
-      // `repository` (from setUp) and `withEmail` (this test) end up
-      // listening to the same underlying purchaseStream, so asserting on
-      // a shared fake would also catch repository's own (email-less) call.
-      final dedicatedVerifier = FakePurchaseVerifier();
-      final withEmail = InAppPurchaseSubscriptionRepository(
-        verifier: dedicatedVerifier,
-        getConfirmationEmail: () async => 'user@example.com',
-      );
-      addTearDown(withEmail.dispose);
-
-      fakePlatform.emitPurchaseUpdate([
-        PurchaseDetails(
-          productID: SubscriptionPlan.monthlyProductId,
-          verificationData: PurchaseVerificationData(
-            localVerificationData: 'local',
-            serverVerificationData: 'server-token',
-            source: 'test',
-          ),
-          transactionDate: null,
-          status: PurchaseStatus.purchased,
-        ),
-      ]);
-
-      await Future<void>.delayed(Duration.zero);
-
-      expect(dedicatedVerifier.calls, hasLength(1));
-      expect(dedicatedVerifier.calls.single.email, 'user@example.com');
     },
   );
 

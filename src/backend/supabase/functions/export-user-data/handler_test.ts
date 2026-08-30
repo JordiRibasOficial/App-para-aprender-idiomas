@@ -3,6 +3,10 @@ import { assertEquals } from "@std/assert";
 import { handleExportUserData } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { UserDataExport } from "./types.ts";
+import type { Caller } from "../_shared/auth.ts";
+
+const REAL_CALLER: Caller = { id: "user-1", email: "user@example.com" };
+const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
 
 const FAKE_EXPORT: UserDataExport = {
   userId: "user-1",
@@ -22,8 +26,8 @@ const FAKE_EXPORT: UserDataExport = {
 
 function buildDeps(overrides: Partial<HandlerDeps> = {}): HandlerDeps {
   return {
-    getUserId: (authHeader) =>
-      Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    getCaller: (authHeader) =>
+      Promise.resolve(authHeader === "Bearer valid-token" ? REAL_CALLER : null),
     isRateLimited: () => Promise.resolve(false),
     buildExport: () => Promise.resolve(FAKE_EXPORT),
     ...overrides,
@@ -39,6 +43,12 @@ function request(authHeader: string | null = "Bearer valid-token"): Request {
 Deno.test("rejects requests without a valid auth token", async () => {
   const response = await handleExportUserData(request(null), buildDeps());
   assertEquals(response.status, 401);
+});
+
+Deno.test("rejects an anonymous caller — no account to export data for", async () => {
+  const deps = buildDeps({ getCaller: () => Promise.resolve(ANONYMOUS_CALLER) });
+  const response = await handleExportUserData(request(), deps);
+  assertEquals(response.status, 403);
 });
 
 Deno.test("rejects a rate-limited caller with 429, without building an export", async () => {

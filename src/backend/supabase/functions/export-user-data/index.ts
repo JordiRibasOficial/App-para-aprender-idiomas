@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-import { createGetUserId } from "../_shared/auth.ts";
+import { createGetCaller } from "../_shared/auth.ts";
 import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleExportUserData } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
@@ -18,7 +18,7 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 // get-course-content, avoids a second round-trip to mint a scoped client.
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
+const getCaller = createGetCaller(supabaseUrl, supabaseAnonKey);
 
 // Lower than the other two functions: there's no legitimate reason for a
 // user to re-export their own data many times in a short window, and each
@@ -64,7 +64,7 @@ async function buildExport(userId: string): Promise<UserDataExport> {
 }
 
 const deps: HandlerDeps = {
-  getUserId,
+  getCaller,
   isRateLimited,
   buildExport,
 };

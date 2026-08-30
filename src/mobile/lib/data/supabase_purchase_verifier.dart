@@ -17,10 +17,11 @@ class PurchaseVerificationException implements Exception {
 }
 
 /// Calls the `verify-purchase` Supabase Edge Function — see
-/// src/backend/README.md for what it does server-side. Signs the user in
-/// anonymously if there's no session yet: this app has no real accounts
-/// (see AuthChoiceScreen), so an anonymous Supabase identity is enough to
-/// tie a purchase to a device and is upgradable later via identity linking.
+/// src/backend/README.md for what it does server-side. Requires a real
+/// account (see AuthChoiceScreen/AccountRepository) — callers gate on
+/// [requireAccount] before this is ever reached; see
+/// [requireAccountAccessToken]'s doc comment for why entitlement is tied to
+/// an account rather than an anonymous session.
 class SupabasePurchaseVerifier implements PurchaseVerifier {
   const SupabasePurchaseVerifier(this._client);
 
@@ -31,9 +32,8 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
     required String platform,
     required String productId,
     required String purchaseToken,
-    String? email,
   }) async {
-    final accessToken = await ensureAnonymousSession(_client);
+    final accessToken = await requireAccountAccessToken(_client);
 
     final FunctionResponse response;
     try {
@@ -44,7 +44,6 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
           'platform': platform,
           'productId': productId,
           'purchaseToken': purchaseToken,
-          'email': ?email,
         },
       );
     } on FunctionException catch (e) {

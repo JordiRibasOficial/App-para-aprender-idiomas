@@ -9,7 +9,6 @@ import '../../data/supabase_purchase_verifier.dart';
 import '../../domain/models/entitlement.dart';
 import '../../domain/models/subscription_plan.dart';
 import '../../domain/repositories/subscription_repository.dart';
-import 'onboarding_providers.dart';
 
 final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) {
   // in_app_purchase has no web implementation; fall back to the mock so the
@@ -19,14 +18,6 @@ final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) {
   }
   final repository = InAppPurchaseSubscriptionRepository(
     verifier: SupabasePurchaseVerifier(Supabase.instance.client),
-    // ref.read, not ref.watch: this only needs the value at the moment a
-    // purchase is verified, not to rebuild the repository whenever
-    // onboarding state changes. onboardingProvider should already be
-    // loaded by the time a purchase can happen (onboarding gates the rest
-    // of the app) — a guest user simply has no email, and AsyncValue.value
-    // (nullable in Riverpod 3) handles the (normally unreachable) case
-    // where it somehow isn't loaded yet.
-    getConfirmationEmail: () async => ref.read(onboardingProvider).value?.email,
   );
   ref.onDispose(repository.dispose);
   return repository;
