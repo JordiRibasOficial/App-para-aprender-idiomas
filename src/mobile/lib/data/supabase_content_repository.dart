@@ -34,7 +34,7 @@ class SupabasePremiumCourseFetcher implements PremiumCourseFetcher {
 
   @override
   Future<Map<String, dynamic>> fetch({required String targetLanguage}) async {
-    final accessToken = await ensureAnonymousSession(_client);
+    final accessToken = await requireAccountAccessToken(_client);
 
     final FunctionResponse response;
     try {

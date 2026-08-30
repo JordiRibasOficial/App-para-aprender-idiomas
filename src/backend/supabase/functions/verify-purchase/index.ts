@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-import { createGetUserId } from "../_shared/auth.ts";
+import { createGetCaller } from "../_shared/auth.ts";
 import { sendPurchaseConfirmationEmail } from "../_shared/email.ts";
 import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleVerifyPurchase } from "./handler.ts";
@@ -19,7 +19,7 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 // insert/update policy on `subscriptions`, only this function does).
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
+const getCaller = createGetCaller(supabaseUrl, supabaseAnonKey);
 
 // Generous enough for legitimate use (purchase, restore, retries after a
 // flaky network) while stopping a script from hammering this endpoint —
@@ -81,7 +81,7 @@ function buildVerifiers(): Partial<Record<Platform, PurchaseVerifier>> {
 }
 
 const deps: HandlerDeps = {
-  getUserId,
+  getCaller,
   isRateLimited,
   verifiers: buildVerifiers(),
   upsertSubscription,

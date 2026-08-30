@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-import { createGetUserId } from "../_shared/auth.ts";
+import { createGetCaller } from "../_shared/auth.ts";
 import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleDeleteUserData } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
@@ -14,7 +14,7 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 // only works with the service-role key.
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
+const getCaller = createGetCaller(supabaseUrl, supabaseAnonKey);
 
 // Tighter than export's 10/10min: there is even less legitimate reason to
 // call this repeatedly — the first successful call already deletes the
@@ -41,7 +41,7 @@ async function deleteUser(userId: string): Promise<void> {
 }
 
 const deps: HandlerDeps = {
-  getUserId,
+  getCaller,
   isRateLimited,
   deleteUser,
 };

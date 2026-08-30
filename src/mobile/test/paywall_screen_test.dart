@@ -5,14 +5,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app_para_aprender_idiomas/data/mock_subscription_repository.dart';
+import 'package:app_para_aprender_idiomas/domain/models/account_session.dart';
 import 'package:app_para_aprender_idiomas/domain/repositories/subscription_repository.dart';
 import 'package:app_para_aprender_idiomas/presentation/paywall/paywall_screen.dart';
+import 'package:app_para_aprender_idiomas/presentation/providers/account_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/subscription_providers.dart';
 
+const _fakeAccount = AccountSession(
+  userId: 'test-user',
+  email: 'test@example.com',
+);
+
 void main() {
-  Widget buildPaywall(SubscriptionRepository repository) {
+  // Purchase/restore both gate on requireAccount() first — most tests here
+  // are about what happens *after* that gate, so default to already having
+  // one. account: null exercises the gate itself.
+  Widget buildPaywall(
+    SubscriptionRepository repository, {
+    AccountSession? account = _fakeAccount,
+  }) {
     return ProviderScope(
-      overrides: [subscriptionRepositoryProvider.overrideWithValue(repository)],
+      overrides: [
+        subscriptionRepositoryProvider.overrideWithValue(repository),
+        accountSessionProvider.overrideWith((ref) => Stream.value(account)),
+      ],
       child: const MaterialApp(home: PaywallScreen()),
     );
   }
@@ -173,6 +189,50 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('¡Ya eres Premium!'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'a guest tapping Suscribirse is asked to create an account first, and no purchase is attempted if they cancel',
+    (tester) async {
+      final repository = MockSubscriptionRepository();
+      await tester.pumpWidget(buildPaywall(repository, account: null));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CheckboxListTile));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(
+        find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
+      );
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Suscribirse — €89.94'),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Necesitas una cuenta'), findsOneWidget);
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+
+      // Never reached the purchasing state, so never called the repository.
+      expect(find.text('¡Ya eres Premium!'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'a guest tapping Restaurar compras is asked to create an account first',
+    (tester) async {
+      await tester.pumpWidget(
+        buildPaywall(MockSubscriptionRepository(), account: null),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.text('Restaurar compras'));
+      await tester.tap(find.text('Restaurar compras'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Necesitas una cuenta'), findsOneWidget);
+      expect(find.text('No se encontraron compras anteriores.'), findsNothing);
     },
   );
 }

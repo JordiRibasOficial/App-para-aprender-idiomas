@@ -51,6 +51,8 @@ credentials, which only the project owner can provide.
 `handler.ts` is written to fail closed everywhere:
 
 - No auth token → 401, nothing written.
+- Caller has no real account (anonymous session) → 403, nothing written —
+  see "Real accounts..." below for why this now requires one.
 - More than 20 verification attempts from the same user in 10 minutes →
   429, nothing written (see `verify_purchase_attempts` — logged regardless
   of outcome, so it also covers repeated failed/rejected attempts).
@@ -78,11 +80,12 @@ here (`content/`), and `handler.ts` serves one only after confirming the
 caller has an `active` row in `subscriptions` (unexpired, if `expires_at` is
 set). English stays bundled client-side — it's free, there's nothing to gate.
 
-Same fail-closed shape as `verify-purchase`: no auth → 401, more than 30
-requests from the same user in 10 minutes → 429 (see
-`get_course_content_requests`), not Premium → 403 with no content in the
-body, DB failure → generic 500 (not the raw Postgres error — see
-`handler.ts`'s catch-all). `content_test.ts` separately
+Same fail-closed shape as `verify-purchase`: no auth → 401, no real account
+or not Premium → 403 with no content in the body (see "Real accounts..."
+below for the account case), more than 30 requests from the same user in
+10 minutes → 429 (see `get_course_content_requests`), DB failure →
+generic 500 (not the raw Postgres error — see `handler.ts`'s catch-all).
+`content_test.ts` separately
 validates the 3 JSON files' own quality (5+ units, no duplicate exercise
 ids, `multipleChoice.correctAnswer` actually in `options`, etc.) — the
 server-side continuation of what used to be `content_repository_test.dart`
@@ -98,17 +101,18 @@ which never runs inside a browser origin, so there is no legitimate origin
 to allow. Omitting the header means a browser-based caller (e.g. a
 malicious page trying to reuse a leaked anon key from a victim's session)
 has its request blocked by the browser itself. The real access control is
-the Bearer-token check (`getUserId`) plus rate limiting above — that's what
+the Bearer-token check (`getCaller`) plus rate limiting above — that's what
 actually determines who can call this, not CORS.
 
 ## export-user-data
 
 RGPD art. 15/20 (right of access / data portability) — lets the caller pull
-everything this backend holds about their own anonymous session identity in
-one request: their `subscriptions` row(s) and `verify_purchase_attempts`
-timestamps. No input body — there's nothing to specify, `getUserId` already
-determines whose data comes back, and every query in `buildExport` is scoped
-to that same userId (see `index.ts`).
+everything this backend holds about their own account in one request: their
+`subscriptions` row(s) and `verify_purchase_attempts` timestamps. No input
+body — there's nothing to specify, `getCaller` already determines whose
+data comes back, and every query in `buildExport` is scoped to that same
+userId (see `index.ts`). Requires a real (non-anonymous) account, same as
+the other three functions — see "Real accounts..." below.
 
 Deliberately excludes `store_transaction_id` and `raw_response` from the
 `subscriptions` rows it returns — those are opaque store-internal
@@ -136,11 +140,12 @@ Deletes the caller's Supabase Auth user via the Admin API
 one transaction. No separate per-table deletes to keep in sync as new
 tables are added; any future table just needs the same cascade FK.
 
-Same fail-closed shape as the others: no auth → 401, more than 5 requests
-from the same user in 10 minutes → 429 (see `delete_user_data_requests`),
-a deletion failure → generic 500 (not the raw Admin API error).
-Irreversible and immediate: once it succeeds, the caller's anonymous
-identity no longer exists, so their existing Bearer token stops working —
+Same fail-closed shape as the others: no auth → 401, no real account → 403
+(see "Real accounts..." below), more than 5 requests from the same user in
+10 minutes → 429 (see `delete_user_data_requests`), a deletion failure →
+generic 500 (not the raw Admin API error). Irreversible and immediate: once
+it succeeds, the caller's account no longer exists, so their existing
+Bearer token stops working —
 the mobile app signs out locally right after a successful call
 (`SupabaseUserDataDeletionRepository`) rather than waiting for a token
 failure to discover that. The "Eliminar mis datos" button lives on the same
@@ -152,12 +157,27 @@ this can't be undone.
 The app moved from anonymous-only Supabase identities to also supporting
 real accounts — `AuthChoiceScreen` now offers "Registrarse con email" in
 addition to "Continuar como invitado" (Google/Apple/Facebook to follow;
-see the mobile app's `AccountRepository`). Nothing about the anonymous
-identity used by `verify-purchase`/`get-course-content`/`export-user-data`/
-`delete-user-data` changes yet — that migration (moving those four
-functions to require a real account instead of an anonymous one) is
-tracked as a separate, deliberately isolated follow-up so it can be
-reviewed on its own, given how monetization-sensitive that code path is.
+see the mobile app's `AccountRepository`). **Update:** `verify-purchase`,
+`get-course-content`, `export-user-data`, and `delete-user-data` now all
+*require* a real (non-anonymous) account too — `getCaller` (see
+`_shared/auth.ts`, already built for `save-marketing-contact`) replaces
+`getUserId` in all four, and each rejects a caller with no account email
+with 403. A guest can still use the app and complete the first (free)
+lesson with zero backend calls at all — nothing changed there — but buying
+or restoring Premium, opening Premium content, or using "Mis datos" now
+prompts account creation first (`requireAccount` in the mobile app, gating
+*before* the store purchase sheet even opens — critically, not only at
+verification time, since failing there would mean charging the user for
+nothing). `verify-purchase` also now sends the TRLGDCU confirmation email
+to the caller's own verified account email (`caller.email`) rather than a
+client-supplied one — the `email` field is gone from
+`VerifyPurchaseInputSchema` entirely, since there's no longer a
+legitimate case for "confirm to an address other than my own account's."
+
+This app has no real users in production yet (still pre-launch — see
+`docs/business/launch-readiness-review.md`), so this was a clean breaking
+change with no migration/backfill needed for existing anonymous identities
+or their entitlements.
 
 `save-marketing-contact` records LSSICE art. 21 marketing consent (offers,
 promotions, news by email) — a separate, explicit opt-in from creating the
@@ -231,7 +251,8 @@ Ribas Oficial", region `eu-west-3`):
   configured**: needs both a fresh `supabase functions deploy
   verify-purchase` to ship this code and `RESEND_API_KEY`/
   `RESEND_FROM_EMAIL` set before it does anything. Until both, this is a
-  silent no-op — `input.email` is accepted by the schema but
+  silent no-op — the account's email is always available by the time this
+  runs (a real account is required — see below), but
   `sendConfirmationEmail` isn't wired to anything live yet, so no request
   fails and nothing is sent.
 - Real email/password accounts and `save-marketing-contact` — **not yet
@@ -244,6 +265,12 @@ Ribas Oficial", region `eu-west-3`):
   link first depends on the project's "Confirm email" setting (Dashboard →
   Authentication → Providers → Email); the mobile app already handles
   either outcome (see `SignUpResult`'s doc comment in the mobile app).
+- `verify-purchase`/`get-course-content`/`export-user-data`/
+  `delete-user-data` now require a real account (see "Real accounts..."
+  above) — **not yet deployed**: needs a fresh `supabase functions deploy`
+  for all four. Once live, the Status smoke test recorded above (run
+  against an anonymous JWT) is stale — a re-run needs a real account's JWT
+  instead, since an anonymous one will now get `403` from all four.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
@@ -615,7 +642,11 @@ confirmed live via a real Google Play Developer API call. Two things left:
    deploy save-marketing-contact` (see "Real accounts (email/password) and
    save-marketing-contact" above) to ship real email/password sign-up and
    marketing opt-in.
-4. Google/Apple/Facebook sign-in: each needs its own OAuth credentials
+4. Redeploy `verify-purchase`, `get-course-content`, `export-user-data`,
+   and `delete-user-data` (`supabase functions deploy <name>` for each) —
+   all four now require a real account, not just anonymous, per the same
+   section above.
+5. Google/Apple/Facebook sign-in: each needs its own OAuth credentials
    created in that provider's own developer console (Google Cloud Console,
    Apple Developer, Meta for Developers), then enabling the matching
    provider in Supabase Dashboard → Authentication → Providers. Tracked as
@@ -624,8 +655,9 @@ confirmed live via a real Google Play Developer API call. Two things left:
    what to hand back.
 
 Once those are done, a real purchase in the app on either platform will
-exercise the whole path — client, anonymous auth, edge function, store
-verification, entitlement, confirmation email — for real.
+exercise the whole path — client, a real account, edge function, store
+verification, entitlement, confirmation email to that account's own
+address — for real.
 
 One thing worth knowing if you ever regenerate the Google secret by hand
 from PowerShell: `Get-Content -Raw file.json | ConvertFrom-Json |

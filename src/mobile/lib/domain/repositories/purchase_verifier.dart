@@ -4,14 +4,14 @@
 /// directly, and so tests can inject a fake instead of hitting a real
 /// backend.
 abstract interface class PurchaseVerifier {
+  // No email parameter: the backend now requires a real account for this
+  // call (see requireAccountAccessToken) and sends the TRLGDCU
+  // purchase-confirmation email to that account's own address — see
+  // src/backend/supabase/functions/verify-purchase/handler.ts.
   Future<PurchaseVerificationResult> verify({
     required String platform,
     required String productId,
     required String purchaseToken,
-    // Sent once, only if the user gave one during onboarding — used to
-    // send the TRLGDCU purchase-confirmation email, never persisted
-    // server-side. See src/backend/supabase/functions/verify-purchase/types.ts.
-    String? email,
   });
 }
 

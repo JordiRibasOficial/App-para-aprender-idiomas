@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-import { createGetUserId } from "../_shared/auth.ts";
+import { createGetCaller } from "../_shared/auth.ts";
 import { createRateLimiter } from "../_shared/rate_limit.ts";
 import { handleGetCourseContent } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
@@ -27,7 +27,7 @@ const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 // second round-trip to mint a scoped client per request.
 const admin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-const getUserId = createGetUserId(supabaseUrl, supabaseAnonKey);
+const getCaller = createGetCaller(supabaseUrl, supabaseAnonKey);
 
 // Generous: this only serves static bundled JSON to an already-Premium
 // user, so the legitimate use case (browsing between the 3 Premium
@@ -57,7 +57,7 @@ const courseContent: Record<PremiumLanguage, unknown> = {
 };
 
 const deps: HandlerDeps = {
-  getUserId,
+  getCaller,
   isRateLimited,
   hasActivePremium,
   courseContent,

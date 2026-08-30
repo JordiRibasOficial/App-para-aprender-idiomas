@@ -4,7 +4,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../domain/models/entitlement.dart';
 import '../../domain/models/subscription_plan.dart';
+import '../account/require_account.dart';
 import '../legal_urls.dart';
+import '../providers/account_providers.dart';
 import '../providers/subscription_providers.dart';
 import '../theme/app_theme.dart';
 import 'plan_card.dart';
@@ -28,6 +30,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   bool _withdrawalConsent = false;
 
   Future<void> _purchase(SubscriptionPlan plan) async {
+    if (!await requireAccount(context, ref)) return;
+    if (!mounted) return;
+
     setState(() => _purchasing = true);
     try {
       await ref.read(subscriptionRepositoryProvider).purchase(plan);
@@ -37,6 +42,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   }
 
   Future<void> _restore() async {
+    if (!await requireAccount(context, ref)) return;
+    if (!mounted) return;
+
     setState(() => _restoring = true);
     try {
       await ref.read(subscriptionRepositoryProvider).restorePurchases();
@@ -68,6 +76,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     final plansAsync = ref.watch(subscriptionPlansProvider);
     final entitlement =
         ref.watch(entitlementProvider).value ?? const Entitlement();
+    // Keeps accountSessionProvider actively subscribed and resolved well
+    // before a user can tap "Suscribirse"/"Restaurar compras" — see
+    // requireAccount's doc comment for why this matters.
+    ref.watch(accountSessionProvider);
 
     ref.listen(purchaseErrorProvider, (previous, next) {
       final message = next.value;

@@ -3,6 +3,10 @@ import { assertEquals } from "@std/assert";
 import { handleVerifyPurchase } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { Platform, PurchaseVerifier, SubscriptionUpsert, VerifyPurchaseInput } from "./types.ts";
+import type { Caller } from "../_shared/auth.ts";
+
+const REAL_CALLER: Caller = { id: "user-1", email: "user@example.com" };
+const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
 
 class FakeVerifier implements PurchaseVerifier {
   constructor(
@@ -27,7 +31,8 @@ function buildDeps(overrides: Partial<HandlerDeps> = {}): {
   const upserts: SubscriptionUpsert[] = [];
   const confirmationEmails: { to: string; productId: string; platform: string }[] = [];
   const deps: HandlerDeps = {
-    getUserId: (authHeader) => Promise.resolve(authHeader === "Bearer valid-token" ? "user-1" : null),
+    getCaller: (authHeader) =>
+      Promise.resolve(authHeader === "Bearer valid-token" ? REAL_CALLER : null),
     isRateLimited: () => Promise.resolve(false),
     verifiers: { android: new FakeVerifier() } as Partial<Record<Platform, PurchaseVerifier>>,
     upsertSubscription: (row) => {
@@ -61,6 +66,17 @@ Deno.test("rejects requests without a valid auth token, without writing anything
   );
 
   assertEquals(response.status, 401);
+  assertEquals(upserts.length, 0);
+});
+
+Deno.test("rejects an anonymous caller — no account to attach a purchase to", async () => {
+  const { deps, upserts } = buildDeps({ getCaller: () => Promise.resolve(ANONYMOUS_CALLER) });
+  const response = await handleVerifyPurchase(
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+    deps,
+  );
+
+  assertEquals(response.status, 403);
   assertEquals(upserts.length, 0);
 });
 
@@ -196,15 +212,10 @@ Deno.test("an expired purchase is persisted as expired, not active", async () =>
   assertEquals(upserts[0].status, "expired");
 });
 
-Deno.test("an active purchase with an email sends the confirmation email", async () => {
+Deno.test("an active purchase sends the confirmation email to the caller's own account email", async () => {
   const { deps, confirmationEmails } = buildDeps();
   const response = await handleVerifyPurchase(
-    request({
-      platform: "android",
-      productId: "annual_sub",
-      purchaseToken: "tok",
-      email: "user@example.com",
-    }),
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
     deps,
   );
 
@@ -217,28 +228,12 @@ Deno.test("an active purchase with an email sends the confirmation email", async
   });
 });
 
-Deno.test("no email in the request means no confirmation email is sent", async () => {
-  const { deps, confirmationEmails } = buildDeps();
-  const response = await handleVerifyPurchase(
-    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
-    deps,
-  );
-
-  assertEquals(response.status, 200);
-  assertEquals(confirmationEmails.length, 0);
-});
-
-Deno.test("an expired purchase with an email does not send a confirmation email", async () => {
+Deno.test("an expired purchase does not send a confirmation email", async () => {
   const { deps, confirmationEmails } = buildDeps({
     verifiers: { android: new FakeVerifier({ isActive: false, expiresAt: null }) },
   });
   const response = await handleVerifyPurchase(
-    request({
-      platform: "android",
-      productId: "annual_sub",
-      purchaseToken: "tok",
-      email: "user@example.com",
-    }),
+    request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
     deps,
   );
 
@@ -253,12 +248,7 @@ Deno.test(
       sendConfirmationEmail: () => Promise.reject(new Error("Resend send failed: 401")),
     });
     const response = await handleVerifyPurchase(
-      request({
-        platform: "android",
-        productId: "annual_sub",
-        purchaseToken: "tok",
-        email: "user@example.com",
-      }),
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
       deps,
     );
     const body = await response.json();
