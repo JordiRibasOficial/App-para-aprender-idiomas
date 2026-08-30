@@ -619,7 +619,9 @@ confirmed live via a real Google Play Developer API call. Two things left:
    created in that provider's own developer console (Google Cloud Console,
    Apple Developer, Meta for Developers), then enabling the matching
    provider in Supabase Dashboard → Authentication → Providers. Tracked as
-   separate follow-up rounds, one provider at a time.
+   separate follow-up rounds, one provider at a time — Google is first, see
+   `docs/business/google-signin-setup-guide.md` for the exact steps and
+   what to hand back.
 
 Once those are done, a real purchase in the app on either platform will
 exercise the whole path — client, anonymous auth, edge function, store
