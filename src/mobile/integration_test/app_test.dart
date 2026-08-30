@@ -30,7 +30,8 @@ void main() {
       expect(find.text('App para Aprender Idiomas'), findsOneWidget);
       expect(find.text('Inglés · A1'), findsNothing);
 
-      // --- Onboarding: language (English default) -> level (A1 default) -> guest ---
+      // --- Onboarding: language (English default) -> guest (level is A1 by
+      // default and skipped since it's the only one available) ---
       // pumpAndSettle (not a single pump) between the two checkbox taps: a
       // bare pump() left the second tap racing the first checkbox's
       // ripple/gesture-arena resolution on a real device, hanging the whole
@@ -43,10 +44,6 @@ void main() {
       await tester.tap(find.text('Empezar'));
       await tester.pumpAndSettle();
       expect(find.text('Elige tu idioma'), findsOneWidget);
-
-      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-      await tester.pumpAndSettle();
-      expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
 
       await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
       await tester.pumpAndSettle();

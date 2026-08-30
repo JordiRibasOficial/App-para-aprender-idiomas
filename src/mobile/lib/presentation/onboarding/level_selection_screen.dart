@@ -8,7 +8,10 @@ import '../theme/app_theme.dart';
 class LevelSelectionScreen extends ConsumerWidget {
   const LevelSelectionScreen({super.key});
 
-  static const _availableLevels = ['A1'];
+  /// Public so [LanguageSelectionScreen] can decide, without duplicating
+  /// this list, whether this screen has any real choice to offer — see its
+  /// use of [availableLevels].
+  static const availableLevels = ['A1'];
   static const _comingSoonLevels = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
   @override
@@ -33,7 +36,7 @@ class LevelSelectionScreen extends ConsumerWidget {
             },
             child: Column(
               children: [
-                for (final level in _availableLevels)
+                for (final level in availableLevels)
                   Padding(
                     padding: const EdgeInsets.only(bottom: AppTheme.spaceSm),
                     child: _LevelCard(

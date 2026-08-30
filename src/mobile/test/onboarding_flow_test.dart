@@ -46,7 +46,8 @@ class _AlreadyPremiumSubscriptionRepository implements SubscriptionRepository {
   void dispose() {}
 }
 
-/// Navigates Welcome -> Language -> Level -> Auth choice. Picks French
+/// Navigates Welcome -> Language -> Auth choice (the level screen is skipped
+/// since A1 is the only level and already the default). Picks French
 /// (paired with an active-subscription override by callers, since it
 /// requires Premium too) rather than English or Portuguese: any two tests in
 /// this file that each complete onboarding all the way to the *same*
@@ -74,10 +75,6 @@ Future<void> _reachAuthChoiceScreen(WidgetTester tester) async {
   await tester.tap(find.textContaining('Francés'));
   await tester.pumpAndSettle();
   await tester.tap(find.widgetWithText(FilledButton, 'Continuar')); // language
-  await tester.pumpAndSettle();
-  await tester.tap(
-    find.widgetWithText(FilledButton, 'Continuar'),
-  ); // level (A1 default)
   await tester.pumpAndSettle();
 }
 
@@ -200,12 +197,9 @@ void main() {
       await _acceptTermsAndStart(tester);
       expect(find.text('Elige tu idioma'), findsOneWidget);
 
-      // English is preselected as the default target language.
-      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-      await tester.pumpAndSettle();
-      expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
-
-      // A1 is preselected and the only available level.
+      // English is preselected as the default target language, and A1 is
+      // preselected as the only available level — so this "Continuar" skips
+      // the level screen entirely and lands straight on auth choice.
       await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
       await tester.pumpAndSettle();
       expect(find.text('¿Cómo quieres continuar?'), findsOneWidget);
@@ -283,10 +277,8 @@ void main() {
 
       await tester.tap(find.textContaining('Portugués'));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
-      await tester.pumpAndSettle();
-      expect(find.text('¿Cuál es tu nivel?'), findsOneWidget);
-
+      // With an active subscription this "Continuar" skips straight past
+      // the (single-level) level screen to auth choice.
       await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
       await tester.pumpAndSettle();
 

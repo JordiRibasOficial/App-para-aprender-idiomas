@@ -6,6 +6,7 @@ import '../../domain/models/target_language.dart';
 import '../providers/onboarding_providers.dart';
 import '../providers/subscription_providers.dart';
 import '../theme/app_theme.dart';
+import 'level_selection_screen.dart';
 
 class LanguageSelectionScreen extends ConsumerWidget {
   const LanguageSelectionScreen({super.key});
@@ -49,7 +50,18 @@ class LanguageSelectionScreen extends ConsumerWidget {
             onPressed: () {
               final needsPremium =
                   targetLanguageOption(selected).requiresPremium && !isPremium;
-              context.push(needsPremium ? '/paywall' : '/onboarding/level');
+              if (needsPremium) {
+                context.push('/paywall');
+                return;
+              }
+              // Only one level exists today (A1, already the default
+              // selection) — the level screen would offer nothing to
+              // actually decide, so skip straight to the last real
+              // onboarding step instead of adding a screen of pure friction.
+              final nextRoute = LevelSelectionScreen.availableLevels.length > 1
+                  ? '/onboarding/level'
+                  : '/onboarding/auth';
+              context.push(nextRoute);
             },
             child: const Text('Continuar'),
           ),
