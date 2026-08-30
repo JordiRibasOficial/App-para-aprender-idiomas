@@ -60,7 +60,7 @@ void main() {
       },
     );
 
-    test('complete persists the email when the auth mode is email', () async {
+    test('complete persists the email when the auth mode is account', () async {
       final secureEmailStore = _FakeSecureEmailStore();
       final repository = SharedPreferencesOnboardingRepository(
         secureEmailStore: secureEmailStore,
@@ -69,7 +69,7 @@ void main() {
       await repository.complete(
         level: 'A1',
         targetLanguage: 'en',
-        authMode: AuthMode.email,
+        authMode: AuthMode.account,
         email: 'ana@example.com',
       );
       final reloaded = await SharedPreferencesOnboardingRepository(
@@ -77,7 +77,7 @@ void main() {
       ).load();
 
       expect(reloaded.completed, isTrue);
-      expect(reloaded.authMode, AuthMode.email);
+      expect(reloaded.authMode, AuthMode.account);
       expect(reloaded.email, 'ana@example.com');
     });
 

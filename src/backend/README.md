@@ -34,6 +34,11 @@ supabase/
         pt.json, fr.json, ja.json
       handler_test.ts       # Deno tests, using fake deps
       content_test.ts         # validates the 3 JSON files themselves (5+ units, no duplicate ids, …)
+    save-marketing-contact/
+      index.ts        # Deno.serve entrypoint — wires the real Supabase client
+      handler.ts       # request logic: real-account + email-match check, then upsert
+      types.ts           # the Zod request schema
+      handler_test.ts       # Deno tests, using fake deps
 ```
 
 The Flutter client is wired up (`src/mobile/lib/data/supabase_purchase_verifier.dart`)
@@ -142,6 +147,31 @@ failure to discover that. The "Eliminar mis datos" button lives on the same
 "Mis datos" screen as the export button, behind a confirmation dialog since
 this can't be undone.
 
+## Real accounts (email/password) and save-marketing-contact
+
+The app moved from anonymous-only Supabase identities to also supporting
+real accounts — `AuthChoiceScreen` now offers "Registrarse con email" in
+addition to "Continuar como invitado" (Google/Apple/Facebook to follow;
+see the mobile app's `AccountRepository`). Nothing about the anonymous
+identity used by `verify-purchase`/`get-course-content`/`export-user-data`/
+`delete-user-data` changes yet — that migration (moving those four
+functions to require a real account instead of an anonymous one) is
+tracked as a separate, deliberately isolated follow-up so it can be
+reviewed on its own, given how monetization-sensitive that code path is.
+
+`save-marketing-contact` records LSSICE art. 21 marketing consent (offers,
+promotions, news by email) — a separate, explicit opt-in from creating the
+account itself, never bundled with it. Requires a real (non-anonymous)
+caller and that the submitted email matches the caller's own account
+email — see `handler.ts`'s doc comment for why both checks matter. Writes
+to `marketing_contacts` (service role only, no client policies — same
+trust model as `subscriptions`), rate-limited the same way as the other
+functions (`marketing_contact_requests`, 10 requests/10 min). Its row is
+covered by the *existing* `delete-user-data`/"Eliminar mis datos" flow for
+free: `marketing_contacts.user_id` has an `on delete cascade` FK to
+`auth.users`, so deleting the Auth user (which that function already does)
+removes the marketing row too — no code change was needed there.
+
 ## Status
 
 **All four functions and every migration are deployed to the live project**,
@@ -204,6 +234,16 @@ Ribas Oficial", region `eu-west-3`):
   silent no-op — `input.email` is accepted by the schema but
   `sendConfirmationEmail` isn't wired to anything live yet, so no request
   fails and nothing is sent.
+- Real email/password accounts and `save-marketing-contact` — **not yet
+  deployed**: the three new migrations (`marketing_contacts`,
+  `marketing_contact_requests`, the updated `purge_stale_request_logs()`)
+  need `supabase db push`, and the function needs `supabase functions
+  deploy save-marketing-contact`. Email/password sign-up itself needs no
+  new project secrets — it's Supabase Auth's built-in behavior — but
+  whether it returns a session immediately or requires clicking an email
+  link first depends on the project's "Confirm email" setting (Dashboard →
+  Authentication → Providers → Email); the mobile app already handles
+  either outcome (see `SignUpResult`'s doc comment in the mobile app).
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
@@ -571,6 +611,17 @@ confirmed live via a real Google Play Developer API call. Two things left:
 2. `RESEND_API_KEY` / `RESEND_FROM_EMAIL` (see "Purchase confirmation
    email setup" above) — needs a domain you control DNS for, which this
    project doesn't have yet.
+3. `supabase db push` (the three new migrations) + `supabase functions
+   deploy save-marketing-contact` (see "Real accounts (email/password) and
+   save-marketing-contact" above) to ship real email/password sign-up and
+   marketing opt-in.
+4. Google/Apple/Facebook sign-in: each needs its own OAuth credentials
+   created in that provider's own developer console (Google Cloud Console,
+   Apple Developer, Meta for Developers), then enabling the matching
+   provider in Supabase Dashboard → Authentication → Providers. Tracked as
+   separate follow-up rounds, one provider at a time — Google is first, see
+   `docs/business/google-signin-setup-guide.md` for the exact steps and
+   what to hand back.
 
 Once those are done, a real purchase in the app on either platform will
 exercise the whole path — client, anonymous auth, edge function, store

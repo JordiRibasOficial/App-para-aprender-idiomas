@@ -2,7 +2,7 @@
 
 > **BORRADOR. No publicar sin revisión de un abogado real.** Nombre y email ya rellenados según lo indicado por el usuario — la jurisdicción (sección 12) y el resto de puntos `[PENDIENTE]` siguen sin confirmar con un asesor real. La sección 7 (DMCA/LSSI) no debe activarse ni publicarse hasta que exista una función real de subida de contenido por el usuario; la sección 8 (normas de conducta), hasta que exista alguna función de interacción entre usuarios.
 
-**Última actualización: 20 de agosto de 2026**
+**Última actualización: 30 de agosto de 2026**
 
 ## 1. Aceptación de los términos
 
@@ -14,7 +14,7 @@ La App ofrece cursos de idiomas con lecciones interactivas. Una parte del conten
 
 ## 3. Cuentas y progreso
 
-En esta versión, la App no requiere una cuenta real — el progreso se guarda localmente en el dispositivo. Desinstalar la App o cambiar de dispositivo sin haber añadido más adelante un sistema de sincronización real implica perder el progreso guardado. `[PENDIENTE: actualizar esta sección cuando exista sincronización real entre dispositivos.]`
+La App no requiere una cuenta real para usarse — puede seguir usándose como invitado. Quien lo prefiera puede crear una cuenta (email y contraseña; Google, Apple y Facebook próximamente) desde la pantalla de registro inicial. Crear cuenta es siempre opcional y nunca bloquea el acceso a la primera lección ni al contenido gratuito. El progreso de aprendizaje (lecciones completadas, puntuación, racha) se guarda localmente en el dispositivo en ambos casos — tener cuenta no lo sincroniza todavía entre dispositivos. Desinstalar la App, o cambiar de dispositivo, implica perder ese progreso local mientras esa sincronización no exista; la cuenta en sí (si se creó una) no se pierde, porque vive en nuestro backend, no en el dispositivo. `[PENDIENTE: actualizar esta sección cuando el progreso también se sincronice a través de la cuenta.]`
 
 ## 4. Suscripciones
 
