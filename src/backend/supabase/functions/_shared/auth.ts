@@ -25,3 +25,31 @@ export function createGetUserId(
     return data.user.id;
   };
 }
+
+export interface Caller {
+  id: string;
+  /** null for an anonymous session — a real account always has one. */
+  email: string | null;
+}
+
+/**
+ * Same validation as [createGetUserId], but also returns the caller's own
+ * account email — for the one function (save-marketing-contact) that needs
+ * to confirm a submitted email actually belongs to the authenticated
+ * caller, not an anonymous session or a third party's address.
+ */
+export function createGetCaller(
+  supabaseUrl: string,
+  supabaseAnonKey: string,
+): (authHeader: string | null) => Promise<Caller | null> {
+  return async (authHeader) => {
+    if (!authHeader?.startsWith("Bearer ")) return null;
+    const jwt = authHeader.slice("Bearer ".length);
+    const asCaller = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data, error } = await asCaller.auth.getUser(jwt);
+    if (error || !data.user) return null;
+    return { id: data.user.id, email: data.user.email ?? null };
+  };
+}

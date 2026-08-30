@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:riverpod/misc.dart' show Override;
 
+import 'package:app_para_aprender_idiomas/data/in_memory_account_repository.dart';
+import 'package:app_para_aprender_idiomas/data/in_memory_marketing_consent_repository.dart';
 import 'package:app_para_aprender_idiomas/data/in_memory_onboarding_repository.dart';
 import 'package:app_para_aprender_idiomas/data/in_memory_progress_repository.dart';
 import 'package:app_para_aprender_idiomas/data/in_memory_terms_acceptance_repository.dart';
@@ -10,6 +13,7 @@ import 'package:app_para_aprender_idiomas/domain/models/entitlement.dart';
 import 'package:app_para_aprender_idiomas/domain/models/subscription_plan.dart';
 import 'package:app_para_aprender_idiomas/domain/repositories/subscription_repository.dart';
 import 'package:app_para_aprender_idiomas/main.dart';
+import 'package:app_para_aprender_idiomas/presentation/providers/account_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/onboarding_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/progress_providers.dart';
 import 'package:app_para_aprender_idiomas/presentation/providers/subscription_providers.dart';
@@ -45,6 +49,31 @@ class _AlreadyPremiumSubscriptionRepository implements SubscriptionRepository {
   @override
   void dispose() {}
 }
+
+/// Every test in this file needs these four — split out purely to keep each
+/// test's override list from repeating them.
+List<Override> _baseOverrides({
+  InMemoryAccountRepository? accountRepository,
+  InMemoryMarketingConsentRepository? marketingConsentRepository,
+  SubscriptionRepository? subscriptionRepository,
+}) => [
+  progressRepositoryProvider.overrideWithValue(InMemoryProgressRepository()),
+  onboardingRepositoryProvider.overrideWithValue(
+    InMemoryOnboardingRepository(),
+  ),
+  termsAcceptanceRepositoryProvider.overrideWithValue(
+    InMemoryTermsAcceptanceRepository(),
+  ),
+  subscriptionRepositoryProvider.overrideWithValue(
+    subscriptionRepository ?? MockSubscriptionRepository(),
+  ),
+  accountRepositoryProvider.overrideWithValue(
+    accountRepository ?? InMemoryAccountRepository(),
+  ),
+  marketingConsentRepositoryProvider.overrideWithValue(
+    marketingConsentRepository ?? InMemoryMarketingConsentRepository(),
+  ),
+];
 
 /// Navigates Welcome -> Language -> Auth choice (the level screen is skipped
 /// since A1 is the only level and already the default). Picks French
@@ -89,23 +118,7 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          progressRepositoryProvider.overrideWithValue(
-            InMemoryProgressRepository(),
-          ),
-          onboardingRepositoryProvider.overrideWithValue(
-            InMemoryOnboardingRepository(),
-          ),
-          termsAcceptanceRepositoryProvider.overrideWithValue(
-            InMemoryTermsAcceptanceRepository(),
-          ),
-          subscriptionRepositoryProvider.overrideWithValue(
-            MockSubscriptionRepository(),
-          ),
-        ],
-        child: const MyApp(),
-      ),
+      ProviderScope(overrides: _baseOverrides(), child: const MyApp()),
     );
     await tester.pumpAndSettle();
 
@@ -117,23 +130,7 @@ void main() {
     '"Empezar" stays disabled until both the terms and age checkboxes are ticked',
     (tester) async {
       await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            progressRepositoryProvider.overrideWithValue(
-              InMemoryProgressRepository(),
-            ),
-            onboardingRepositoryProvider.overrideWithValue(
-              InMemoryOnboardingRepository(),
-            ),
-            termsAcceptanceRepositoryProvider.overrideWithValue(
-              InMemoryTermsAcceptanceRepository(),
-            ),
-            subscriptionRepositoryProvider.overrideWithValue(
-              MockSubscriptionRepository(),
-            ),
-          ],
-          child: const MyApp(),
-        ),
+        ProviderScope(overrides: _baseOverrides(), child: const MyApp()),
       );
       await tester.pumpAndSettle();
 
@@ -174,23 +171,7 @@ void main() {
     'completing onboarding as a guest reaches the lesson list and persists the choice',
     (tester) async {
       await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            progressRepositoryProvider.overrideWithValue(
-              InMemoryProgressRepository(),
-            ),
-            onboardingRepositoryProvider.overrideWithValue(
-              InMemoryOnboardingRepository(),
-            ),
-            termsAcceptanceRepositoryProvider.overrideWithValue(
-              InMemoryTermsAcceptanceRepository(),
-            ),
-            subscriptionRepositoryProvider.overrideWithValue(
-              MockSubscriptionRepository(),
-            ),
-          ],
-          child: const MyApp(),
-        ),
+        ProviderScope(overrides: _baseOverrides(), child: const MyApp()),
       );
       await tester.pumpAndSettle();
 
@@ -217,23 +198,7 @@ void main() {
     'choosing a Premium language without an active subscription is sent to the paywall',
     (tester) async {
       await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            progressRepositoryProvider.overrideWithValue(
-              InMemoryProgressRepository(),
-            ),
-            onboardingRepositoryProvider.overrideWithValue(
-              InMemoryOnboardingRepository(),
-            ),
-            termsAcceptanceRepositoryProvider.overrideWithValue(
-              InMemoryTermsAcceptanceRepository(),
-            ),
-            subscriptionRepositoryProvider.overrideWithValue(
-              MockSubscriptionRepository(),
-            ),
-          ],
-          child: const MyApp(),
-        ),
+        ProviderScope(overrides: _baseOverrides(), child: const MyApp()),
       );
       await tester.pumpAndSettle();
 
@@ -254,20 +219,9 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            progressRepositoryProvider.overrideWithValue(
-              InMemoryProgressRepository(),
-            ),
-            onboardingRepositoryProvider.overrideWithValue(
-              InMemoryOnboardingRepository(),
-            ),
-            termsAcceptanceRepositoryProvider.overrideWithValue(
-              InMemoryTermsAcceptanceRepository(),
-            ),
-            subscriptionRepositoryProvider.overrideWithValue(
-              _AlreadyPremiumSubscriptionRepository(),
-            ),
-          ],
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+          ),
           child: const MyApp(),
         ),
       );
@@ -296,20 +250,9 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            progressRepositoryProvider.overrideWithValue(
-              InMemoryProgressRepository(),
-            ),
-            onboardingRepositoryProvider.overrideWithValue(
-              InMemoryOnboardingRepository(),
-            ),
-            termsAcceptanceRepositoryProvider.overrideWithValue(
-              InMemoryTermsAcceptanceRepository(),
-            ),
-            subscriptionRepositoryProvider.overrideWithValue(
-              _AlreadyPremiumSubscriptionRepository(),
-            ),
-          ],
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+          ),
           child: const MyApp(),
         ),
       );
@@ -317,12 +260,13 @@ void main() {
 
       await _reachAuthChoiceScreen(tester);
       await tester.tap(
-        find.widgetWithText(FilledButton, 'Continuar con email'),
+        find.widgetWithText(FilledButton, 'Registrarse con email'),
       );
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), 'no-es-un-email');
-      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.enterText(find.byType(TextField).first, 'no-es-un-email');
+      await tester.enterText(find.byType(TextField).last, 'password1234');
+      await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
       await tester.pumpAndSettle();
 
       // Dialog stays open with an inline error instead of completing onboarding.
@@ -330,7 +274,7 @@ void main() {
         find.text('Escribe un email válido, p. ej. tu@email.com'),
         findsOneWidget,
       );
-      expect(find.text('Tu email'), findsOneWidget);
+      expect(find.text('Crea tu cuenta'), findsOneWidget);
 
       // Close the dialog explicitly — an open showDialog() route is pushed
       // imperatively on top of appRouter's declarative stack, so it isn't
@@ -342,24 +286,13 @@ void main() {
   );
 
   testWidgets(
-    'a valid email completes onboarding and reaches the lesson list',
+    'a password shorter than 8 characters is rejected with an inline error',
     (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            progressRepositoryProvider.overrideWithValue(
-              InMemoryProgressRepository(),
-            ),
-            onboardingRepositoryProvider.overrideWithValue(
-              InMemoryOnboardingRepository(),
-            ),
-            termsAcceptanceRepositoryProvider.overrideWithValue(
-              InMemoryTermsAcceptanceRepository(),
-            ),
-            subscriptionRepositoryProvider.overrideWithValue(
-              _AlreadyPremiumSubscriptionRepository(),
-            ),
-          ],
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+          ),
           child: const MyApp(),
         ),
       );
@@ -367,15 +300,182 @@ void main() {
 
       await _reachAuthChoiceScreen(tester);
       await tester.tap(
-        find.widgetWithText(FilledButton, 'Continuar con email'),
+        find.widgetWithText(FilledButton, 'Registrarse con email'),
       );
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), 'ana@example.com');
-      await tester.tap(find.widgetWithText(FilledButton, 'Continuar'));
+      await tester.enterText(find.byType(TextField).first, 'ana@example.com');
+      await tester.enterText(find.byType(TextField).last, 'short');
+      await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('La contraseña debe tener al menos 8 caracteres.'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets(
+    'a valid sign-up completes onboarding and reaches the lesson list',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+          ),
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _reachAuthChoiceScreen(tester);
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Registrarse con email'),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, 'ana@example.com');
+      await tester.enterText(find.byType(TextField).last, 'password1234');
+      await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
       await tester.pumpAndSettle();
 
       expect(find.text('Francés · A1'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'the marketing checkbox is unticked by default and opts nobody in on its own',
+    (tester) async {
+      final marketingConsentRepository = InMemoryMarketingConsentRepository();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+            marketingConsentRepository: marketingConsentRepository,
+          ),
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _reachAuthChoiceScreen(tester);
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Registrarse con email'),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, 'ana@example.com');
+      await tester.enterText(find.byType(TextField).last, 'password1234');
+      await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Francés · A1'), findsOneWidget);
+      expect(marketingConsentRepository.optInCalls, isEmpty);
+    },
+  );
+
+  testWidgets('ticking the marketing checkbox opts the new account in', (
+    tester,
+  ) async {
+    final marketingConsentRepository = InMemoryMarketingConsentRepository();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: _baseOverrides(
+          subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+          marketingConsentRepository: marketingConsentRepository,
+        ),
+        child: const MyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await _reachAuthChoiceScreen(tester);
+    await tester.tap(
+      find.widgetWithText(FilledButton, 'Registrarse con email'),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextField).first, 'ana@example.com');
+    await tester.enterText(find.byType(TextField).last, 'password1234');
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Francés · A1'), findsOneWidget);
+    expect(marketingConsentRepository.optInCalls, ['ana@example.com']);
+  });
+
+  testWidgets(
+    'a sign-up that requires email confirmation still lets the user into the app',
+    (tester) async {
+      final accountRepository = InMemoryAccountRepository(
+        confirmationRequiredFor: {'ana@example.com'},
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+            accountRepository: accountRepository,
+          ),
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _reachAuthChoiceScreen(tester);
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Registrarse con email'),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, 'ana@example.com');
+      await tester.enterText(find.byType(TextField).last, 'password1234');
+      await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Francés · A1'), findsOneWidget);
+      expect(find.textContaining('email de confirmación'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'a rejected sign-up (e.g. email already registered) is shown inline, not accepted',
+    (tester) async {
+      final accountRepository = InMemoryAccountRepository(
+        errorFor: {'ana@example.com': 'Ese email ya tiene una cuenta.'},
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: _baseOverrides(
+            subscriptionRepository: _AlreadyPremiumSubscriptionRepository(),
+            accountRepository: accountRepository,
+          ),
+          child: const MyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _reachAuthChoiceScreen(tester);
+      await tester.tap(
+        find.widgetWithText(FilledButton, 'Registrarse con email'),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, 'ana@example.com');
+      await tester.enterText(find.byType(TextField).last, 'password1234');
+      await tester.tap(find.widgetWithText(FilledButton, 'Crear cuenta'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Ese email ya tiene una cuenta.'), findsOneWidget);
+      expect(find.text('Crea tu cuenta'), findsOneWidget);
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
     },
   );
 }

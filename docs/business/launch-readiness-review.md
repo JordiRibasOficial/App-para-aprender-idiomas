@@ -93,6 +93,24 @@ el código ya está desplegable, pero sin esto el envío es un no-op silencioso
 — no falla nada, simplemente no se manda el correo. No bloquea el
 lanzamiento: el resto del flujo de compra funciona igual.
 
+✅ **Cuentas reales (email/contraseña) y consentimiento de marketing**:
+`AuthChoiceScreen` ofrece ahora "Registrarse con email" además de
+"Continuar como invitado" — crear cuenta sigue siendo opcional y nunca
+bloquea la primera lección. El opt-in de marketing es una casilla
+separada, no premarcada, distinta de aceptar los términos (LSSICE art. 21)
+— solo se guarda el email si el usuario la marca explícitamente, y se
+borra automáticamente si el usuario elimina su cuenta desde "Mis datos"
+(FK en cascada, sin código adicional). `privacy-policy-draft.md` y
+`terms-of-service-draft.md` (y sus espejos en gh-pages) están
+actualizados. 🔲 Pendiente solo el despliegue (`supabase db push` +
+`supabase functions deploy save-marketing-contact`) — ver
+`src/backend/README.md`.
+
+🔲 **Google/Apple/Facebook Sign-In**: planeados, no implementados —
+`AuthChoiceScreen` los muestra como "Próximamente". Cada uno necesita
+credenciales OAuth propias del propietario, creadas en la consola de cada
+proveedor.
+
 ## Legal — Términos, privacidad, DSA
 
 ✅ Cláusula de jurisdicción del ToS corregida y verificada contra las
@@ -165,6 +183,8 @@ actualizadas para declarar el nuevo SDK.
 | 3 | ~~Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito~~ — ✅ hecho, job activo confirmado con `select * from cron.job;` | `src/backend/README.md` § Data retention |
 | 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry), DSN real configurado en `sentry_config.dart` | `docs/business/crash-reporting-review.md` |
 | 5 | ~~Implementar el envío del email de confirmación en soporte duradero~~ — ✅ hecho (Resend), pendiente solo de comprar un dominio propio y configurar `RESEND_API_KEY`/`RESEND_FROM_EMAIL` | `src/backend/README.md` § Purchase confirmation email setup |
+| 6 | ~~Implementar cuentas reales (email/contraseña) y el opt-in de marketing~~ — ✅ código hecho, pendiente `supabase db push` + `supabase functions deploy save-marketing-contact` | `src/backend/README.md` § Real accounts (email/password) and save-marketing-contact |
+| 7 | Crear credenciales OAuth para Google, Apple y Facebook Sign-In (cada una en su propia consola de desarrollador) y habilitar cada proveedor en Supabase Dashboard → Authentication → Providers | `src/backend/README.md` § Next step |
 
 Ninguno de los puntos restantes bloquea el lanzamiento por sí solo —
 cada uno falla de forma segura (fail-closed o documentado como riesgo bajo)

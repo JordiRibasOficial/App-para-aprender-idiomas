@@ -1,7 +1,8 @@
-enum AuthMode { guest, email }
+enum AuthMode { guest, account }
 
-/// Onboarding never talks to a backend in the MVP — [AuthMode.email] only
-/// means "I gave you an email to reach me at later", not a real account.
+/// [AuthMode.account] means a real Supabase Auth identity (see
+/// AccountRepository) — not just a contact email. [email] is that account's
+/// address when [authMode] is [AuthMode.account]; unset for guests.
 /// [selectedLevel] is captured for future use once more than the A1 course
 /// exists; it doesn't drive any content branching yet.
 class OnboardingState {
