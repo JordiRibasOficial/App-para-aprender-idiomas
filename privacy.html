@@ -39,19 +39,21 @@
       <h2>2. Qué datos recogemos</h2>
       <p>
         La aplicación tiene un backend propio (Supabase), con un alcance todavía reducido:
-        verifica compras de suscripción contra Google Play / Apple, sirve el contenido de los
-        cursos de pago a quien tiene una suscripción activa, y — desde esta versión — puede
-        gestionar una cuenta real si el usuario decide crear una. Los datos que se recogen son:
+        gestiona cuentas de usuario, verifica compras de suscripción contra Google Play /
+        Apple, y sirve el contenido de los cursos de pago a quien tiene una suscripción
+        activa. La primera lección y el contenido gratuito nunca requieren cuenta ni tocan
+        este backend en absoluto. Los datos que se recogen son:
       </p>
       <div class="card">
         <p><strong>Progreso de aprendizaje</strong> (lecciones completadas, puntuación, racha):
         almacenado localmente en el dispositivo, no se envía a ningún servidor nuestro.</p>
-        <p><strong>Cuenta con email y contraseña (opcional)</strong>: si el usuario elige
-        "Registrarse con email" en el registro inicial, creamos una cuenta real (email y
-        contraseña, gestionada por Supabase Auth — nunca vemos ni guardamos la contraseña en
-        texto plano). El usuario puede seguir usando la app sin crear cuenta ("Continuar como
-        invitado") — crear cuenta nunca es obligatorio para usar la primera lección ni el
-        contenido gratuito.</p>
+        <p><strong>Cuenta con email y contraseña</strong>: si el usuario elige "Registrarse
+        con email" — desde el registro inicial, o cuando la app se lo pide al intentar
+        comprar/restaurar Premium, abrir un idioma de pago o usar "Mis datos" (ver más abajo)
+        — creamos una cuenta real (email y contraseña, gestionada por Supabase Auth — nunca
+        vemos ni guardamos la contraseña en texto plano). Crear cuenta nunca es obligatorio
+        para usar la primera lección ni el contenido gratuito — solo lo es para lo
+        anterior.</p>
         <p><strong>Marketing por email (opcional, solo con cuenta)</strong>: al crear una
         cuenta, el usuario puede marcar, mediante una casilla separada y no premarcada, que
         quiere recibir ofertas, promociones y novedades por email. Solo si la marca, guardamos
@@ -59,31 +61,29 @@
         lo activamos automáticamente a partir de la cuenta. El usuario puede pedir que dejemos
         de usar su email para esto; si borra su cuenta desde "Mis datos", este registro se
         borra también automáticamente.</p>
-        <p><strong>Email de confirmación de compra (opcional)</strong>: si el usuario tiene una
-        cuenta real y completa una compra, su email de cuenta se envía una única vez a nuestro
-        backend junto con esa compra, para poder enviar el correo de confirmación que exige la
-        normativa española de consumo (art. 98.7 TRLGDCU) — se usa solo para ese envío puntual,
-        a través de Resend (nuestro proveedor de email transaccional), y no se guarda en
-        ninguna tabla ni base de datos propia.</p>
-        <p><strong>Identidad anónima de sesión (solo invitados)</strong>: si el usuario no crea
-        una cuenta, para verificar una compra o descargar un curso de pago la app crea
-        automáticamente una identidad anónima en nuestro backend — un identificador técnico sin
-        nombre, email ni ningún dato personal asociado, que solo sirve para vincular esas dos
-        operaciones a un mismo dispositivo. Se guarda cifrada en el dispositivo.</p>
-        <p><strong>Datos de verificación de compra</strong>: cuando el usuario compra o
-        restaura una suscripción, la app envía el token de compra a nuestro backend, que lo
-        verifica directamente contra la API oficial de Google Play / Apple App Store y guarda
-        el resultado (plataforma, producto, estado, fecha de expiración) asociado a la
-        identidad anónima anterior — nunca a un nombre o email. No tenemos acceso a datos de
-        tarjetas ni de pago en ningún momento; eso lo gestionan Google/Apple directamente.
-        También se registra la marca de tiempo de cada intento de verificación, únicamente
-        para limitar el abuso de este mecanismo — estos registros de control de abuso se
-        eliminan automáticamente a los 7 días.</p>
+        <p><strong>Email de confirmación de compra</strong>: al completar una compra, el
+        email de la cuenta se envía una única vez a nuestro backend, junto con esa compra,
+        para poder enviarle el correo de confirmación que exige la normativa española de
+        consumo (art. 98.7 TRLGDCU) — se usa solo para ese envío puntual, a través de Resend
+        (nuestro proveedor de email transaccional), y no se guarda en ninguna tabla ni base de
+        datos propia.</p>
+        <p><strong>Datos de verificación de compra</strong>: comprar o restaurar una
+        suscripción, abrir un idioma de pago (portugués, francés o japonés), y usar "Mis
+        datos" requieren tener una cuenta real (ver arriba) — la app la pide antes de intentar
+        cualquiera de estas cosas, nunca después de haber cobrado. Al comprar/restaurar, la
+        app envía el token de compra a nuestro backend, que lo verifica directamente contra la
+        API oficial de Google Play / Apple App Store y guarda el resultado (plataforma,
+        producto, estado, fecha de expiración) asociado a la cuenta — nunca a un nombre suelto
+        ni a datos de pago. No tenemos acceso a datos de tarjetas ni de pago en ningún
+        momento; eso lo gestionan Google/Apple directamente. También se registra la marca de
+        tiempo de cada intento de verificación, únicamente para limitar el abuso de este
+        mecanismo — estos registros de control de abuso se eliminan automáticamente a los 7
+        días.</p>
         <p><strong>Qué curso de pago se está descargando</strong>: al abrir un idioma de pago
         (portugués, francés o japonés), la app pide su contenido a nuestro backend, que
-        comprueba que la identidad anónima tiene una suscripción activa antes de responder.
-        Esto revela a nuestro backend qué idioma está estudiando un usuario Premium en el
-        momento de la descarga. El progreso dentro de ese curso sigue siendo 100% local.</p>
+        comprueba que la cuenta tiene una suscripción activa antes de responder. Esto revela a
+        nuestro backend qué idioma está estudiando un usuario Premium en el momento de la
+        descarga. El progreso dentro de ese curso sigue siendo 100% local.</p>
         <p><strong>Publicidad (solo usuarios sin suscripción Premium activa)</strong>: la
         versión gratuita muestra anuncios de Google AdMob. AdMob puede recoger un
         identificador de publicidad del dispositivo y datos técnicos para mostrar y medir
@@ -103,10 +103,10 @@
       <h2>4. Base legal del tratamiento (RGPD)</h2>
       <ul>
         <li>Progreso local: no sale del dispositivo, por lo que no constituye un tratamiento por nuestra parte en el sentido del RGPD más allá de facilitar el almacenamiento local.</li>
-        <li>Cuenta con email y contraseña: ejecución de un contrato (art. 6.1.b RGPD) — el usuario pide expresamente crear una cuenta.</li>
+        <li>Cuenta con email y contraseña: ejecución de un contrato (art. 6.1.b RGPD) — el usuario pide expresamente crear una cuenta y esa cuenta es el servicio solicitado.</li>
         <li>Marketing por email: consentimiento explícito del usuario (art. 6.1.a RGPD), recogido mediante una casilla separada y no premarcada.</li>
         <li>Email transmitido puntualmente para el correo de confirmación de compra: cumplimiento de una obligación legal (art. 6.1.c RGPD).</li>
-        <li>Identidad anónima de sesión y datos de verificación de compra: ejecución del contrato de suscripción, necesario para prestar el servicio de pago.</li>
+        <li>Datos de verificación de compra: ejecución del contrato de suscripción (necesario para prestar el servicio de pago) — sin la cuenta y esos datos no podemos confirmar que una compra es genuina ni entregar el contenido de pago correspondiente.</li>
         <li>Publicidad: consentimiento del usuario (recogido vía el formulario UMP de Google para usuarios en la UE/Reino Unido) o interés legítimo donde el RGPD lo permita, según la región.</li>
         <li>Datos de diagnóstico/fallos (Sentry): interés legítimo (art. 6.1.f RGPD) — mantener la app funcionando de forma segura y detectar errores en producción.</li>
       </ul>
@@ -116,9 +116,8 @@
         Google Play Billing / Apple StoreKit procesan los pagos de la suscripción, sujetos a
         las políticas de privacidad de Google y Apple respectivamente.
         <strong>Supabase</strong> (nuestro proveedor de backend, alojado en la UE) actúa como
-        encargado del tratamiento para la cuenta del usuario (si crea una), la identidad
-        anónima de sesión (si no), los datos de verificación de compra y el consentimiento de
-        marketing, descritos en la sección 2 — sujeto a la
+        encargado del tratamiento para la cuenta del usuario, los datos de verificación de
+        compra y el consentimiento de marketing, descritos en la sección 2 — sujeto a la
         <a href="https://supabase.com/privacy">política de privacidad de Supabase</a>.
         <strong>Google AdMob</strong> muestra anuncios a usuarios sin suscripción Premium
         activa, sujeto a la
@@ -131,18 +130,19 @@
         dirección de email del usuario únicamente cuando completa una compra y solo para
         enviar ese correo puntual — sujeto a la
         <a href="https://resend.com/legal/privacy-policy">política de privacidad de Resend</a>.
-        Esta sección se actualizará si en el futuro se añade analítica de comportamiento o un
-        sistema de cuentas real.
+        Esta sección se actualizará si en el futuro se añade analítica de comportamiento de
+        terceros.
       </p>
 
       <h2>6. Derechos del usuario</h2>
       <p>
         Bajo el RGPD, el usuario tiene derecho a acceder, rectificar, suprimir, limitar el
         tratamiento y portar sus datos. El progreso de aprendizaje vive localmente, así que
-        desinstalar la app lo elimina junto con cualquier identidad anónima de sesión que
-        hubiera. Esto no aplica igual a una cuenta real: si el usuario creó una, esa cuenta y su
-        consentimiento de marketing (si lo dio) viven en nuestro backend, no en el dispositivo —
-        desinstalar la app no la borra. Para acceder a los datos guardados en nuestro backend,
+        desinstalar la app lo elimina. Esto no aplica igual a una cuenta real: si el usuario
+        creó una, esa cuenta y su consentimiento de marketing (si lo dio) viven en nuestro
+        backend, no en el dispositivo — desinstalar la app no la borra, precisamente porque el
+        propósito de tener cuenta es poder reinstalar o cambiar de dispositivo sin perderla.
+        Para acceder a los datos guardados en nuestro backend,
         exportarlos o <strong>eliminarlos permanentemente</strong> (cuenta, suscripción,
         intentos de verificación de compra y consentimiento de marketing, todo junto), puede
         usar la opción "Mis datos" dentro de la propia App — el botón "Eliminar mis datos" borra
