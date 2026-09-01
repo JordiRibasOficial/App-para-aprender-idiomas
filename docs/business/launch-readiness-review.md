@@ -206,7 +206,8 @@ actualizadas para declarar el nuevo SDK.
 | 5 | ~~Implementar el envío del email de confirmación en soporte duradero~~ — ✅ hecho (Resend), pendiente solo de comprar un dominio propio y configurar `RESEND_API_KEY`/`RESEND_FROM_EMAIL` | `src/backend/README.md` § Purchase confirmation email setup |
 | 6 | ~~Implementar cuentas reales (email/contraseña) y el opt-in de marketing~~ — ✅ código hecho, pendiente `supabase db push` + `supabase functions deploy save-marketing-contact` | `src/backend/README.md` § Real accounts (email/password) and save-marketing-contact |
 | 7 | Crear credenciales OAuth para Google Sign-In (Client ID "Web" + registrar Android/iOS) y habilitar el proveedor en Supabase Dashboard → Authentication → Providers | `docs/business/google-signin-setup-guide.md` |
-| 8 | Crear credenciales OAuth para Apple y Facebook Sign-In (cada una en su propia consola de desarrollador) — guías equivalentes a la de Google, pendientes de escribir cuando le toque a cada una | `src/backend/README.md` § Next step |
+| 8 | Crear credenciales OAuth para Apple Sign-In (App ID + Services ID + Key en Apple Developer, 99 USD/año si aún no estás inscrito) y habilitar el proveedor en Supabase | `docs/business/apple-signin-setup-guide.md` |
+| 9 | Crear credenciales OAuth para Facebook Login (App ID + App Secret + Client Token en Meta for Developers, más modo Live para usuarios reales) y habilitar el proveedor en Supabase | `docs/business/facebook-signin-setup-guide.md` |
 
 Ninguno de los puntos restantes bloquea el lanzamiento por sí solo —
 cada uno falla de forma segura (fail-closed o documentado como riesgo bajo)
