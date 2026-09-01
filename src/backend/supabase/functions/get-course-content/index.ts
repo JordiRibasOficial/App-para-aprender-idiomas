@@ -40,12 +40,18 @@ const isRateLimited = createRateLimiter(admin, {
 });
 
 async function hasActivePremium(userId: string): Promise<boolean> {
+  // Requires a real future expiry. An earlier version also accepted
+  // `expires_at is null` as active, which read as "Premium forever" — no
+  // verifier can currently produce that combination, and the DB now forbids
+  // it outright (see the 20260901120000 migration), but treating a missing
+  // expiry as an unlimited entitlement is the wrong default to leave lying
+  // around for whatever writes this table next.
   const { count, error } = await admin
     .from("subscriptions")
     .select("*", { count: "exact", head: true })
     .eq("user_id", userId)
     .eq("status", "active")
-    .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
+    .gt("expires_at", new Date().toISOString());
   if (error) throw new Error(`Premium check failed: ${error.message}`);
   return (count ?? 0) > 0;
 }

@@ -4,8 +4,25 @@ import { handleDeleteUserData } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { Caller } from "../_shared/auth.ts";
 
-const REAL_CALLER: Caller = { id: "user-1", email: "user@example.com" };
-const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
+const REAL_CALLER: Caller = {
+  id: "user-1",
+  email: "user@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: true,
+};
+const ANONYMOUS_CALLER: Caller = {
+  id: "anon-1",
+  email: null,
+  isAnonymous: true,
+  isEmailConfirmed: false,
+};
+/// Signed up but never proved the address is theirs — not a usable identity.
+const UNCONFIRMED_CALLER: Caller = {
+  id: "unconfirmed-1",
+  email: "unconfirmed@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: false,
+};
 
 function buildDeps(overrides: Partial<HandlerDeps> = {}): HandlerDeps {
   return {
@@ -122,4 +139,18 @@ Deno.test("rejects a GET request", async () => {
   });
   const response = await handleDeleteUserData(req, buildDeps());
   assertEquals(response.status, 405);
+});
+
+Deno.test("rejects a signed-up-but-unconfirmed caller — not a proven identity", async () => {
+  let deleteUserCalled = false;
+  const deps = buildDeps({
+    getCaller: () => Promise.resolve(UNCONFIRMED_CALLER),
+    deleteUser: () => {
+      deleteUserCalled = true;
+      return Promise.resolve();
+    },
+  });
+  const response = await handleDeleteUserData(request(), deps);
+  assertEquals(response.status, 403);
+  assertEquals(deleteUserCalled, false);
 });

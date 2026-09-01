@@ -51,20 +51,52 @@ credentials, which only the project owner can provide.
 `handler.ts` is written to fail closed everywhere:
 
 - No auth token → 401, nothing written.
-- Caller has no real account (anonymous session) → 403, nothing written —
-  see "Real accounts..." below for why this now requires one.
+- Caller has no real, confirmed account (anonymous session, or a signup whose
+  email was never confirmed) → 403, nothing written — see "Real accounts..."
+  below, and `_shared/auth.ts`'s `isRealAccount` for why all three conditions
+  are checked separately rather than inferred from a non-null email.
 - More than 20 verification attempts from the same user in 10 minutes →
   429, nothing written (see `verify_purchase_attempts` — logged regardless
   of outcome, so it also covers repeated failed/rejected attempts).
 - Malformed request → 400, nothing written.
 - Platform has no verifier configured (missing secrets) → 503, nothing written.
 - The store's API call fails → 502, nothing written.
+- The store transaction already belongs to a different account → 409, nothing
+  written (see "Purchase ownership" below).
 - Entitlement is written **only** after a verifier returns a positive result
-  from Google/Apple's own servers.
+  from Google/Apple's own servers — and on Android, only when Google also
+  reports the payment as actually received (`paymentState` 1) or an active
+  free trial (2). A *pending* payment (state 0, which Play issues for payment
+  methods that settle later) carries a normal future expiry date and used to
+  be granted Premium on that alone; it no longer is.
 
 A modified client can send whatever it wants to this endpoint; without a
 Google/Apple purchase token that those companies' own APIs recognize as real,
 it gets nothing.
+
+### Purchase ownership
+
+A store purchase token is not a secret: it is readable on the device that
+made the purchase, and can simply be handed to someone else. So "the store
+says this token is active" is necessary but **not sufficient** to grant
+entitlement — you also have to answer *whose* purchase it is.
+
+A store transaction is therefore owned permanently by the first account that
+claims it. `verify-purchase` writes through the `claim_subscription` Postgres
+function (migration `20260901120000`), whose `on conflict ... where
+s.user_id = excluded.user_id` clause lets the original claimant keep
+refreshing its own row (restore, renewal, expiry) while writing nothing at
+all for anybody else — atomically, serialized by the unique index on
+`(platform, store_transaction_id)`, so two simultaneous claims cannot both
+win.
+
+Before this, that conflict was resolved with a plain upsert that overwrote
+`user_id`. Replaying one genuine, currently-active token from a second
+account passed the real Google/Apple check (the purchase *is* real), moved
+the entitlement row onto the replayer, and silently stripped Premium from the
+account that had actually paid for it — repeatable for any number of
+accounts. The mobile client surfaces the resulting 409 as "esta compra ya
+está asociada a otra cuenta".
 
 ## get-course-content
 
@@ -271,6 +303,25 @@ Ribas Oficial", region `eu-west-3`):
   for all four. Once live, the Status smoke test recorded above (run
   against an anonymous JWT) is stale — a re-run needs a real account's JWT
   instead, since an anonymous one will now get `403` from all four.
+- **Security hardening (migration `20260901120000`) — not yet deployed.**
+  Needs `supabase db push` **before** redeploying the functions, because
+  `verify-purchase` and every rate limiter now call the two Postgres
+  functions that migration creates (`claim_subscription`,
+  `record_and_check_rate_limit`) — deploy the functions first and they'll
+  fail closed on a missing RPC until the migration lands. Then redeploy all
+  five. What it changes:
+  - Store transactions are owned first-claim-wins, closing a purchase-token
+    replay hole (see "Purchase ownership" above).
+  - Rate limiting is atomic, so concurrent requests can no longer all slip
+    past the same cap.
+  - `status = 'active'` now requires a non-null `expires_at` at the DB level.
+  - Android grants require Google to report the payment as received, not just
+    an unexpired subscription.
+  - "Real account" is now `is_anonymous = false` **and** a confirmed email,
+    rather than inferred from a non-null email. Confirm **Dashboard →
+    Authentication → Providers → Email → Confirm email** is on; with it off
+    Supabase auto-confirms at signup, so the check still passes, but leaving
+    it on is what makes the check meaningful.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.

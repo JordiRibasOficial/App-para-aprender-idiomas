@@ -47,6 +47,18 @@ class SupabasePurchaseVerifier implements PurchaseVerifier {
         },
       );
     } on FunctionException catch (e) {
+      // 409 is the one status here a user can actually act on: the backend
+      // binds a store purchase to the first account that claims it (see
+      // src/backend/README.md § "Purchase ownership"), so this means the
+      // purchase is genuinely theirs-but-on-another-account, or someone
+      // else's. Everything else stays a raw diagnostic — those are bugs or
+      // outages, not something the user can resolve.
+      if (e.status == 409) {
+        throw const PurchaseVerificationException(
+          'Esta compra ya está asociada a otra cuenta. Inicia sesión con esa '
+          'cuenta para restaurarla.',
+        );
+      }
       throw PurchaseVerificationException(
         'verify-purchase respondió ${e.status}: ${e.details}',
       );

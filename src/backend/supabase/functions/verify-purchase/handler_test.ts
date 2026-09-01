@@ -5,8 +5,29 @@ import type { HandlerDeps } from "./handler.ts";
 import type { Platform, PurchaseVerifier, SubscriptionUpsert, VerifyPurchaseInput } from "./types.ts";
 import type { Caller } from "../_shared/auth.ts";
 
-const REAL_CALLER: Caller = { id: "user-1", email: "user@example.com" };
-const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
+const REAL_CALLER: Caller = {
+  id: "user-1",
+  email: "user@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: true,
+};
+const ANONYMOUS_CALLER: Caller = {
+  id: "anon-1",
+  email: null,
+  isAnonymous: true,
+  isEmailConfirmed: false,
+};
+/**
+ * Signed up, holds a session, but never proved the address is theirs. Allowed
+ * through by the old `email != null` check — which meant registering as
+ * someone else's address was enough to have this endpoint mail them.
+ */
+const UNCONFIRMED_CALLER: Caller = {
+  id: "user-2",
+  email: "someone-elses@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: false,
+};
 
 class FakeVerifier implements PurchaseVerifier {
   constructor(
@@ -35,9 +56,9 @@ function buildDeps(overrides: Partial<HandlerDeps> = {}): {
       Promise.resolve(authHeader === "Bearer valid-token" ? REAL_CALLER : null),
     isRateLimited: () => Promise.resolve(false),
     verifiers: { android: new FakeVerifier() } as Partial<Record<Platform, PurchaseVerifier>>,
-    upsertSubscription: (row) => {
+    claimSubscription: (row) => {
       upserts.push(row);
-      return Promise.resolve();
+      return Promise.resolve(true);
     },
     sendConfirmationEmail: (input) => {
       confirmationEmails.push(input);
@@ -79,6 +100,42 @@ Deno.test("rejects an anonymous caller — no account to attach a purchase to", 
   assertEquals(response.status, 403);
   assertEquals(upserts.length, 0);
 });
+
+Deno.test(
+  "rejects a signed-up-but-unconfirmed caller — an unproven address must not receive our mail",
+  async () => {
+    const { deps, upserts, confirmationEmails } = buildDeps({
+      getCaller: () => Promise.resolve(UNCONFIRMED_CALLER),
+    });
+    const response = await handleVerifyPurchase(
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),
+      deps,
+    );
+
+    assertEquals(response.status, 403);
+    assertEquals(upserts.length, 0);
+    assertEquals(confirmationEmails.length, 0);
+  },
+);
+
+Deno.test(
+  "replaying a store token already claimed by another account is refused with 409, granting nothing",
+  async () => {
+    // The store still says this purchase is genuine and active — it is. The
+    // claim is what fails, because the transaction belongs to someone else.
+    const { deps, confirmationEmails } = buildDeps({
+      claimSubscription: () => Promise.resolve(false),
+    });
+    const response = await handleVerifyPurchase(
+      request({ platform: "android", productId: "annual_sub", purchaseToken: "someone-elses-token" }),
+      deps,
+    );
+
+    assertEquals(response.status, 409);
+    // No entitlement, and no confirmation email for a purchase that isn't theirs.
+    assertEquals(confirmationEmails.length, 0);
+  },
+);
 
 Deno.test(
   "rejects a rate-limited caller with 429, without calling the verifier or writing anything",
@@ -292,7 +349,7 @@ Deno.test(
   "an upsert failure after a positive verification surfaces as a generic 500, not the raw Postgres error",
   async () => {
     const { deps } = buildDeps({
-      upsertSubscription: () => Promise.reject(new Error("Failed to persist subscription: unique violation")),
+      claimSubscription: () => Promise.reject(new Error("Failed to persist subscription: unique violation")),
     });
     const response = await handleVerifyPurchase(
       request({ platform: "android", productId: "annual_sub", purchaseToken: "tok" }),

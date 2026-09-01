@@ -1,6 +1,7 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
 import { VerifyPurchaseInputSchema } from "./types.ts";
 import type { Platform, PurchaseVerifier, SubscriptionUpsert } from "./types.ts";
+import { isRealAccount } from "../_shared/auth.ts";
 import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
@@ -14,7 +15,13 @@ export interface HandlerDeps {
   isRateLimited(userId: string): Promise<boolean>;
   /** One verifier per platform. A missing entry means that platform isn't configured yet. */
   verifiers: Partial<Record<Platform, PurchaseVerifier>>;
-  upsertSubscription(row: SubscriptionUpsert): Promise<void>;
+  /**
+   * Binds this store transaction to `row.userId`, returning false — and
+   * writing nothing — if it already belongs to a different account. See the
+   * 20260901120000 migration for why a store transaction is permanently
+   * owned by whoever claims it first.
+   */
+  claimSubscription(row: SubscriptionUpsert): Promise<boolean>;
   /**
    * Sends the TRLGDCU durable-medium purchase confirmation (see the call
    * site below). Best-effort by design — see there for why a rejection
@@ -68,9 +75,9 @@ async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Prom
   if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
-  if (!caller.email) {
+  if (!isRealAccount(caller)) {
     return jsonResponse(
-      { error: "A real account is required to purchase or restore a subscription." },
+      { error: "A real, confirmed account is required to purchase or restore a subscription." },
       403,
     );
   }
@@ -118,7 +125,13 @@ async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Prom
   }
 
   const status = result.isActive ? "active" : "expired";
-  await deps.upsertSubscription({
+  // A real, currently-active store token is readable on the buying device
+  // and can simply be handed to someone else. Before this check, replaying
+  // one from a second account passed the store's verification (the purchase
+  // *is* genuine) and moved the entitlement row onto the replayer — giving
+  // away Premium for free and stripping it from whoever actually paid.
+  // Ownership is now first-claim-wins, enforced atomically in Postgres.
+  const claimed = await deps.claimSubscription({
     userId,
     platform: input.platform,
     productId: input.productId,
@@ -127,6 +140,15 @@ async function handleVerifyPurchaseUnsafe(req: Request, deps: HandlerDeps): Prom
     expiresAt: result.expiresAt,
     rawResponse: result.raw,
   });
+  if (!claimed) {
+    return jsonResponse(
+      {
+        error:
+          "This purchase is already linked to a different account. Sign in with that account to restore it.",
+      },
+      409,
+    );
+  }
 
   // Best-effort, deliberately outside the try/catch chain that turns
   // failures into error responses above: the entitlement is already

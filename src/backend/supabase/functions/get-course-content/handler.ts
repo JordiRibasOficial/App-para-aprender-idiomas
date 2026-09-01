@@ -1,6 +1,7 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
 import { GetCourseContentInputSchema } from "./types.ts";
 import type { PremiumLanguage } from "./types.ts";
+import { isRealAccount } from "../_shared/auth.ts";
 import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
@@ -56,7 +57,7 @@ async function handleGetCourseContentUnsafe(req: Request, deps: HandlerDeps): Pr
   if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
-  if (!caller.email) {
+  if (!isRealAccount(caller)) {
     return jsonResponse(
       { error: "A real account is required to access Premium content." },
       403,
