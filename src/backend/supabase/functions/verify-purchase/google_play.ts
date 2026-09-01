@@ -51,7 +51,42 @@ async function getAccessToken(serviceAccount: GoogleServiceAccount): Promise<str
 
 interface SubscriptionPurchaseResponse {
   expiryTimeMillis?: string;
+  /**
+   * 0 = payment pending, 1 = payment received, 2 = free trial,
+   * 3 = pending deferred upgrade/downgrade. Google omits the field entirely
+   * for cancelled or expired subscriptions.
+   */
   paymentState?: number;
+}
+
+/**
+ * The two states where Google has actually given us the sale: payment
+ * received, and an active free trial (which Play grants deliberately and
+ * which the user is entitled to).
+ *
+ * State 0 is the one that matters here: a subscription whose payment is
+ * still pending — Play supports payment methods that settle later in
+ * several markets, and a card can decline after the fact — carries a
+ * perfectly normal *future* `expiryTimeMillis`. Granting on expiry alone,
+ * as this did before, handed full Premium to purchases that were never
+ * paid for. An absent field means cancelled/expired, so it fails closed too.
+ */
+const PAID_PAYMENT_STATES: ReadonlySet<number> = new Set([1, 2]);
+
+/**
+ * Exported so the entitlement decision — the security-relevant part — can be
+ * tested directly, without standing up a fake Google OAuth exchange and a
+ * real RSA key just to reach it.
+ */
+export function isSubscriptionActive(
+  data: SubscriptionPurchaseResponse,
+  nowMillis: number,
+): boolean {
+  const isPaid = typeof data.paymentState === "number" &&
+    PAID_PAYMENT_STATES.has(data.paymentState);
+  if (!isPaid) return false;
+  const expiryTimeMillis = data.expiryTimeMillis ? Number(data.expiryTimeMillis) : null;
+  return expiryTimeMillis !== null && expiryTimeMillis > nowMillis;
 }
 
 /**
@@ -84,7 +119,7 @@ export class GooglePlayVerifier implements PurchaseVerifier {
     }
     const data = (await response.json()) as SubscriptionPurchaseResponse;
     const expiryTimeMillis = data.expiryTimeMillis ? Number(data.expiryTimeMillis) : null;
-    const isActive = expiryTimeMillis !== null && expiryTimeMillis > Date.now();
+    const isActive = isSubscriptionActive(data, Date.now());
     return {
       isActive,
       expiresAt: expiryTimeMillis ? new Date(expiryTimeMillis).toISOString() : null,

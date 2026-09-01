@@ -1,5 +1,6 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
 import type { UserDataExport } from "./types.ts";
+import { isRealAccount } from "../_shared/auth.ts";
 import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
@@ -57,7 +58,7 @@ async function handleExportUserDataUnsafe(req: Request, deps: HandlerDeps): Prom
   if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
-  if (!caller.email) {
+  if (!isRealAccount(caller)) {
     return jsonResponse(
       { error: "A real account is required to export your data." },
       403,

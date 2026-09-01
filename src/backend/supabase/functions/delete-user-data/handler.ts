@@ -1,4 +1,5 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
+import { isRealAccount } from "../_shared/auth.ts";
 import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
@@ -60,7 +61,7 @@ async function handleDeleteUserDataUnsafe(req: Request, deps: HandlerDeps): Prom
   if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
-  if (!caller.email) {
+  if (!isRealAccount(caller)) {
     return jsonResponse(
       { error: "A real account is required to delete account data." },
       403,

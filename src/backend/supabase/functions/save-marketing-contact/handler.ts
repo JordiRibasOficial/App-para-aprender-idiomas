@@ -1,5 +1,6 @@
 import { corsPreflightResponse, jsonResponse } from "../_shared/http.ts";
 import { SaveMarketingContactInputSchema } from "./types.ts";
+import { isRealAccount } from "../_shared/auth.ts";
 import type { Caller } from "../_shared/auth.ts";
 
 export interface HandlerDeps {
@@ -53,7 +54,7 @@ async function handleSaveMarketingContactUnsafe(
   if (!caller) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
-  if (!caller.email) {
+  if (!isRealAccount(caller)) {
     return jsonResponse(
       { error: "A real account is required to opt in to marketing email." },
       403,

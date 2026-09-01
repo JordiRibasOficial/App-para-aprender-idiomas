@@ -4,8 +4,25 @@ import { handleSaveMarketingContact } from "./handler.ts";
 import type { HandlerDeps } from "./handler.ts";
 import type { Caller } from "../_shared/auth.ts";
 
-const REAL_CALLER: Caller = { id: "user-1", email: "ana@example.com" };
-const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
+const REAL_CALLER: Caller = {
+  id: "user-1",
+  email: "ana@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: true,
+};
+const ANONYMOUS_CALLER: Caller = {
+  id: "anon-1",
+  email: null,
+  isAnonymous: true,
+  isEmailConfirmed: false,
+};
+/// Signed up but never proved the address is theirs — not a usable identity.
+const UNCONFIRMED_CALLER: Caller = {
+  id: "unconfirmed-1",
+  email: "unconfirmed@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: false,
+};
 
 function buildDeps(overrides: Partial<HandlerDeps> = {}): HandlerDeps {
   return {
@@ -174,3 +191,17 @@ Deno.test("rejects a GET request", async () => {
   const response = await handleSaveMarketingContact(req, buildDeps());
   assertEquals(response.status, 405);
 });
+
+Deno.test(
+  "rejects a signed-up-but-unconfirmed caller — consent needs a proven address",
+  async () => {
+    const deps = buildDeps({
+      getCaller: () => Promise.resolve(UNCONFIRMED_CALLER),
+    });
+    const response = await handleSaveMarketingContact(
+      request({ email: "unconfirmed@example.com" }),
+      deps,
+    );
+    assertEquals(response.status, 403);
+  },
+);

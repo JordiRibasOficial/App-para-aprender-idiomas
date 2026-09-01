@@ -5,8 +5,25 @@ import type { HandlerDeps } from "./handler.ts";
 import type { PremiumLanguage } from "./types.ts";
 import type { Caller } from "../_shared/auth.ts";
 
-const REAL_CALLER: Caller = { id: "user-1", email: "user@example.com" };
-const ANONYMOUS_CALLER: Caller = { id: "anon-1", email: null };
+const REAL_CALLER: Caller = {
+  id: "user-1",
+  email: "user@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: true,
+};
+const ANONYMOUS_CALLER: Caller = {
+  id: "anon-1",
+  email: null,
+  isAnonymous: true,
+  isEmailConfirmed: false,
+};
+/// Signed up but never proved the address is theirs — not a usable identity.
+const UNCONFIRMED_CALLER: Caller = {
+  id: "unconfirmed-1",
+  email: "unconfirmed@example.com",
+  isAnonymous: false,
+  isEmailConfirmed: false,
+};
 
 const FAKE_CONTENT: Record<PremiumLanguage, unknown> = {
   pt: { sourceLanguage: "es", targetLanguage: "pt", fake: true },
@@ -136,4 +153,10 @@ Deno.test("rejects a GET request", async () => {
   });
   const response = await handleGetCourseContent(req, buildDeps());
   assertEquals(response.status, 405);
+});
+
+Deno.test("rejects a signed-up-but-unconfirmed caller — not a proven identity", async () => {
+  const deps = buildDeps({ getCaller: () => Promise.resolve(UNCONFIRMED_CALLER) });
+  const response = await handleGetCourseContent(request({ targetLanguage: "pt" }), deps);
+  assertEquals(response.status, 403);
 });

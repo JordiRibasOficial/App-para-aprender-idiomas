@@ -31,21 +31,30 @@ const isRateLimited = createRateLimiter(admin, {
   windowMs: 10 * 60 * 1000,
 });
 
-async function upsertSubscription(row: SubscriptionUpsert): Promise<void> {
-  const { error } = await admin.from("subscriptions").upsert(
-    {
-      user_id: row.userId,
-      platform: row.platform,
-      product_id: row.productId,
-      store_transaction_id: row.storeTransactionId,
-      status: row.status,
-      expires_at: row.expiresAt,
-      raw_response: row.rawResponse,
-      verified_at: new Date().toISOString(),
-    },
-    { onConflict: "platform,store_transaction_id" },
-  );
+/**
+ * Delegates to the `claim_subscription` Postgres function rather than doing
+ * a PostgREST upsert here. The upsert this replaced resolved a conflict on
+ * (platform, store_transaction_id) by overwriting the row's `user_id`, so
+ * replaying a genuine store token from a second account transferred the
+ * entitlement to it. The function makes ownership first-claim-wins and does
+ * it atomically — see the 20260901120000 migration.
+ *
+ * Returns false when the transaction belongs to another account (nothing
+ * written); the handler turns that into a 409.
+ */
+async function claimSubscription(row: SubscriptionUpsert): Promise<boolean> {
+  const { data, error } = await admin.rpc("claim_subscription", {
+    p_user_id: row.userId,
+    p_platform: row.platform,
+    p_product_id: row.productId,
+    p_store_transaction_id: row.storeTransactionId,
+    p_status: row.status,
+    p_expires_at: row.expiresAt,
+    p_raw_response: row.rawResponse,
+  });
   if (error) throw new Error(`Failed to persist subscription: ${error.message}`);
+  // Fail closed: only an explicit true counts as a successful claim.
+  return data === true;
 }
 
 function buildVerifiers(): Partial<Record<Platform, PurchaseVerifier>> {
@@ -84,7 +93,7 @@ const deps: HandlerDeps = {
   getCaller,
   isRateLimited,
   verifiers: buildVerifiers(),
-  upsertSubscription,
+  claimSubscription,
   sendConfirmationEmail: sendPurchaseConfirmationEmail,
 };
 
