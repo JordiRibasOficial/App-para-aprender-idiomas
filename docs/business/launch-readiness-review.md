@@ -117,7 +117,8 @@ de intentar cualquiera de estas cosas, nunca después de cobrar; la primera
 lección y el contenido gratuito siguen sin tocar cuentas ni backend en
 absoluto. Las cuatro Edge Functions (`verify-purchase`,
 `get-course-content`, `export-user-data`, `delete-user-data`) rechazan con
-`403` a cualquier llamante sin cuenta real (`getCaller().email == null`).
+`403` a cualquier llamante sin cuenta real y confirmada (`isRealAccount()`
+en `_shared/auth.ts`).
 El correo de confirmación de compra ahora se envía siempre al email de la
 cuenta, nunca a un campo suelto del cliente. Como la app no tiene usuarios
 reales todavía, fue un cambio disruptivo limpio, sin migración ni backfill
@@ -126,6 +127,23 @@ de identidades anónimas existentes. `privacy-policy-draft.md` y
 `play-console-setup-guide.md` y `store-listing.md` están actualizados.
 🔲 Pendiente solo el despliegue (`supabase functions deploy` de las cuatro
 funciones) — ver `src/backend/README.md` § Status.
+
+✅ **Auditoría de seguridad ofensiva del backend de pagos** (PR #50, 1 de
+septiembre): encontró y cerró un bypass de entitlement crítico (un token de
+compra genuino se podía reclamar desde una segunda cuenta, robando la
+suscripción a quien había pagado de verdad — `claim_subscription` en
+Postgres lo hace ahora "primero en reclamar, dueño para siempre", atómico)
+y uno alto (Android concedía Premium con el pago todavía pendiente,
+`paymentState` nunca se comprobaba). También: rate limiting atómico (antes
+la comprobación tenía una ventana de carrera), "cuenta real" ahora exige el
+flag `is_anonymous` de Supabase **y** email confirmado (antes bastaba con
+un email no nulo, así que registrarse con la dirección de otra persona
+colaba), y `status='active'` con `expires_at` nulo ya no es posible a nivel
+de base de datos. 81 tests de backend (antes 62), cada ataque reproducido
+como test. 🔲 **Pendiente el despliegue — orden importa**:
+`supabase db push` **antes** de `supabase functions deploy`, porque las
+funciones ahora llaman a las dos funciones de Postgres que crea la
+migración `20260901120000` — ver `src/backend/README.md` § Status.
 
 🔲 **Google/Apple/Facebook Sign-In**: planeados, no implementados —
 `AuthChoiceScreen` los muestra como "Próximamente". Cada uno necesita
@@ -205,6 +223,8 @@ actualizadas para declarar el nuevo SDK.
 | 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry), DSN real configurado en `sentry_config.dart` | `docs/business/crash-reporting-review.md` |
 | 5 | ~~Implementar el envío del email de confirmación en soporte duradero~~ — ✅ hecho (Resend), pendiente solo de comprar un dominio propio y configurar `RESEND_API_KEY`/`RESEND_FROM_EMAIL` | `src/backend/README.md` § Purchase confirmation email setup |
 | 6 | ~~Implementar cuentas reales (email/contraseña) y el opt-in de marketing~~ — ✅ código hecho, pendiente `supabase db push` + `supabase functions deploy save-marketing-contact` | `src/backend/README.md` § Real accounts (email/password) and save-marketing-contact |
+| 6b | Desplegar el requisito de cuenta real en las 4 funciones de pago/datos (`supabase functions deploy verify-purchase get-course-content export-user-data delete-user-data`) | `src/backend/README.md` § Status |
+| 6c | **`supabase db push`** (migración `20260901120000`, seguridad) **antes** de redesplegar las 5 funciones — si despliegas las funciones sin esto primero, fallan cerradas (503/500) hasta que la migración llegue | `src/backend/README.md` § Status |
 | 7 | Crear credenciales OAuth para Google Sign-In (Client ID "Web" + registrar Android/iOS) y habilitar el proveedor en Supabase Dashboard → Authentication → Providers | `docs/business/google-signin-setup-guide.md` |
 | 8 | Crear credenciales OAuth para Apple Sign-In (App ID + Services ID + Key en Apple Developer, 99 USD/año si aún no estás inscrito) y habilitar el proveedor en Supabase | `docs/business/apple-signin-setup-guide.md` |
 | 9 | Crear credenciales OAuth para Facebook Login (App ID + App Secret + Client Token en Meta for Developers, más modo Live para usuarios reales) y habilitar el proveedor en Supabase | `docs/business/facebook-signin-setup-guide.md` |
