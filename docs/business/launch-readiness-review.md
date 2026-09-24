@@ -104,9 +104,8 @@ separada, no premarcada, distinta de aceptar los términos (LSSICE art. 21)
 borra automáticamente si el usuario elimina su cuenta desde "Mis datos"
 (FK en cascada, sin código adicional). `privacy-policy-draft.md` y
 `terms-of-service-draft.md` (y sus espejos en gh-pages) están
-actualizados. 🔲 Pendiente solo el despliegue (`supabase db push` +
-`supabase functions deploy save-marketing-contact`) — ver
-`src/backend/README.md`.
+actualizados. ✅ Desplegado (`supabase db push` +
+`supabase functions deploy save-marketing-contact`, 24 de septiembre).
 
 ✅ **Cuentas obligatorias para pagos y datos personales**: comprar/restaurar
 una suscripción, abrir un idioma de pago, y usar "Mis datos" (exportar o
@@ -125,8 +124,9 @@ reales todavía, fue un cambio disruptivo limpio, sin migración ni backfill
 de identidades anónimas existentes. `privacy-policy-draft.md` y
 `terms-of-service-draft.md` (y sus espejos en gh-pages),
 `play-console-setup-guide.md` y `store-listing.md` están actualizados.
-🔲 Pendiente solo el despliegue (`supabase functions deploy` de las cuatro
-funciones) — ver `src/backend/README.md` § Status.
+✅ Desplegado (`supabase functions deploy` de las cuatro funciones, 24 de
+septiembre — smoke test: las cinco devuelven `401` limpio sin token, nada
+de 500/503).
 
 ✅ **Auditoría de seguridad ofensiva del backend de pagos** (PR #50, 1 de
 septiembre): encontró y cerró un bypass de entitlement crítico (un token de
@@ -140,10 +140,9 @@ flag `is_anonymous` de Supabase **y** email confirmado (antes bastaba con
 un email no nulo, así que registrarse con la dirección de otra persona
 colaba), y `status='active'` con `expires_at` nulo ya no es posible a nivel
 de base de datos. 81 tests de backend (antes 62), cada ataque reproducido
-como test. 🔲 **Pendiente el despliegue — orden importa**:
-`supabase db push` **antes** de `supabase functions deploy`, porque las
-funciones ahora llaman a las dos funciones de Postgres que crea la
-migración `20260901120000` — ver `src/backend/README.md` § Status.
+como test. ✅ Desplegado (`supabase db push` — las 4 migraciones
+pendientes, incluida `20260901120000` — seguido de `supabase functions
+deploy` de las 5 funciones, 24 de septiembre).
 
 🔲 **Google/Apple/Facebook Sign-In**: planeados, no implementados —
 `AuthChoiceScreen` los muestra como "Próximamente". Cada uno necesita
@@ -222,9 +221,9 @@ actualizadas para declarar el nuevo SDK.
 | 3 | ~~Habilitar `pg_cron` desde el Dashboard de Supabase y ejecutar el `cron.schedule(...)` ya escrito~~ — ✅ hecho, job activo confirmado con `select * from cron.job;` | `src/backend/README.md` § Data retention |
 | 4 | ~~Elegir proveedor de crash reporting e implementarlo~~ — ✅ hecho (Sentry), DSN real configurado en `sentry_config.dart` | `docs/business/crash-reporting-review.md` |
 | 5 | ~~Implementar el envío del email de confirmación en soporte duradero~~ — ✅ hecho (Resend), pendiente solo de comprar un dominio propio y configurar `RESEND_API_KEY`/`RESEND_FROM_EMAIL` | `src/backend/README.md` § Purchase confirmation email setup |
-| 6 | ~~Implementar cuentas reales (email/contraseña) y el opt-in de marketing~~ — ✅ código hecho, pendiente `supabase db push` + `supabase functions deploy save-marketing-contact` | `src/backend/README.md` § Real accounts (email/password) and save-marketing-contact |
-| 6b | Desplegar el requisito de cuenta real en las 4 funciones de pago/datos (`supabase functions deploy verify-purchase get-course-content export-user-data delete-user-data`) | `src/backend/README.md` § Status |
-| 6c | **`supabase db push`** (migración `20260901120000`, seguridad) **antes** de redesplegar las 5 funciones — si despliegas las funciones sin esto primero, fallan cerradas (503/500) hasta que la migración llegue | `src/backend/README.md` § Status |
+| 6 | ~~Implementar cuentas reales (email/contraseña) y el opt-in de marketing~~ — ✅ hecho y desplegado (24 sep.) | `src/backend/README.md` § Real accounts (email/password) and save-marketing-contact |
+| 6b | ~~Desplegar el requisito de cuenta real en las 4 funciones de pago/datos~~ — ✅ hecho (24 sep.) | `src/backend/README.md` § Status |
+| 6c | ~~`supabase db push` (migración `20260901120000`, seguridad) antes de redesplegar las 5 funciones~~ — ✅ hecho (24 sep.), orden respetado, smoke test 401 limpio en las 5 | `src/backend/README.md` § Status |
 | 7 | Crear credenciales OAuth para Google Sign-In (Client ID "Web" + registrar Android/iOS) y habilitar el proveedor en Supabase Dashboard → Authentication → Providers | `docs/business/google-signin-setup-guide.md` |
 | 8 | Crear credenciales OAuth para Apple Sign-In (App ID + Services ID + Key en Apple Developer, 99 USD/año si aún no estás inscrito) y habilitar el proveedor en Supabase | `docs/business/apple-signin-setup-guide.md` |
 | 9 | Crear credenciales OAuth para Facebook Login (App ID + App Secret + Client Token en Meta for Developers, más modo Live para usuarios reales) y habilitar el proveedor en Supabase | `docs/business/facebook-signin-setup-guide.md` |

@@ -279,37 +279,37 @@ Ribas Oficial", region `eu-west-3`):
   true`. The four rate-limit tracking tables now get purged of rows older
   than 7 days automatically, every day at 03:00.
 - `verify-purchase` now also sends a TRLGDCU purchase-confirmation email
-  (see "Purchase confirmation email setup" below) — **not yet deployed or
-  configured**: needs both a fresh `supabase functions deploy
-  verify-purchase` to ship this code and `RESEND_API_KEY`/
-  `RESEND_FROM_EMAIL` set before it does anything. Until both, this is a
-  silent no-op — the account's email is always available by the time this
-  runs (a real account is required — see below), but
-  `sendConfirmationEmail` isn't wired to anything live yet, so no request
-  fails and nothing is sent.
-- Real email/password accounts and `save-marketing-contact` — **not yet
-  deployed**: the three new migrations (`marketing_contacts`,
-  `marketing_contact_requests`, the updated `purge_stale_request_logs()`)
-  need `supabase db push`, and the function needs `supabase functions
-  deploy save-marketing-contact`. Email/password sign-up itself needs no
+  (see "Purchase confirmation email setup" below) — **code deployed
+  (24 September 2026), not yet configured**: `RESEND_API_KEY`/
+  `RESEND_FROM_EMAIL` still need to be set before it does anything. Until
+  those secrets exist, this is a silent no-op — the account's email is
+  always available by the time this runs (a real account is required —
+  see below), but `sendConfirmationEmail` isn't wired to anything live
+  yet, so no request fails and nothing is sent.
+- Real email/password accounts and `save-marketing-contact` — **deployed
+  24 September 2026**: migrations pushed (`marketing_contacts`,
+  `marketing_contact_requests`, the updated `purge_stale_request_logs()`),
+  `save-marketing-contact` live. Email/password sign-up itself needs no
   new project secrets — it's Supabase Auth's built-in behavior — but
   whether it returns a session immediately or requires clicking an email
   link first depends on the project's "Confirm email" setting (Dashboard →
-  Authentication → Providers → Email); the mobile app already handles
-  either outcome (see `SignUpResult`'s doc comment in the mobile app).
+  Authentication → Providers → Email — confirmed **on** as of this deploy);
+  the mobile app already handles either outcome (see `SignUpResult`'s doc
+  comment in the mobile app).
 - `verify-purchase`/`get-course-content`/`export-user-data`/
   `delete-user-data` now require a real account (see "Real accounts..."
-  above) — **not yet deployed**: needs a fresh `supabase functions deploy`
-  for all four. Once live, the Status smoke test recorded above (run
-  against an anonymous JWT) is stale — a re-run needs a real account's JWT
-  instead, since an anonymous one will now get `403` from all four.
-- **Security hardening (migration `20260901120000`) — not yet deployed.**
-  Needs `supabase db push` **before** redeploying the functions, because
-  `verify-purchase` and every rate limiter now call the two Postgres
-  functions that migration creates (`claim_subscription`,
-  `record_and_check_rate_limit`) — deploy the functions first and they'll
-  fail closed on a missing RPC until the migration lands. Then redeploy all
-  five. What it changes:
+  above) — **deployed 24 September 2026**: all four redeployed. The
+  Status smoke test recorded above (run against an anonymous JWT) is
+  stale — a re-run needs a real account's JWT instead, since an anonymous
+  one now gets `403` from all four.
+- **Security hardening (migration `20260901120000`) — deployed
+  24 September 2026.** `supabase db push` ran before the function
+  redeploy, as required (`verify-purchase` and every rate limiter call
+  the two Postgres functions that migration creates —
+  `claim_subscription`, `record_and_check_rate_limit`). All five
+  functions redeployed after. Post-deploy smoke test: all five return a
+  clean `401` for an unauthenticated request — no `500`/`503`, so nothing
+  is failing on a missing RPC. What it changed:
   - Store transactions are owned first-claim-wins, closing a purchase-token
     replay hole (see "Purchase ownership" above).
   - Rate limiting is atomic, so concurrent requests can no longer all slip
@@ -318,10 +318,9 @@ Ribas Oficial", region `eu-west-3`):
   - Android grants require Google to report the payment as received, not just
     an unexpired subscription.
   - "Real account" is now `is_anonymous = false` **and** a confirmed email,
-    rather than inferred from a non-null email. Confirm **Dashboard →
-    Authentication → Providers → Email → Confirm email** is on; with it off
-    Supabase auto-confirms at signup, so the check still passes, but leaving
-    it on is what makes the check meaningful.
+    rather than inferred from a non-null email. **Confirm email** is on
+    (verified above), which is what makes this check meaningful rather than
+    a no-op.
 
 The database password isn't recorded anywhere in this repo; rotate/view it
 from the dashboard (Project Settings → Database) if you need it.
