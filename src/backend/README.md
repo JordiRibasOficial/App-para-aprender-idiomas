@@ -412,9 +412,10 @@ endpoints).
 
 `verify-purchase` sends a purchase-confirmation email — required by TRLGDCU
 arts. 98.7/99.2, see `docs/business/terms-of-service-draft.md` §4 for the
-legal reasoning — whenever a purchase verifies as active *and* the client
-sent an email (only present if the user gave one during onboarding; guest
-users send none, and simply don't get this email). It's sent via
+legal reasoning — whenever a purchase verifies as active, to the caller's
+own account email (a real, confirmed account is required to reach
+`verify-purchase` at all — see "Real accounts..." above — so this is never
+conditional on the client having sent one). It's sent via
 `_shared/email.ts`, best-effort: a failed send is logged
 (`supabase functions logs verify-purchase`) but never fails the request or
 undoes the entitlement grant already made — see that file and
