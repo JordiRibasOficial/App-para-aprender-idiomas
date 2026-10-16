@@ -67,7 +67,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   # Test-only: for the Override type (package:riverpod/misc.dart) used to
   # type shared ProviderScope override-list helpers in test files.
-  riverpod: ^3.4.2
+  riverpod: ^3.4.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
